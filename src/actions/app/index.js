@@ -1,8 +1,19 @@
 import constants from '../../constants/app';
+import { baseURL } from '../../Firebase';
 
 //APP
-export function initializeApp() {
-    return {}
+export function initializeApp(data) {
+	const ref = baseURL.users;
+    return {
+    	types: [
+    		constants.INITIALIZE_APP_REQUEST,
+    		constants.INITIALIZE_APP_SUCCESS,
+    		constants.INITIALIZE_APP_FAILURE
+    	],
+    	method: 'add',
+    	data: data,
+    	callRef: ref,
+    }
 }
 
 //NON-API

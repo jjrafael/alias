@@ -1,10 +1,10 @@
-//import { resetSessionTimer } from '../actions/loginActions';
-
 export default function callAPIMiddleware({ dispatch, getState }) {
   return next => action => {
     const {
       types,
-      callAPI,
+      method,
+      callRef,
+      data,
       shouldCallAPI = () => true,
       payload = {}
     } = action
@@ -22,10 +22,6 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       throw new Error('Expected an array of three string types.')
     }
 
-    if (typeof callAPI !== 'function') {
-      throw new Error('Expected callAPI to be a function.')
-    }
-
     if (!shouldCallAPI(getState())) {
       return
     }
@@ -37,29 +33,21 @@ export default function callAPIMiddleware({ dispatch, getState }) {
         type: requestType
       })
     )
-
-    return callAPI().then(
-      response =>
-        {
-          if(response.status === 200) {
-            localStorage.setItem('auth_token', response.data.auth_token);
-            //dispatch(resetSessionTimer())
-          }
-          
-          return dispatch(
-            Object.assign({}, payload, {
-              response,
-              type: successType
-            })
-          )
-        },
-      error =>
-        dispatch(
-          Object.assign({}, payload, {
-            error,
-            type: failureType
-          })
-        )
-    )
+    
+    return callRef[method](data).then((response) => {
+      return dispatch(
+        Object.assign({}, payload, {
+          response,
+          type: successType
+        })
+      )
+    }).catch((error) => {
+      dispatch(
+        Object.assign({}, payload, {
+          error,
+          type: failureType
+        })
+      )
+    })
   }
 }

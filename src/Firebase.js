@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
+import 'firebase/firestore';
 
-var firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyANK72PRG_bYJRIHXBghfDpeovTzB9HEQs",
     authDomain: "alias-2399d.firebaseapp.com",
     databaseURL: "https://alias-2399d.firebaseio.com",
@@ -12,5 +13,13 @@ var firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+export const baseURL = {
+	users: firebase.firestore().collection('users'),
+	app: firebase.firestore().collection('app'),
+	games: firebase.firestore().collection('games'),
+	decks: firebase.firestore().collection('decks'),
+	teams: firebase.firestore().collection('teams') 
+}
 
 export default firebase;

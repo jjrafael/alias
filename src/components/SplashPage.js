@@ -8,14 +8,15 @@ import Button from './common/Button';
 import Loading from './common/Loading';
 
 //actions
-import { toggleLoadingOverlay } from '../actions/app'
+import { toggleLoadingOverlay, initializeApp } from '../actions/app'
 
 const mapStateToProps = state => {return {}}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      toggleLoadingOverlay
+      toggleLoadingOverlay,
+      initializeApp
     },
     dispatch
   )
@@ -29,7 +30,16 @@ class SplashPage extends React.Component {
 		}
 	}
 	openApp = () => {
+		const data = {
+			name: 'tester1',
+			email: 'tester1@mail.co',
+			platform: 'Desktop',
+			is_logged: false,
+			device: 'ASUS Laptop',
+			status: 'active,',
+		}
 		this.props.toggleLoadingOverlay();
+		this.props.initializeApp(data);
 	}
 
 	render() {
