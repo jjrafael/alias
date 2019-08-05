@@ -17,6 +17,7 @@ const initialState = {
     isCustom: false,
     selectedDecks: [],
     decks: [],
+    loadingOverlay: false,
 
     //requests
     appInitializing: false,
@@ -91,6 +92,13 @@ export default function App(state = initialState, action) {
                 ...state,
                 decksLoading: false,
                 decksError: true,
+            }
+
+        //NON-API
+        case app.TOGGLE_LOADING_OVERLAY:
+            return {
+                ...state,
+                loadingOverlay: !state.loadingOverlay,
             }
 
         default: 

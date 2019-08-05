@@ -3,9 +3,11 @@ import '../../styles/app.css';
 
 class Header extends React.Component {
   render() {
+    const {children} = this.props;
     return (
-      <header className="app-header">
-      </header>
+      <div className="default">
+        {children}
+      </div>
     );
   }
 }
