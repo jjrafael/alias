@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import '../styles/app.css';
 
 //components
@@ -8,9 +8,17 @@ import Button from './common/Button';
 import Loading from './common/Loading';
 
 //actions
-import { toggleLoadingOverlay, initializeApp } from '../actions/app'
+import { toggleLoadingOverlay, initializeApp } from '../actions/app';
 
-const mapStateToProps = state => {return {}}
+//misc
+import { getNow } from '../utils';
+
+const mapStateToProps = state => {
+	return {
+		deviceDetails: state.app.deviceDetails,
+		user: state.app.user,
+	}
+}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
@@ -29,14 +37,21 @@ class SplashPage extends React.Component {
 			loadingTitle: 'Initializing App...'
 		}
 	}
+
 	openApp = () => {
+		const { deviceDetails, user } = this.props;
+		const now = getNow();
 		const data = {
-			name: 'tester1',
-			email: 'tester1@mail.co',
-			platform: 'Desktop',
-			is_logged: false,
-			device: 'ASUS Laptop',
+			name: 'tester3',
+			email: 'tester3@mail.co',
+			platform: deviceDetails.platform,
+			is_logged: user.isLoggedIn,
+			device: deviceDetails.device,
+			browser: deviceDetails.browser,
 			status: 'active,',
+			type: user.type,
+			created_time: now,
+			last_logged_time: now,
 		}
 		this.props.toggleLoadingOverlay();
 		this.props.initializeApp(data);

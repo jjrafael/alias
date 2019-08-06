@@ -2,6 +2,11 @@ import constants from '../constants';
 
 const initialState = {
     appInitialized: false,
+    deviceDetails: {
+        platform: null,
+        device: null,
+        browser: null,
+    },
     gameKey: null,
     settings: {
         timer: 180000, //3mins default timer for team members
@@ -13,7 +18,10 @@ const initialState = {
         soundFx: false,
         music: false,
     },
-    isAdmin: false,
+    user: {
+        isLoggedIn: false,
+        type: 'admin',
+    },
     isCustom: false,
     selectedDecks: [],
     decks: [],
@@ -99,6 +107,12 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 loadingOverlay: !state.loadingOverlay,
+            }
+        //NON-API
+        case app.SET_DEVICE_DETAILS:
+            return {
+                ...state,
+                deviceDetails: action.data,
             }
 
         default: 

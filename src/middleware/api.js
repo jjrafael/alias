@@ -1,3 +1,5 @@
+import config from '../config';
+
 export default function callAPIMiddleware({ dispatch, getState }) {
   return next => action => {
     const {
@@ -7,7 +9,8 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       data,
       shouldCallAPI = () => true,
       payload = {}
-    } = action
+    } = action;
+    const { disableAPI, readOnlyAPI } = config;
 
     if (!types) {
       // Normal action: pass it on
@@ -22,7 +25,7 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       throw new Error('Expected an array of three string types.')
     }
 
-    if (!shouldCallAPI(getState())) {
+    if (!shouldCallAPI(getState()) || disableAPI || (readOnlyAPI && method !== 'get')) {
       return
     }
 

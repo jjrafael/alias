@@ -22,3 +22,10 @@ export function toggleLoadingOverlay() {
         type: constants.TOGGLE_LOADING_OVERLAY,
     }
 }
+
+export function setDeviceDetails(data) {
+    return {
+        type: constants.SET_DEVICE_DETAILS,
+        data,
+    }
+}
