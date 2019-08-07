@@ -1,0 +1,9 @@
+@mixin sq ($value) {
+  width: $value;
+  height: $value;
+}
+
+@mixin wh ($w, $h) {
+  width: $w;
+  height: $h;
+}

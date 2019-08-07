@@ -7,9 +7,8 @@ import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import reducers from './reducers';
-import './styles/main.css';
 import api from './middleware/api';
-import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from './serviceWorker';
 
 const composeEnhancers =
 typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__

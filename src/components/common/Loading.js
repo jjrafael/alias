@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux'
-import '../../styles/main.css';
 
 //actions
 import { toggleLoadingOverlay } from '../../actions/app'

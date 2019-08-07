@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import '../styles/app.css';
 
 //components
 import Button from './common/Button';
 import Loading from './common/Loading';
+import Card from './common/Card';
+import CardsCol from './common/CardsCol';
 
 //actions
 import { toggleLoadingOverlay, initializeApp } from '../actions/app';
@@ -62,6 +63,11 @@ class SplashPage extends React.Component {
 
 	    return (
 	      <div className="page-wrapper splash-page">
+	      	<div className="splash-tilt">
+	      		<CardsCol count={12}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      	</div>
 	        <h1>ALIAS</h1>
 	        <div className="center">
 	        	<Button

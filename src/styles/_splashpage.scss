@@ -1,0 +1,10 @@
+.splash-page {
+	@include sq(100%);
+	background: $bg-splash;
+}
+
+.splash-tilt {
+	@include sq(100%);
+	background: $card-back-splash;
+	transform: rotateZ(45deg);
+}
