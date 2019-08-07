@@ -3,4 +3,9 @@
 	position: absolute;
 	top: 0px;
 	right: 0px;
+	overflow: hidden;
+}
+
+.page-body {
+	@include sq(100%);
 }

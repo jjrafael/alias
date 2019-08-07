@@ -64,19 +64,69 @@ class SplashPage extends React.Component {
 	    return (
 	      <div className="page-wrapper splash-page">
 	      	<div className="splash-tilt">
-	      		<CardsCol count={12}>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
+	      			<Card size="medium" flipBack type="splash-cards"/>
+	      		</CardsCol>
+	      		<CardsCol count={20}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
 	      	</div>
-	        <h1>ALIAS</h1>
-	        <div className="center">
-	        	<Button
-	        		text="Click"
-	        		className="btn btn-icon btn-l"
-	        		onClick={this.openApp}
-	        	/>
-	        </div>
-
+	      	<div className="splash-logo-wrapper">
+	      		<div className="logo-typography">
+	      			<span>A</span>
+	      			<span>L</span>
+	      			<span>I</span>
+	      			<span>A</span>
+	      			<span>S</span>
+	      		</div>
+		        <div className="center">
+		        	<Button
+		        		text="Click"
+		        		className="btn btn-icon btn-l"
+		        		onClick={this.openApp}
+		        	/>
+		        </div>
+	      	</div>
+	        
 	        <Loading title={loadingTitle} autoDismiss/>
 	      </div>
 	    );

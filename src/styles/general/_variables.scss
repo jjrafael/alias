@@ -1,5 +1,13 @@
 /*fonts*/
 
 /*colors*/
-$bg-splash: #22ff86;
-$card-back-splash: #140019; 
+$bg: #5e4b60;
+$midnight: #140019;
+$aqua: #33ff8f;
+$aqua-dark: #25b365;
+$chrome: #ffc313;
+
+/*element colors*/
+$bg-splash: $bg;
+$card-back-splash: $midnight; 
+$card-front-splash: $aqua-dark;

@@ -7,3 +7,8 @@
   width: $w;
   height: $h;
 }
+
+@mixin no-pads () {
+	margin: 0px;
+	padding: 0px;
+}

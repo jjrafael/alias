@@ -15,7 +15,7 @@ class CardsCol extends React.Component {
   	const { className, count, children } = this.props;
 
     return (
-      <div className={`cardscol ${className}`}>
+      <div className={`cardscol ${className || ''}`}>
         {count && count > 1 ? this.renderCards(count) : children}
       </div>
     )

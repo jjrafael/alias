@@ -9,6 +9,7 @@
 @import './forms/textbox';
 @import './cards/card';
 @import './common/button';
+@import './common/loading';
 
 /*pages*/
 @import './splashpage';
@@ -21,6 +22,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @include sq(100%);
 }
 
 code {

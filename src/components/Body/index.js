@@ -4,7 +4,7 @@ class Header extends React.Component {
   render() {
     const {children} = this.props;
     return (
-      <div className="default">
+      <div className="page-body default">
         {children}
       </div>
     );

@@ -1,0 +1,46 @@
+.card {
+	margin: 5px 4px;
+	transition: all 0.3s ease;
+	position: relative;
+	@include wh(100px, 200px);
+	.card-back {
+		background: $card-back-splash;
+		border-radius: 8px;
+		@include wh(81px, 180px);
+		padding: 10px;
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		transition: all 0.4s ease;
+		z-index: 2;
+	}
+	.card-front {
+		background: $card-front-splash;
+		border-radius: 8px;
+		@include wh(81px, 180px);
+		padding: 10px;
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		transform: rotateY(180deg);
+		transition: all 0.4s ease;
+		z-index: 1;
+	}
+	&:hover {
+		.card-front {
+			transform: rotateY(0deg);
+			transition: transform 0.4s ease 0s, z-index 0.2s;
+			z-index: 2;
+		}
+		.card-back {
+			transform: rotateY(180deg);
+			z-index: 1;
+		}
+	};
+}
+
+.cardscol {
+	float: left;
+	transition: all 0.3s ease;
+}
+
