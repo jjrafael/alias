@@ -1,13 +1,27 @@
 /*fonts*/
+$josefin: 'Josefin Sans',sans-serif;
+$shrikhand: 'Shrikhand', 'Josefin Sans', sans-serif;
+$fw-thin: 400;
+$fw-light: 200;
+$fw-reg: 400;
+$fw-semib: 600;
+$fw-bold: 700;
 
 /*colors*/
+$black: #131313;
+$white: #fff;
 $bg: #5e4b60;
 $midnight: #140019;
 $aqua: #33ff8f;
 $aqua-dark: #25b365;
 $chrome: #ffc313;
+$chrome-dark: #d3a315;
+$peach: #fc913d;
+$coral: #ee202f;
+$purple: #833ab4;
 
 /*element colors*/
 $bg-splash: $bg;
 $card-back-splash: $midnight; 
-$card-front-splash: $aqua-dark;
+$card-front-splash: $aqua;
+$logo-color: $chrome;

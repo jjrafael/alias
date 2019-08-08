@@ -1,6 +1,7 @@
 .splash-page {
 	@include sq(100%);
 	background: $bg-splash;
+	@include gradient-sunset();
 	display: flex;
     align-items: center;
     justify-content: center;
@@ -27,8 +28,9 @@
 }
 
 .logo-typography {
-	color: $aqua;
-	font-size: 100px;
+	font-family: $shrikhand;
+	color: $logo-color;
+	font-size: 150px;
 	text-align: center;
     display: block;
 	span {
