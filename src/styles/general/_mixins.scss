@@ -35,6 +35,24 @@
 	background: linear-gradient(45deg, rgba(131,58,180,1) 31%, rgba(253,29,29,1) 62%, rgba(252,176,69,1) 100%);
 }
 
+@mixin gradient-soltice-75 () {
+	background: rgb(105,2,115);
+	background: linear-gradient(45deg, rgba(105,2,115,0.75) 0%, rgba(141,3,65,0.75) 100%);
+}
+
+@mixin gradient-summer-75 () {
+	background: rgb(105,2,115);
+	background: linear-gradient(45deg, rgba(34,193,195,0.75) 0%, rgba(253,187,45,0.75) 100%);
+}
+
+@mixin gradient-midnight-75 () {
+	background: rgb(20,0,49);
+background: linear-gradient(45deg, rgba(20,0,49,0.75) 0%, rgba(25,208,222,0.75) 100%);
+}
+
+
+/*text gradients*/
+
 @mixin text-gradient-soltice () {
 	background: transparent;
 	background: -webkit-linear-gradient(45deg, rgba(105,2,115,1) 0%, rgba(141,3,65,1) 100%);

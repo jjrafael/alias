@@ -17,7 +17,10 @@ import { setDeviceDetails } from '../actions/app';
 import { isMobile } from '../utils/app';
 import { variables } from '../config';
 
-const mapStateToProps = state => {return {}}
+const mapStateToProps = state => {return {
+	user: state.app.user,
+	appDetails: state.app.appDetails,
+}}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
@@ -48,7 +51,10 @@ class Page extends React.Component {
 	}
 
   	render() {
+  		const { user, appDetails } = this.props;
   		const props = { variables };
+  		const isAppReady = user && user.is_logged && !!appDetails;
+  		const isTeamReady = false;
 
 	    return (
 	      <div className="page" id="MainPage">
@@ -56,8 +62,8 @@ class Page extends React.Component {
 	        <Body className="app-body">
 	        	<Switch>
 	        		<Route exact path="/"  render={() => <SplashPage {...props} /> }/>
-	        		<Route exact path="/home"render={() => <HomePage {...props} /> }/>
-	        		<Route exact path="/build-team" render={() => <BuildTeamPage {...props} /> }/>
+	        		<Route exact path="/home"render={() => isAppReady ? <HomePage {...props} /> : <SplashPage {...props} /> }/>
+	        		<Route exact path="/build-team" render={() => isTeamReady ? <BuildTeamPage {...props} /> : <SplashPage {...props} />}/>
 	        		<Route  render={() => <SplashPage {...props} /> }/>
 	        	</Switch>
 	        </Body>

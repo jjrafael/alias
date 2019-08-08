@@ -1,7 +1,6 @@
 import constants from '../constants';
 
 const initialState = {
-    appInitialized: false,
     deviceDetails: {
         platform: null,
         device: null,
@@ -18,10 +17,8 @@ const initialState = {
         soundFx: false,
         music: false,
     },
-    user: {
-        isLoggedIn: false,
-        type: 'admin',
-    },
+    appDetails: null,
+    user: null,
     isCustom: false,
     selectedDecks: [],
     decks: [],
@@ -31,11 +28,13 @@ const initialState = {
     appInitializing: false,
     decksLoading: false,
     settingsLoading: false,
+    addingUser: false,
 
     //failures
     decksError: false,
     initializeError: false,
     settingsError: false,
+    userError: false,
 };
 
 export default function App(state = initialState, action) {
@@ -51,7 +50,10 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 appInitializing: false,
-                appInitialized: true,
+                appDetails: {
+                    ...action.payload,
+                    id: action.response.id,
+                },
                 gameKey: action.response.data,
                 initializeError: false,
             }
@@ -60,6 +62,29 @@ export default function App(state = initialState, action) {
                 ...state,
                 appInitializing: false,
                 initializeError: true,
+            }
+
+        //INITIALIZE USER
+        case app.ADD_USER_REQUEST:
+            return {
+                ...state,
+                addingUser: true,
+            }
+        case app.ADD_USER_SUCCESS:
+            return {
+                ...state,
+                addingUser: false,
+                user: {
+                    ...action.payload,
+                    id: action.response.id
+                },
+                userError: false,
+            }
+        case app.ADD_USER_FAILURE:
+            return {
+                ...state,
+                addingUser: false,
+                userError: true,
             }
 
         //SETTINGS

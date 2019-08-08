@@ -5,6 +5,6 @@ export const variables = {
 export default {
 	//enablers
 	disableAPI: false,
-	readOnlyAPI: true,
+	readOnlyAPI: false,
 	variables,
 }

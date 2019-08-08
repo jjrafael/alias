@@ -41,7 +41,8 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       return dispatch(
         Object.assign({}, payload, {
           response,
-          type: successType
+          type: successType,
+          payload: data
         })
       )
     }).catch((error) => {

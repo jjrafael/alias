@@ -64,9 +64,9 @@ class Loading extends React.Component {
 
 	    return (
 	      <div className={`loading-overlay ${className || ''} ${active}`}>
-	        <h1>
+	        <h2>
 	        	{title}
-	        </h1>
+	        </h2>
 	      </div>
 	    );
   	}

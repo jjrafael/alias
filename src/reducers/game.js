@@ -39,7 +39,6 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 endingGame: false,
-                appInitialized: true,
                 gameKey: action.response.data,
                 endingError: false,
             }
