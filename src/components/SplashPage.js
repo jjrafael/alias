@@ -64,49 +64,43 @@ class SplashPage extends React.Component {
 	    return (
 	      <div className="page-wrapper splash-page">
 	      	<div className="splash-tilt">
-	      		<CardsCol count={20}>
+	      		<CardsCol count={20} animDelay={'0.5s'} className="--roulette">
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20}>
+	      		<CardsCol count={20} animDelay={'3s'} className="--roulette">
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20}>
+	      		<CardsCol count={20} animDelay={'1s'} className="--roulette">
+	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
+	      				<div className="card-inner">
+	      					<h3>Add Cards</h3>
+	      				</div>
+	      			</Card>
+	      		</CardsCol>
+	      		<CardsCol count={20} animDelay={'0.5s'} className="--roulette">
+	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
+	      				<div className="card-inner">
+	      					<h3>As Team</h3>
+	      				</div>
+	      			</Card>
+	      		</CardsCol>
+	      		<CardsCol count={20} animDelay={'2s'} className="--roulette">
+	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
+	      				<div className="card-inner">
+	      					<h3>Play</h3>
+	      				</div>
+	      			</Card>
+	      		</CardsCol>
+	      		<CardsCol count={20} animDelay={'2.5s'} className="--roulette">
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20}>
+	      		<CardsCol count={20} animDelay={'3s'} className="--roulette">
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20}>
+	      		<CardsCol count={20} animDelay={'1s'} className="--roulette">
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
-	      		</CardsCol>
-	      		<CardsCol count={20}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
-	      		</CardsCol>
-	      		<CardsCol count={20}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
-	      		</CardsCol>
-	      		<CardsCol count={20}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
-	      		</CardsCol>
-	      		<CardsCol count={20}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
-	      		</CardsCol>
-	      		<CardsCol count={20}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
-	      		</CardsCol>
-	      		<CardsCol count={20}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
-	      		</CardsCol>
-	      		<CardsCol count={20}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
-	      		</CardsCol>
-	      		<CardsCol count={20}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
-	      		</CardsCol>
-	      		<CardsCol count={20}>
+	      		<CardsCol count={20} animDelay={'4s'} className="--roulette">
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
 	      	</div>

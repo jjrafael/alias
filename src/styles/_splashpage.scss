@@ -11,8 +11,8 @@
 	@include wh(150%, 100%);
 	transform: rotateZ(45deg);
 	position: absolute;
-	top: -50%;
-	left: 30%;
+    top: -20%;
+    left: 10%;
 	z-index: 0;
 }
 
@@ -30,7 +30,7 @@
 .logo-typography {
 	font-family: $shrikhand;
 	color: $logo-color;
-	font-size: 150px;
+	font-size: $fs-xxl;
 	text-align: center;
     display: block;
 	span {

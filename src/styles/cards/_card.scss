@@ -2,11 +2,28 @@
 	margin: 5px 4px;
 	transition: all 0.3s ease;
 	position: relative;
-	@include wh(100px, 200px);
+	@include wh(200px, 350px);
+	&.--pointer {
+		cursor: pointer;
+	}
+	.card-inner {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		margin: 10px;
+		background: none;
+	    width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        border-radius: 8px;
+        @include center-flex();
+        h3 {
+        	color: $midnight;
+        }
+	}
 	.card-back {
 		background: $card-back-splash;
 		border-radius: 8px;
-		@include wh(81px, 180px);
+		@include wh(181px, 330px);
 		padding: 10px;
 		position: absolute;
 		top: 0px;
@@ -28,7 +45,7 @@
 		};
 		&__emblem {
 			font-family: $shrikhand;
-			font-size: 70px;
+			font-size: $fs-xl;
 			text-align: center;
 			@include text-gradient-soltice();
 		}
@@ -36,7 +53,7 @@
 	.card-front {
 		background: $card-front-splash;
 		border-radius: 8px;
-		@include wh(81px, 180px);
+		@include wh(181px, 330px);
 		padding: 10px;
 		position: absolute;
 		top: 0px;
@@ -61,5 +78,13 @@
 .cardscol {
 	float: left;
 	transition: all 0.3s ease;
+	&.--roulette {
+		transition: all 0.3s ease;
+  		animation: roulette 10s infinite;
+	}
+	&:hover.--roulette {
+		animation: none!important;
+		margin-top: 0px;
+	};
 }
 

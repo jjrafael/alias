@@ -12,10 +12,13 @@ class CardsCol extends React.Component {
   }
 
   render() {
-  	const { className, count, children } = this.props;
+  	const { className, count, children, animDelay } = this.props;
+    const style = {
+      animationDelay: animDelay
+    }
 
     return (
-      <div className={`cardscol ${className || ''}`}>
+      <div className={`cardscol ${className || ''}`} style={style}>
         {count && count > 1 ? this.renderCards(count) : children}
       </div>
     )
