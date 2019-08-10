@@ -191,7 +191,7 @@ class MainView extends React.Component {
   		const isAppReady = (isLogged && !!appDetails && verifyCacheDone);
   		const isTeamReady = isAppReady && false;
   		const isGridReady = isAppReady && false;
-
+  		
 	    return (
 	      <div className="page" id="MainPage">
 	        <Header className={`app-header ${!isAppReady ? 'hide' : ''}`}  />

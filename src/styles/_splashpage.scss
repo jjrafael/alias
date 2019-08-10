@@ -2,9 +2,7 @@
 	@include sq(100%);
 	background: $bg-splash;
 	@include gradient-sunset();
-	display: flex;
-    align-items: center;
-    justify-content: center;
+	@include center-flex();
 }
 
 .splash-tilt {

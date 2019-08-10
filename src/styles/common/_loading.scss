@@ -4,7 +4,7 @@
 
 .loading-overlay.active {
 	background: rgba(0,0,0,0.5);
-	@include gradient-midnight-75();
+	@include gradient-midnight(45deg, 0.75);
 	width: 100vw;
 	height: 100vh;
 	position: fixed;

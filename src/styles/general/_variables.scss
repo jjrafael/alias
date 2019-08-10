@@ -15,9 +15,15 @@ $fs-l: 50px;
 $fs-xl: 75px;
 $fs-xxl: 150px;
 
+/*neutral*/
+$black: rgba(19, 19, 19, 1);
+$white: rgba(255, 255, 255, 1);
+$black-10: rgba(19, 19, 19, 0.10);
+$white-10: rgba(255, 255, 255, 0.10);
+$black-50: rgba(19, 19, 19, 0.5);
+$white-50: rgba(255, 255, 255, 0.5);
+
 /*colors*/
-$black: #131313;
-$white: #fff;
 $bg: #5e4b60;
 $midnight: #140019;
 $aqua: #33ff8f;
@@ -33,3 +39,7 @@ $bg-splash: $bg;
 $card-back-splash: $midnight; 
 $card-front-splash: $aqua;
 $logo-color: $chrome;
+
+/*element dimensions*/
+$header-height: 50px;
+$header-width: 100%;

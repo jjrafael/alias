@@ -11,14 +11,17 @@
 
 /*elements*/
 @import './page';
-@import './header';
 @import './forms/textbox';
 @import './cards/card';
 @import './common/button';
 @import './common/loading';
+@import './header/header';
+@import './header/scorebar';
+@import './header/timebar';
 
 /*pages*/
 @import './splashpage';
+@import './homepage';
 
 /*global styles*/
 body {

@@ -10,7 +10,7 @@ class HomePage extends React.Component {
 
 	render() {
 	    return (
-	      <div className="page-wrapper splash-page">
+	      <div className="page-wrapper home-page">
 	        <h1>HOME</h1>
 	        <div className="center">
 	        	<Button

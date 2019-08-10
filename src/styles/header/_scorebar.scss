@@ -1,0 +1,58 @@
+.scorebar {
+	width: 50%;
+	position: relative;
+	float: left;
+	height: 100%;
+	&[data-team="1"] {
+		background: $chrome;
+	}
+	&[data-team="2"] {
+		background: $aqua;
+		> * {
+			float: right;
+			text-align: right;
+		}
+	}
+	&__avatar {
+		float: left;
+		width: 40px;
+		height: $header-height;
+		background: $black-10;
+	}
+	&__round-score {
+		float: left;
+		font-size: $fs-m;
+		font-family: $shrikhand;
+		padding: 5px 20px;
+		width: 80px;
+	    height: 40px;
+		line-height: 40px;
+		.over-score {
+			font-size: $fs-xs;
+			color: $white-50;
+		}
+	}
+	&__info {
+		float: left;
+		width: 200px;
+		height: 30px;
+		padding: 10px;
+	}
+	&__name {
+		font-size: $fs-xs;
+	}
+	&__trophies {
+		float: 	left;
+		width: auto;
+		height: 25px;
+		$color: $midnight;
+	}
+	&__violations {
+		float: 	left;
+		width: auto;
+		height: 25px;
+		color: $coral;
+		font-size: $fs-xxs;
+		text-transform: uppercase;
+	}
+}

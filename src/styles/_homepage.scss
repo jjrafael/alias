@@ -1,0 +1,5 @@
+.home-page {
+	@include gradient-summer();
+	@include sq(100%);
+	@include center-flex();
+}
