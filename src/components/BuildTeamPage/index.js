@@ -5,7 +5,7 @@ import Button from '../common/Button';
 
 class BuildTeamPage extends React.Component {
 	openApp = () => {
-		console.log('jj build team2');
+		
 	}
 
 	render() {

@@ -7,7 +7,7 @@ import { toggleLoadingOverlay } from '../../actions/app'
 
 const mapStateToProps = (state) => {
     return {
-        loadingOverlay: state.app.loadingOverlay
+        loading: state.app.loading
     }
 }
 
@@ -26,7 +26,6 @@ class Loading extends React.Component {
 		super();
 		this.state = {
 			defautTitle: 'Loading...',
-			title: 'Loading...',
 			dismissTimer: 3000,
 			autoDismiss: false,
 		}
@@ -37,19 +36,32 @@ class Loading extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if(prevProps.loadingOverlay !== this.props.loadingOverlay
-			&& this.state.autoDismiss && this.props.loadingOverlay){
-			setTimeout(() => {
-				this.props.toggleLoadingOverlay();
-			}, this.state.dismissTimer)
+		if(prevProps.loading !== this.props.loading){
+			if(this.state.autoDismiss && this.props.loading.show){
+				this.autoDismiss();
+			}
+			if(!this.props.loading.show){
+				this.dismiss();
+			}
 		}
 	}
 
+	dismiss() {
+		if(this.props.loading.show){
+			this.props.toggleLoadingOverlay(false, this.state.defautTitle);
+		}
+	}
+
+	autoDismiss() {
+		setTimeout(() => {
+			this.dismiss();
+		}, this.state.dismissTimer)
+}
+
 	setStateValues(props) {
-		const {title, defautTitle, dismissTimer} = this.state;
+		const { dismissTimer } = this.state;
 		const state = {
 			...this.state,
-			title: props.title || title || defautTitle,
 			autoDismiss: props.autoDismiss || false,
 			dismissTimer: props.autoDismiss ? (props.dismissTimer || dismissTimer) : dismissTimer,
 		}
@@ -58,14 +70,13 @@ class Loading extends React.Component {
 	}
 
 	render() {
-		const { className, loadingOverlay } = this.props;
-		const { title } = this.state;
-		const active = loadingOverlay ? 'active' : '';
+		const { className, loading } = this.props;
+		const active = loading.show ? 'active' : '';
 
 	    return (
 	      <div className={`loading-overlay ${className || ''} ${active}`}>
 	        <h2>
-	        	{title}
+	        	{loading.title || this.state.defautTitle}
 	        </h2>
 	      </div>
 	    );

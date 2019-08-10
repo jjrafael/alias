@@ -22,7 +22,10 @@ const initialState = {
     isCustom: false,
     selectedDecks: [],
     decks: [],
-    loadingOverlay: false,
+    loading: {
+        show: false,
+        title: 'Loading...'
+    },
 
     //requests
     appInitializing: false,
@@ -64,6 +67,29 @@ export default function App(state = initialState, action) {
                 initializeError: true,
             }
 
+        //READ APP
+        case app.READ_APP_REQUEST:
+            return {
+                ...state,
+                readingApp: true,
+            }
+        case app.READ_APP_SUCCESS:
+            return {
+                ...state,
+                readingApp: false,
+                appDetails: {
+                    ...action.response.data(),
+                    id: action.response.id,
+                },
+                initializeError: false,
+            }
+        case app.READ_APP_FAILURE:
+            return {
+                ...state,
+                readingApp: false,
+                initializeError: true,
+            }
+
         //INITIALIZE USER
         case app.ADD_USER_REQUEST:
             return {
@@ -85,6 +111,28 @@ export default function App(state = initialState, action) {
                 ...state,
                 addingUser: false,
                 userError: true,
+            }
+        //READ APP
+        case app.READ_USER_REQUEST:
+            return {
+                ...state,
+                readingApp: true,
+            }
+        case app.READ_USER_SUCCESS:
+            return {
+                ...state,
+                readingApp: false,
+                user: {
+                    ...action.response.data(),
+                    id: action.response.id,
+                },
+                initializeError: false,
+            }
+        case app.READ_USER_FAILURE:
+            return {
+                ...state,
+                readingApp: false,
+                initializeError: true,
             }
 
         //SETTINGS
@@ -131,13 +179,22 @@ export default function App(state = initialState, action) {
         case app.TOGGLE_LOADING_OVERLAY:
             return {
                 ...state,
-                loadingOverlay: !state.loadingOverlay,
+                loading: {
+                    ...state.loading,
+                    ...action.data,
+                },
             }
-        //NON-API
+        
         case app.SET_DEVICE_DETAILS:
             return {
                 ...state,
                 deviceDetails: action.data,
+            }
+
+        case app.SET_APP:
+            return {
+                ...state,
+                appDetails: action.data,
             }
 
         default: 

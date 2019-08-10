@@ -5,12 +5,14 @@ export default function callAPIMiddleware({ dispatch, getState }) {
     const {
       types,
       method,
+      operType,
       callRef,
       data,
       shouldCallAPI = () => true,
       payload = {}
     } = action;
     const { disableAPI, readOnlyAPI } = config;
+    const writeMethods = ['set', 'add', 'delete', 'update'];
 
     if (!types) {
       // Normal action: pass it on
@@ -25,7 +27,7 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       throw new Error('Expected an array of three string types.')
     }
 
-    if (!shouldCallAPI(getState()) || disableAPI || (readOnlyAPI && method !== 'get')) {
+    if (!shouldCallAPI(getState()) || disableAPI || (readOnlyAPI && writeMethods.indexOf(method) !== -1)) {
       return
     }
 
@@ -37,21 +39,40 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       })
     )
     
-    return callRef[method](data).then((response) => {
-      return dispatch(
-        Object.assign({}, payload, {
-          response,
-          type: successType,
-          payload: data
-        })
-      )
-    }).catch((error) => {
-      dispatch(
-        Object.assign({}, payload, {
-          error,
-          type: failureType
-        })
-      )
-    })
+    if(['on', 'once'].indexOf(method) !== -1){
+      return callRef[method](operType).then((snapshot) => {
+        return dispatch(
+          Object.assign({}, payload, {
+            response: snapshot && snapshot.val() ? snapshot.val() : {},
+            type: successType,
+            payload: data
+          })
+        )
+      }).catch((error) => {
+        dispatch(
+          Object.assign({}, payload, {
+            error,
+            type: failureType
+          })
+        )
+      })
+    }else{
+      return callRef[method](data).then((response) => {
+        return dispatch(
+          Object.assign({}, payload, {
+            response,
+            type: successType,
+            payload: data
+          })
+        )
+      }).catch((error) => {
+        dispatch(
+          Object.assign({}, payload, {
+            error,
+            type: failureType
+          })
+        )
+      })  
+    }
   }
 }

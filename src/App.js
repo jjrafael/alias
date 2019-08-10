@@ -1,11 +1,11 @@
 import React from 'react';
-import Page from './components/Page';
+import MainView from './components/MainView';
 import './styles/main.scss';
 
 function App() {
   return (
     <div className="App" id="App">
-      <Page />
+      <MainView />
     </div>
   );
 }

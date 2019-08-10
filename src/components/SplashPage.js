@@ -4,15 +4,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 //components
-import Loading from './common/Loading';
 import Card from './common/Card';
 import CardsCol from './common/CardsCol';
 
 //actions
-import { toggleLoadingOverlay, initializeApp, addUser } from '../actions/app';
+import { initializeApp, addUser } from '../actions/app';
 
 //misc
-import { getNow } from '../utils';
+import { getNow, setLocalStorage } from '../utils';
 
 const mapStateToProps = state => {
 	return {
@@ -27,7 +26,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      toggleLoadingOverlay,
       initializeApp,
       addUser
     },
@@ -44,15 +42,11 @@ class SplashPage extends React.Component {
 	}
 
 	componentDidUpdate(prevProps){
-		if(prevProps.user !== this.props.user && this.props.user){
+		if(prevProps.user !== this.props.user && !!this.props.user){
 			if(this.props.user.id){
 				this.initApp(this.props.user);
-			}
-		}
-
-		if(prevProps.appDetails !== this.props.appDetails && this.props.appDetails){
-			if(this.props.appDetails.id){
-				this.props.history.push('/home');
+				setLocalStorage('alias_userId', this.props.user.id);
+				setLocalStorage('alias_user', JSON.stringify(this.props.user));
 			}
 		}
 	}
@@ -88,15 +82,14 @@ class SplashPage extends React.Component {
 			browser: deviceDetails.browser,
 			status: 'active,',
 			type: user ? user.type : 'player',
+			role: 'grid',
 			created_time: now,
 			last_logged_time: now,
 		}
-		this.props.toggleLoadingOverlay();
 		this.props.addUser(data);
 	}
 
 	render() {
-		const { loadingTitle } = this.state;
 		const { loadingOverlay } = this.props;
 
 	    return (
@@ -118,7 +111,7 @@ class SplashPage extends React.Component {
 	      		<CardsCol count={20} animDelay={'0.5s'} className="--roulette">
 	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
 	      				<div className="card-inner">
-	      					<h3>Play As Team</h3>
+	      					<h3>As Team Leader</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
@@ -151,8 +144,6 @@ class SplashPage extends React.Component {
 	      			<span>S</span>
 	      		</div>
 	      	</div>
-	        
-	        <Loading title={loadingTitle} autoDismiss/>
 	      </div>
 	    );
   	}

@@ -8,6 +8,7 @@ const initialState = {
     gameLoser: null,
     gameEnded: false,
     isPause: false,
+    gameDetails: null,
 
     //requests
     endingGame: false,
@@ -125,6 +126,34 @@ export default function Game(state = initialState, action) {
                 ...state,
                 gameLoading: false,
                 gameError: true,
+            }
+
+        //READ GAME
+        case game.READ_GAME_REQUEST:
+            return {
+                ...state,
+                gameLoading: true,
+            }
+        case game.READ_GAME_SUCCESS:
+            return {
+                ...state,
+                gameLoading: false,
+                gameDetails: {
+                    ...action,
+                    id: action.response.id
+                },
+                gameError: false,
+            }
+        case game.READ_GAME_FAILURE:
+            return {
+                ...state,
+                gameLoading: false,
+                gameError: true,
+            }
+        case game.SET_GAME:
+            return {
+                ...state,
+                gameDetails: action.data,
             }
 
 

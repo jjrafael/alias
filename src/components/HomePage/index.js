@@ -5,7 +5,7 @@ import Button from '../common/Button';
 
 class HomePage extends React.Component {
 	openApp = () => {
-		console.log('jj homepage');
+		
 	}
 
 	render() {
