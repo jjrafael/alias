@@ -2,6 +2,7 @@ import constants from '../constants';
 
 const initialState = {
     rounds: [],
+    turnOf: '1',
     hasMod: false,
     ModDetails: null,
     gameWinner: null,
@@ -150,11 +151,6 @@ export default function Game(state = initialState, action) {
                 gameLoading: false,
                 gameError: true,
             }
-        case game.SET_GAME:
-            return {
-                ...state,
-                gameDetails: action.data,
-            }
 
 
         //ROUNDS
@@ -253,6 +249,18 @@ export default function Game(state = initialState, action) {
                 ...state,
                 gameLoading: false,
                 gameError: true,
+            }
+
+        //NON-API
+        case game.SET_GAME:
+            return {
+                ...state,
+                gameDetails: action.data,
+            }
+        case game.SHIFT_TURN:
+            return {
+                ...state,
+                turnOf: state.turnOf === '1' ? '2' : '1',
             }
 
         default: 

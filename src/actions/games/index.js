@@ -1,14 +1,6 @@
 import constants from '../../constants/game';
 import { baseURL } from '../../Firebase';
 
-//NON-API
-export function setGame(data) {
-    return {
-    	type: constants.SET_GAME,
-        data,
-    }
-}
-
 export function readGame(id) {
     const ref = baseURL.games.doc(id);
     return {
@@ -19,5 +11,19 @@ export function readGame(id) {
         ],
         method: 'get',
         callRef: ref,
+    }
+}
+
+//NON-API
+export function setGame(data) {
+    return {
+        type: constants.SET_GAME,
+        data,
+    }
+}
+
+export function shiftTurn() {
+    return {
+        type: constants.SHIFT_TURN,
     }
 }

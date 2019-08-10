@@ -194,7 +194,7 @@ class MainView extends React.Component {
   		
 	    return (
 	      <div className="page" id="MainPage">
-	        <Header className={`app-header ${!isAppReady ? 'hide' : ''}`}  />
+	        <Header className={`app-header ${!isAppReady ? 'hide' : ''}`} />
 	        <Body className="app-body">
 	        	<Switch>
 	        		<Route exact path="/"  render={() => isAppReady ? <HomePage {...props} /> : <SplashPage {...props} /> }/>

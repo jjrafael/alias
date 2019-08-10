@@ -5,9 +5,12 @@ import { connect } from 'react-redux';
 import HeaderCenter from './HeaderCenter';
 import ScoreBar from './ScoreBar';
 
-const mapStateToProps = state => {return {
-  settings: state.app.settings,
-}}
+const mapStateToProps = state => {
+  return {
+    settings: state.app.settings,
+    gameDetails: state.game.gameDetails
+  }
+}
 
 class Header extends React.Component {
   constructor(props) {
@@ -24,8 +27,9 @@ class Header extends React.Component {
   }
 
   render() {
-    const { className } = this.props;
+    const { className, gameDetails } = this.props;
     const { timer } = this.state;
+    const hasGame = gameDetails;
     const team = {
       team_1: {
         team_number: '1'
@@ -38,9 +42,13 @@ class Header extends React.Component {
     return (
       <header className={`app-header ${className || ''}`}>
         <HeaderCenter timer={timer}/>
-        <ScoreBar team={team.team_1}/>
-        <ScoreBar team={team.team_2}/>
-        <div className="timerbar"></div>
+        { hasGame &&
+            <div>
+              <ScoreBar team={team.team_1}/>
+              <ScoreBar team={team.team_2}/>
+              <div className="timerbar"></div>
+            </div>
+        }
       </header>
     );
   }
