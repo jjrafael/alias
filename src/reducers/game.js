@@ -2,7 +2,7 @@ import constants from '../constants';
 
 const initialState = {
     rounds: [],
-    turnOf: '1',
+    turnOf: '',
     hasMod: false,
     ModDetails: null,
     gameWinner: null,

@@ -2,6 +2,9 @@
 	@include gradient-summer();
 	@include sq(100%);
 	@include center-flex();
+	&[data-team=""], [data-team="none"] {
+		@include gradient-summer();
+	}
 	&[data-team="1"] {
 		@include gradient-sunglaze();
 	}

@@ -3,11 +3,16 @@
 	position: relative;
 	float: left;
 	height: 100%;
+	position: absolute;
+	top: 0px;
+	transition: all 0.6s ease;
 	&[data-team="1"] {
 		background: $chrome;
+		left: 0px;
 	}
 	&[data-team="2"] {
 		background: $aqua;
+		right: 0px;
 		> * {
 			float: right;
 			text-align: right;
@@ -24,12 +29,11 @@
 		font-size: $fs-m;
 		font-family: $shrikhand;
 		padding: 5px 20px;
-		width: 80px;
+		width: auto;
 	    height: 40px;
 		line-height: 40px;
 		.over-score {
 			font-size: $fs-xs;
-			color: $white-50;
 		}
 	}
 	&__info {

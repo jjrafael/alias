@@ -8,7 +8,8 @@ import ScoreBar from './ScoreBar';
 const mapStateToProps = state => {
   return {
     settings: state.app.settings,
-    gameDetails: state.game.gameDetails
+    gameDetails: state.game.gameDetails,
+    turnOf: state.game.turnOf,
   }
 }
 
@@ -27,7 +28,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { className, gameDetails } = this.props;
+    const { className, gameDetails, turnOf } = this.props;
     const { timer } = this.state;
     const hasGame = gameDetails;
     const team = {
@@ -40,8 +41,7 @@ class Header extends React.Component {
     }
 
     return (
-      <header className={`app-header ${className || ''}`}>
-        <HeaderCenter timer={timer}/>
+      <header className={`app-header ${className || ''}`} data-team={turnOf}>
         { hasGame &&
             <div>
               <ScoreBar team={team.team_1}/>
@@ -49,6 +49,7 @@ class Header extends React.Component {
               <div className="timerbar"></div>
             </div>
         }
+        <HeaderCenter timer={timer}/>
       </header>
     );
   }

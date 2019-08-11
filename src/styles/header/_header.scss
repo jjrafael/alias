@@ -11,22 +11,52 @@ header {
 .app-header {
 	height: $header-height;
 	width: $header-width;
-	background: $midnight;
+	@include gradient-summer();
 	color: $white;
 	position: relative;
+	@include center-flex;
+	&[data-team='1'] {
+		.scorebar[data-team='2'] {
+			width: 150px;
+		}
+		.scorebar[data-team='1'] {
+			width: calc(50% + calc(50% - 150px));
+		}
+		.scorebar__info {
+			display: none;
+		}
+		.header-center {
+			margin-left: calc(50% - 250px);
+		}
+	}
+	&[data-team='2'] {
+		.scorebar[data-team='1'] {
+			width: 150px;
+		}
+		.scorebar[data-team='2'] {
+			width: calc(50% + calc(50% - 150px));
+		}
+		.scorebar__info {
+			display: none;
+		}
+		.header-center {
+			margin-left: calc(-50% + 250px);
+		}
+	}
 }
 
 .header-center {
 	width: 200px;
 	height: $header-height;
-	background: $coral;
+	background: $peach;
 	color: $midnight;
 	position: absolute;
 	top: 0px;
-	@include center-auto;
+	transition: all 0.6s ease;
 }
 
 .header-logo {
 	font-size: $fs-m;
-	font-family: $josefin;
+	font-family: $shrikhand;
+	line-height: 50px;
 }

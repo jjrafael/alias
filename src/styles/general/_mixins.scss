@@ -44,7 +44,7 @@
 
 @mixin gradient-sunbreeze ($deg: 45deg, $transparency: 1) {
 	background: rgb(34,193,195);
-	background: linear-gradient($deg, rgba(51,34,195, $transparency) 0%, rgba(34,193,195, $transparency) 75%, rgba(253,187,45, $transparency) 100%);
+	background: linear-gradient($deg, rgba(88,195,34, $transparency) 0%, rgba(34,193,195, $transparency) 75%, rgba(253,187,45, $transparency) 100%);
 }
 
 @mixin gradient-sunset ($deg: 45deg, $transparency: 1) {
