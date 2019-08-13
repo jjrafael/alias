@@ -9,13 +9,13 @@ class Button extends React.Component {
 
   	switch(type){
   		case 'link':
-  			html = <button className={`btn ${className}`} onClick={onClick}>
+  			html = <button className={`btn ${className || ''}`} onClick={onClick}>
   				<Link to={link}>{text}</Link>
   				{children}
   			</button>
   		break;
   		default:
-  			html = <button className={`btn ${className}`} onClick={onClick}>
+  			html = <button className={`btn ${className || ''}`} onClick={onClick}>
   				{text}{children}
   			</button>
   		break;

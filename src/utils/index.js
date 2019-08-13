@@ -6,6 +6,30 @@ export function getNow() {
     return moment().format(variables.timeFormat);
 }
 
+export function getResponse(doc, cond) {
+	let value = null;
+
+	if(doc && doc.response && !doc.error){
+		const data = doc.response.data();
+		const condition = cond ? (data[cond.key] === cond.value) : true;
+		if(data && condition){
+			value = data;
+		}
+	}
+
+	return value;
+}
+
+export function isResponseExists(doc) {
+	let bool = false;
+
+	if(doc && doc.response && !doc.error){
+		bool = !!doc.response.data();
+	}
+
+	return bool;
+}
+
 // local storage
 export function getAllLocalStorage() {
     return {

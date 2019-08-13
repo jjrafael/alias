@@ -12,14 +12,19 @@ import BuildTeamPage from './BuildTeamPage';
 import Loading from './common/Loading';
 
 //actions
-import { setDeviceDetails, readApp, readUser, toggleLoadingOverlay } from '../actions/app';
+import { 
+	setDeviceDetails, 
+	readApp, 
+	readUser, 
+	toggleLoadingOverlay } from '../actions/app';
 import { readGame } from '../actions/games';
 
 //misc
 import { isMobile } from '../utils/app';
 import { 
 	setLocalStorage, 
-	getAllLocalStorage } from '../utils';
+	getAllLocalStorage,
+	getResponse } from '../utils';
 import { variables } from '../config';
 
 const mapStateToProps = state => {return {
@@ -108,14 +113,14 @@ class MainView extends React.Component {
 			cacheLoaded: false,
 			verifyCacheDone: true
 		}
-		let user = null;
+		// let user = null;
 
 		if(userId){
 			this.updateLoading('Verifying Cache...');
-			this.props.readUser(userId).then((doc) => {
-				user = doc.response.data();
+			this.props.readUser(userId, true).then((doc) => {
 				//if exists and active
-				if(doc.response.exists && user.status === 'active' && !doc.error){
+				const cond = {key: 'status', value: 'active'};
+				if(getResponse(doc, cond)){
 					this.checkActiveApp();
 				}else{
 					this.closeLoading();
@@ -138,14 +143,13 @@ class MainView extends React.Component {
 			cacheLoaded: true,
 			verifyCacheDone: true
 		}
-		let app = null;
 
 		if(appId){
 			this.updateLoading('Initializing App...');
 			this.props.readApp(appId).then((doc) => {
-				app = doc.response.data();
 				//if exists and active
-				if(doc.response.exists && app.status === 'active' && !doc.error){
+				const cond = {key: 'status', value: 'active'};
+				if(getResponse(doc, cond)){
 					this.setState({cachedAppChecked: true, cacheLoaded: true});
 					this.checkActiveGame();
 				}else{
@@ -173,7 +177,6 @@ class MainView extends React.Component {
 		if(gameId){
 			this.updateLoading('In a moment...');
 			this.props.readGame(gameId).then((doc) => {
-				//if exists and active
 				this.closeLoading();
 				this.setState({ ...doneStates });
 			})
@@ -194,7 +197,9 @@ class MainView extends React.Component {
   		
 	    return (
 	      <div className="page" id="MainPage">
-	        <Header className={`app-header ${!isAppReady ? 'hide' : ''}`} />
+	      	{ isAppReady &&
+	      		<Header className={`app-header`} />
+	      	}
 	        <Body className="app-body">
 	        	<Switch>
 	        		<Route exact path="/"  render={() => isAppReady ? <HomePage {...props} /> : <SplashPage {...props} /> }/>

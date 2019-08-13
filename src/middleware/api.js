@@ -5,7 +5,6 @@ export default function callAPIMiddleware({ dispatch, getState }) {
     const {
       types,
       method,
-      operType,
       callRef,
       data,
       shouldCallAPI = () => true,
@@ -39,40 +38,21 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       })
     )
     
-    if(['on', 'once'].indexOf(method) !== -1){
-      return callRef[method](operType).then((snapshot) => {
-        return dispatch(
-          Object.assign({}, payload, {
-            response: snapshot && snapshot.val() ? snapshot.val() : {},
-            type: successType,
-            payload: data
-          })
-        )
-      }).catch((error) => {
-        dispatch(
-          Object.assign({}, payload, {
-            error,
-            type: failureType
-          })
-        )
-      })
-    }else{
-      return callRef[method](data).then((response) => {
-        return dispatch(
-          Object.assign({}, payload, {
-            response,
-            type: successType,
-            payload: data
-          })
-        )
-      }).catch((error) => {
-        dispatch(
-          Object.assign({}, payload, {
-            error,
-            type: failureType
-          })
-        )
-      })  
-    }
+    return callRef[method](data).then((response) => {
+      return dispatch(
+        Object.assign({}, payload, {
+          response,
+          type: successType,
+          payload: data
+        })
+      )
+    }).catch((error) => {
+      dispatch(
+        Object.assign({}, payload, {
+          error,
+          type: failureType
+        })
+      )
+    })
   }
 }

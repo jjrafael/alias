@@ -43,7 +43,7 @@ class SplashPage extends React.Component {
 
 	componentDidUpdate(prevProps){
 		if(prevProps.user !== this.props.user && !!this.props.user){
-			if(this.props.user.id){
+			if(this.props.user.id && !this.props.user.isCache){
 				this.initApp(this.props.user);
 				setLocalStorage('alias_userId', this.props.user.id);
 				setLocalStorage('alias_user', JSON.stringify(this.props.user));

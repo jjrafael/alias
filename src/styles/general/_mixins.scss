@@ -25,7 +25,6 @@
     text-align: center;
 }
 
-
 /*gradients*/
 @mixin gradient-soltice ($deg: 45deg, $transparency: 1) {
 	background: rgb(105,2,115);
@@ -65,4 +64,44 @@ background: linear-gradient($deg, rgba(20,0,49, $transparency) 0%, rgba(25,208,2
 	background: -webkit-linear-gradient(45deg, rgba(105,2,115,1) 0%, rgba(141,3,65,1) 100%);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
+}
+
+@mixin text-gradient-sunbreeze () {
+	background: transparent;
+	background: -webkit-linear-gradient(45deg, rgba(0,184,104,1) 0%, rgba(0,158,49,1) 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+@mixin text-gradient-sunglaze () {
+	background: transparent;
+	background: -webkit-linear-gradient(45deg, rgba(253,187,45,1) 0%, rgba(239,33,15,1) 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+
+/*pseudo underlines*/
+@mixin focus-switch-underlines () {
+	transition: all 0.6s ease;
+	&:after, &:before {
+		content: '';
+		position: absolute;
+		bottom: 0px;
+		width: 100%;
+		height: 1px;
+		transition: all 0.6s ease;
+		@include gradient-midnight();
+	}
+	&:before {
+		width: 0%;
+		@include gradient-summer();
+	}
+	&:focus:after {
+		width: 0%;
+	}
+	&:focus:before {
+		width: 100%;
+		transition-delay: 1s;
+	}
 }

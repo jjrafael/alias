@@ -1,0 +1,79 @@
+.app-footer {
+	position: absolute;
+	bottom: 0px;
+	@include center-flex;
+	font-family: $josefin;
+	color: $white;
+	font-size: $fs-xs;
+	z-index: 50px;
+}
+
+.footer__options {
+	min-width: 300px;
+	width: auto;
+	height: 100px;
+	position: relative;
+
+	&--main {
+		font-family: $shrikhand;
+		font-size: $fs-m;
+		line-height: 80px;
+		background: $midnight;
+		border-radius: 10px 10px 0px 0px;
+		padding: 20px;
+		height: 60px;
+		width: 200px;
+		text-align: center;
+		float: left;
+		cursor: pointer;
+		transition: all 0.6s ease;
+		&:hover {
+			height: 150px;
+			line-height: 30px;
+		}
+	}
+	&--left, &--right {
+		line-height: 100px;
+		height: 60px;
+		width: auto;
+		position: relative;
+		float: left;
+		color: $midnight;
+		cursor: pointer;
+		transition: all 0.6s ease;
+		padding: 0px 40px;
+		&:hover {
+			color: $white;
+		};
+	}
+	&.--have-main {
+		.footer__options--left {
+			&:hover:after { width: 0px; };
+			&:after {
+				content: '';
+				width: 40px;
+				position: absolute;
+				bottom: 10px;
+				height: 2px;
+				@include gradient-midnight(210deg);
+				float: left;
+				transition: all 0.6s ease;
+				right: -20px;
+			};
+		}
+		.footer__options--right {
+			&:hover:after { width: 0px; };
+			&:after {
+				content: '';
+				width: 40px;
+				position: absolute;
+				bottom: 10px;
+				left: -20px;
+				height: 2px;
+				@include gradient-midnight();
+				float: right;
+				transition: all 0.6s ease;
+			};
+		}
+	}
+}

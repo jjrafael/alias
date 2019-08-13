@@ -125,6 +125,7 @@ export default function App(state = initialState, action) {
                 user: {
                     ...action.response.data(),
                     id: action.response.id,
+                    isCache: action.isCache
                 },
                 initializeError: false,
             }

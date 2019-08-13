@@ -12,3 +12,18 @@
 		@include gradient-sunbreeze();
 	}
 }
+
+.col-2 {
+	.col[data-team="1"] {
+		.forms-single .input__wrapper .input__textbox {
+			color: $chrome-dark;
+		}
+	}
+	.col[data-team="2"] {
+		.forms-single .input__wrapper {
+			.input__textbox {
+				color: $aqua-dark;
+			}
+		}
+	}
+}

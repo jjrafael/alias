@@ -44,7 +44,7 @@ export function addUser(data) {
     }
 }
 
-export function readUser(id) {
+export function readUser(id, isCache) {
 	const ref = baseURL.users.doc(id);
     return {
     	types: [
@@ -54,6 +54,7 @@ export function readUser(id) {
     	],
     	method: 'get',
     	callRef: ref,
+    	payload: { isCache }
     }
 }
 

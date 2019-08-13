@@ -1,0 +1,24 @@
+.input__textbox {
+	@include wh(250px, 60px);
+	@include focus-switch-underlines();
+	border-radius: 10px;
+	background: none;
+	padding: 10px;
+	color: $chrome;
+	margin: 20px 0px;
+	border: 1px solid transparent;
+	&:hover {
+		border: 1px solid $white;
+	};
+	&:focus{
+		border: transparent;
+	};
+	&.--error {
+		border-color: $coral;
+	}
+	&.--huge {
+		font-family: $shrikhand;
+		font-size: $fs-l;
+		width: 330px;
+	}
+}
