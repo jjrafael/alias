@@ -60,3 +60,17 @@ header {
 	font-family: $shrikhand;
 	line-height: 50px;
 }
+
+/*responsiveness*/
+
+@include mobile {
+	.header-center {
+		width: 50px;
+	}
+	.header-logo {
+		display: none;
+	}
+	.header-menu-icon {
+		display: block;
+	}
+}

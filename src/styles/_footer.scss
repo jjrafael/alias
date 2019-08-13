@@ -5,7 +5,8 @@
 	font-family: $josefin;
 	color: $white;
 	font-size: $fs-xs;
-	z-index: 50px;
+	z-index: 50;
+	width: 100%;
 }
 
 .footer__options {
@@ -81,5 +82,22 @@
 /*responsiveness*/
 
 @include mobile {
-
+	.footer__options {
+		height: 70px;
+		&.--have-main {
+			.footer__options--left,
+			.footer__options--right {
+				padding: 10px 20px;
+				line-height: 70px;
+				&:after { display: none };
+			}
+			.footer__options--main {
+				width: 100px;
+				padding: 10px;
+				font-size: 20px;
+				line-height: 60px;
+				height: 60px;
+			}
+		}
+	}
 }
