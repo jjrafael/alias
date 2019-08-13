@@ -90,48 +90,49 @@ class SplashPage extends React.Component {
 	}
 
 	render() {
-		const { loadingOverlay } = this.props;
+		const { loadingOverlay, deviceDetails } = this.props;
+		const isMobile = deviceDetails.device === 'mobile';
 
 	    return (
 	      <div className="page-wrapper splash-page">
 	      	<div className="splash-tilt">
-	      		<CardsCol count={20} animDelay={'0.5s'} className="--roulette">
+	      		<CardsCol count={20} animDelay={'0.5s'} className={`${!isMobile ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'3s'} className="--roulette">
+	      		<CardsCol count={20} animDelay={'3s'} className={`${!isMobile ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'1s'} className="--roulette">
+	      		<CardsCol count={20} animDelay={'1s'} className={`flippy ${!isMobile ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
 	      				<div className="card-inner">
 	      					<h3>Add Cards</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'0.5s'} className="--roulette">
+	      		<CardsCol count={20} animDelay={'0.5s'} className={`flippy ${!isMobile ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
 	      				<div className="card-inner">
 	      					<h3>As Team Leader</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'2s'} className="--roulette">
+	      		<CardsCol count={20} animDelay={'2s'} className={`flippy ${!isMobile ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
 	      				<div className="card-inner" onClick={this.initUser}>
 	      					<h3>Start Game</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'2.5s'} className="--roulette">
+	      		<CardsCol count={20} animDelay={'2.5s'} className={`${!isMobile ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'3s'} className="--roulette">
+	      		<CardsCol count={20} animDelay={'3s'} className={`${!isMobile ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'1s'} className="--roulette">
+	      		<CardsCol count={20} animDelay={'1s'} className={`${!isMobile ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'4s'} className="--roulette">
+	      		<CardsCol count={20} animDelay={'4s'} className={`${!isMobile ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
 	      	</div>

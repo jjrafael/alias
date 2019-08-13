@@ -67,7 +67,7 @@ class MainView extends React.Component {
 		const navigator = window.navigator;
 		const { gameId, appId, userId } = getAllLocalStorage();
 		const device = {
-			device: isMobile(navigator.userAgent) || 'desktop',
+			device: isMobile(navigator.userAgent) ? 'mobile' : 'desktop',
 			platform: navigator.platform,
 			browser: navigator.appCodeName,
 		}
@@ -188,15 +188,16 @@ class MainView extends React.Component {
 
   	render() {
   		const { user, appDetails } = this.props;
-  		const { verifyCacheDone } = this.state;
+  		const { verifyCacheDone, device } = this.state;
   		const props = { variables };
   		const isLogged = user && user.is_logged;
   		const isAppReady = (isLogged && !!appDetails && verifyCacheDone);
   		const isTeamReady = isAppReady && false;
   		const isGridReady = isAppReady && false;
+  		const cxDevice = device ? device.device : 'desktop';
   		
 	    return (
-	      <div className="page" id="MainPage">
+	      <div className={`page --${cxDevice}`} id="MainPage">
 	      	{ isAppReady &&
 	      		<Header className={`app-header`} />
 	      	}

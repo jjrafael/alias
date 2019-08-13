@@ -41,3 +41,20 @@
 		};
 	}
 }
+
+/*responsiveness*/
+
+@include mobile {
+	.splash-tilt {
+		width: 750px;
+		.cardscol:not(.flippy) {
+			display: none;
+		}
+	}
+	.splash-logo-wrapper {
+		width: 80%;
+		.logo-typography {
+			font-size: 60px;
+		}
+	}
+}

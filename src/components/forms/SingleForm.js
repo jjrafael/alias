@@ -19,7 +19,7 @@ class SingleForm extends React.Component {
     super(props);
     this.state = {
       formData: {
-        [this.props.input.id]: ''
+        [this.props.input.id]: this.props.input.value || ''
       }
     }
   }
@@ -27,7 +27,7 @@ class SingleForm extends React.Component {
   componentDidMount() {
     this.setState({
       formData: {
-        [this.props.input.id]: ''
+        [this.props.input.id]: this.props.input.value || ''
       }
     })
   }
@@ -48,9 +48,11 @@ class SingleForm extends React.Component {
   }
 
   renderInput(input) {
+    const { textOnly } = this.props;
     const { formData } = this.state;
     const generalProps = {
       placeholder: input.placeholder,
+      disabled: textOnly,
     }
 
     let html = null;
@@ -59,20 +61,32 @@ class SingleForm extends React.Component {
       case 'text':
         html = (
           <div className="input__wrapper">
-            {input.showLabel &&
+            {input.showLabel && !textOnly &&
               <h4 className="input__label">{input.label || input.id}</h4>
             }
-            <input className={`input__textbox --huge ${input.className || ''}`} type="text" value={formData[input.id]} onChange={(e) => this.updateValue(e)} {...generalProps}/>
+            <input
+              {...generalProps}
+              className={`input__textbox --huge ${input.className || ''}`}
+              type="text" 
+              value={formData[input.id]} 
+              onChange={(e) => this.updateValue(e)}
+            />
           </div>
         )
       break;
       default:
         html = (
           <div className="input__wrapper">
-            {input.showLabel &&
+            {input.showLabel && !textOnly &&
               <h4 className="input__label">{input.label || input.id}</h4>
             }
-            <input className={`input__textbox --huge ${input.className || ''}`} type="text" value={formData[input.id]} onChange={(e) => this.updateValue(e)} {...generalProps}/>
+            <input
+              {...generalProps}
+              className={`input__textbox --huge ${input.className || ''}`}
+              type="text" 
+              value={formData[input.id]} 
+              onChange={(e) => this.updateValue(e)}
+            />
           </div>
         )
       break;
@@ -89,12 +103,14 @@ class SingleForm extends React.Component {
   }
 
   renderForm() {
-    const { input } = this.props;
+    const { input, textOnly } = this.props;
 
     return (
       <div className="form-single__inner">
         {this.renderInput(input)}
-        <Button text="OK" onClick={this.submitForm}/>
+        { !textOnly &&
+          <Button text="OK" onClick={this.submitForm}/>
+        }
       </div>
     )
   }

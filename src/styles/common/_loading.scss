@@ -16,3 +16,11 @@
     color: white;
     overflow: hidden;
 }
+
+/*responsiveness*/
+
+@include mobile {
+	.loading-overlay h2 {
+		font-size: 35px;
+	}
+}

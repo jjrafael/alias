@@ -24,6 +24,12 @@ const mapDispatchToProps = dispatch => {
 }
 
 class HomePage extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			textOnly: false,
+		}
+	}
 	shiftTurn = () => {
 		this.props.shiftTurn();
 	}
@@ -34,10 +40,55 @@ class HomePage extends React.Component {
 
 	submitForm = (formData) => {
 		console.log('jj submit: ', formData);
+		this.setState({ textOnly: true });
+	}
+
+	renderForm(index) {
+		const { teams } = this.props;
+		const { textOnly } = this.state;
+		const team = teams ? teams[index] : null;
+		const teamNumber = team ? team.team_number : (Number(index) + 1);
+		const inputData = [
+			{
+				id: 'teamName',
+				type: 'text',
+				placeholder: 'Alpha',
+				label: 'Team Name',
+				showLabel: true,
+				required: true,
+				value: 'Alpha',
+				validations: ['charMax-10']
+			},
+			{
+				id: 'teamName',
+				type: 'text',
+				placeholder: 'Beta',
+				label: 'Team Name',
+				showLabel: true,
+				required: true,
+				value: 'Beta',
+				validations: ['charMax-10']
+			},
+		]
+		
+		return (
+			<div className="col --center" data-team={teamNumber}>
+      			{ teams && team && team.status === 'inactive' ?
+      				<div>Connect to TeamCode:
+      					<h2>CODE1234</h2>
+      				</div>
+      				: <SingleForm 
+      					className={textOnly ? '--text-only' : ''}
+      					onSubmit={this.submitForm} 
+      					input={inputData[index]} 
+      					textOnly={textOnly}/>
+      			}
+      		</div>
+		)
 	}
 
 	render() {
-		const { turnOf, teams } = this.props;
+		const { turnOf } = this.props;
 		const footOptions = {
 			main: {
 				text: 'Play',
@@ -53,31 +104,12 @@ class HomePage extends React.Component {
 			},
 			copyright: false,
 		}
-		const inputData = {
-			id: 'teamName',
-			type: 'text',
-			placeholder: 'Alpha',
-			label: 'Team Name',
-			showLabel: true,
-			required: true,
-			validations: ['charMax-10']
-		}
 
 	    return (
 	      <div className={`page-wrapper home-page`} data-team={turnOf}>
 	      	<div className="col-2">
-	      		<div className="col --center" data-team="1">
-	      			{ teams && teams[0] && teams[0].status === 'inactive' ?
-	      				<div>Connect to TeamCode</div>
-	      				: <SingleForm onSubmit={this.submitForm} input={inputData}/>
-	      			}
-	      		</div>
-	      		<div className="col --center" data-team="2">
-	      			{ teams && teams[1] && teams[0].status === 'inactive' ?
-	      				<div>Connect to TeamCode</div>
-	      				: <SingleForm onSubmit={this.submitForm} input={{...inputData, placeholder: 'Beta'}} />
-	      			}
-	      		</div>
+	      		{this.renderForm(0)}
+	      		{this.renderForm(1)}
 	      	</div>
 	      	<Footer options={footOptions}/>
 	      </div>
