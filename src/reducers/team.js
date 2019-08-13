@@ -1,10 +1,12 @@
 import constants from '../constants';
 
 const initialState = {
-    teams: [],
+    team1: null,
+    team2: null,
     selectedTeamMembers: [],
 
     //requests
+    addingTeam: false,
     teamLoading: false,
     memberLoading: false,
 
@@ -15,24 +17,25 @@ const initialState = {
 
 export default function Team(state = initialState, action) {
     const team = constants.team;
+    const teamObj = action.payload && action.payload.team_number ? 'team'+action.payload.team_number : 'team1';
     switch(action.type) {
         //TEAM
         case team.ADD_TEAM_REQUEST:
             return {
                 ...state,
-                teamLoading: true,
+                addingTeam: true,
             }
         case team.ADD_TEAM_SUCCESS:
             return {
                 ...state,
-                teamLoading: false,
-                teams: action.response.data,
+                addingTeam: false,
+                [teamObj]: action.payload,
                 teamError: false,
             }
         case team.ADD_TEAM_FAILURE:
             return {
                 ...state,
-                teamLoading: false,
+                addingTeam: false,
                 teamError: true,
             }
 
@@ -45,7 +48,7 @@ export default function Team(state = initialState, action) {
             return {
                 ...state,
                 teamLoading: false,
-                teams: action.response.data,
+                [teamObj]: action.payload,
                 teamError: false,
             }
         case team.EDIT_TEAM_FAILURE:
@@ -64,7 +67,7 @@ export default function Team(state = initialState, action) {
             return {
                 ...state,
                 teamLoading: false,
-                teams: action.response.data,
+                [teamObj]: action.payload,
                 teamError: false,
             }
         case team.BROWSE_TEAM_FAILURE:
@@ -84,7 +87,7 @@ export default function Team(state = initialState, action) {
             return {
                 ...state,
                 memberLoading: false,
-                teams: action.response.data,
+                [teamObj]: action.payload,
                 clueError: false,
             }
         case team.ADD_MEMBER_FAILURE:
@@ -103,7 +106,7 @@ export default function Team(state = initialState, action) {
             return {
                 ...state,
                 memberLoading: false,
-                teams: action.response.data,
+                [teamObj]: action.payload,
                 clueError: false,
             }
         case team.EDIT_MEMBER_FAILURE:

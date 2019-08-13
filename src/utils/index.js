@@ -30,6 +30,18 @@ export function isResponseExists(doc) {
 	return bool;
 }
 
+export function makeId(length=6) {
+   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   const charsLen = chars.length;
+   let result = '';
+
+   for ( var i = 0; i < length; i++ ) {
+      result += chars.charAt(Math.floor(Math.random() * charsLen));
+   }
+
+   return result;
+}
+
 // local storage
 export function getAllLocalStorage() {
     return {

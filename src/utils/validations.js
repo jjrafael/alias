@@ -35,7 +35,7 @@ export function validateValues(inputs, formData) {
 	return {...result, valid: result.count === 0};
 }
 
-export function validateSingleValue(input, value) {
+export function validateSingleValue(input, value, resultAttribute) {
 	const result = validateValues([input], value);
-    return result.valid;
+    return resultAttribute === 'all' ? result : result[resultAttribute];
 }

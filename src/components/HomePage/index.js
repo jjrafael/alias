@@ -8,16 +8,24 @@ import SingleForm from '../forms/SingleForm';
 
 // actions
 import { shiftTurn } from '../../actions/games';
+import { addTeam } from '../../actions/teams';
+
+//misc
+import { makeId, getNow } from '../../utils';
 
 const mapStateToProps = state => {return {
 	turnOf: state.game.turnOf,
-	teams: state.team.teams,
+	team1: state.team.team1,
+	team2: state.team.team2,
+	addingTeam: state.team.addingTeam,
+	user: state.app.user,
 }}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      shiftTurn
+      shiftTurn,
+      addTeam
     },
     dispatch
   )
@@ -27,61 +35,70 @@ class HomePage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			textOnly: false,
+			textOnly: {
+				1: false,
+				2: false,
+			},
 		}
 	}
+
+	componentDidUpdate(prevProps){
+		if(prevProps.team1 !== this.props.team1){
+			//updated
+		}
+	}
+
 	shiftTurn = () => {
 		this.props.shiftTurn();
 	}
 
-	updateText = () => {
-
+	submitForm = (formData, teamNumber) => {
+		const { addTeam, user } = this.props;
+		const data = {
+			status: 'inactive',
+			team_number: teamNumber,
+			name: formData.name,
+			total_score: 0,
+			total_violations: 0,
+			game_key: makeId(),
+			created_by: user.id,
+			created_time: getNow(),
+		}
+		this.setState({ 
+			textOnly: { ...this.state.textOnly, [teamNumber]: true}
+		});
+		
+		addTeam(data);
 	}
 
-	submitForm = (formData) => {
-		console.log('jj submit: ', formData);
-		this.setState({ textOnly: true });
-	}
-
-	renderForm(index) {
-		const { teams } = this.props;
+	renderForm(index, data) {
+		const { team1, team2, addingTeam } = this.props;
 		const { textOnly } = this.state;
-		const team = teams ? teams[index] : null;
+		const team = index === 0 ? team1 : team2;
 		const teamNumber = team ? team.team_number : (Number(index) + 1);
-		const inputData = [
-			{
-				id: 'teamName',
-				type: 'text',
-				placeholder: 'Alpha',
-				label: 'Team Name',
-				showLabel: true,
-				required: true,
-				value: 'Alpha',
-				validations: ['charMax-10']
-			},
-			{
-				id: 'teamName',
-				type: 'text',
-				placeholder: 'Beta',
-				label: 'Team Name',
-				showLabel: true,
-				required: true,
-				value: 'Beta',
-				validations: ['charMax-10']
-			},
-		]
+		const isTextOnly = textOnly[data.teamNumber];
+		const haveNewTeam = team && team.status === 'inactive';
+		const haveConnectedTeam = team && team.status === 'active';
 		
 		return (
 			<div className="col --center" data-team={teamNumber}>
-      			{ teams && team && team.status === 'inactive' ?
-      				<div>Connect to TeamCode:
-      					<h2>CODE1234</h2>
+				<SingleForm 
+  					className={isTextOnly ? '--text-only' : ''}
+  					onSubmit={this.submitForm} 
+  					input={data} 
+  					textOnly={isTextOnly}/>
+      			{ haveNewTeam && !haveConnectedTeam &&
+      				<div className="msg__connect-to-team">Connect to Team Code:
+      					<h2>{team.game_key || '...'}</h2>
       				</div>
-      				: <SingleForm 
-      					className={textOnly ? '--text-only' : ''}
-      					onSubmit={this.submitForm} 
-      					input={inputData[index]} 
-      					textOnly={textOnly}/>
+      			}
+      			{ addingTeam && !haveConnectedTeam &&
+      				<div className="team-grid">
+      					Initializing Team...
+      				</div>
+      			}
+      			{ haveNewTeam && !addingTeam && haveConnectedTeam &&
+      				<div>Add members</div>
       			}
       		</div>
 		)
@@ -104,12 +121,38 @@ class HomePage extends React.Component {
 			},
 			copyright: false,
 		}
+		const inputData = [
+			{
+				id: 'name',
+				type: 'text',
+				placeholder: 'Alpha',
+				label: 'Team Name',
+				showLabel: true,
+				required: true,
+				value: 'Alpha',
+				validations: ['charMax-10'],
+				teamNumber: 1,
+				enableEnter: true,
+			},
+			{
+				id: 'name',
+				type: 'text',
+				placeholder: 'Beta',
+				label: 'Team Name',
+				showLabel: true,
+				required: true,
+				value: 'Beta',
+				validations: ['charMax-10'],
+				teamNumber: 2,
+				enableEnter: true,
+			},
+		]
 
 	    return (
 	      <div className={`page-wrapper home-page`} data-team={turnOf}>
 	      	<div className="col-2">
-	      		{this.renderForm(0)}
-	      		{this.renderForm(1)}
+	      		{this.renderForm(0, inputData[0])}
+	      		{this.renderForm(1, inputData[1])}
 	      	</div>
 	      	<Footer options={footOptions}/>
 	      </div>

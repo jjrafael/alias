@@ -18,6 +18,9 @@
 		.forms-single .input__wrapper .input__textbox {
 			color: $chrome-dark;
 		}
+		.msg__connect-to-team h2 {
+			@include text-gradient-sunglaze;
+		}
 	}
 	.col[data-team="2"] {
 		.forms-single .input__wrapper {
@@ -25,5 +28,20 @@
 				color: $aqua-dark;
 			}
 		}
+		.msg__connect-to-team h2 {
+			@include text-gradient-sunbreeze;
+		}
 	}
+}
+
+.forms-single {
+	&.--text-only {
+		position: absolute;
+		top: 0px;
+		left: 5%;
+	}
+}
+
+.msg__connect-to-team {
+	color: $midnight;
 }

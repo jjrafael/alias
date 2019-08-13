@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Button from '../common/Button';
 
 //misc
+import { variables } from '../../config';
 import { validateSingleValue } from '../../utils/validations';
 
 const mapStateToProps = state => {
@@ -20,7 +21,8 @@ class SingleForm extends React.Component {
     this.state = {
       formData: {
         [this.props.input.id]: this.props.input.value || ''
-      }
+      },
+      errors: null
     }
   }
 
@@ -32,19 +34,51 @@ class SingleForm extends React.Component {
     })
   }
 
-  updateValue(e){
+  onKeyPress = (e) => {
+    const { keyCode } = variables;
+    if(e.keyCode === keyCode.enter || e.key === keyCode.enter) {
+      this.submitForm();
+    }
+  }
+
+  changeHandler(e){
     e.preventDefault();
     const { input } = this.props;
     const value = e.target.value;
+    let errors = null;
     let newValue = value;
+
     if(input.validations && input.validations.length){
-      const valid = validateSingleValue(input, {[input.id]: value})
-      newValue = valid ? value : this.state.formData[input.id];
+      const validResult = validateSingleValue(input, {[input.id]: value}, 'all');
+      errors = validResult.valid ? null : validResult.errors;
+      newValue = validResult.valid ? value : this.state.formData[input.id];
     }
 
     this.setState({
-      formData: { [input.id]: newValue }
+      formData: { [input.id]: newValue },
+      errors: errors
     })
+  }
+
+  focusHandler() {
+    if(this.props.input.enableEnter){
+      document.addEventListener('keydown', this.onKeyPress, false);
+    }
+  }
+
+  blurHandler() {
+    if(this.props.input.enableEnter){
+      document.removeEventListener('keydown', this.onKeyPress, false);
+    }
+  }
+
+  submitForm() {
+    const { onSubmit, input, textOnly } = this.props;
+    const { formData, errors } = this.state;
+
+    if(!errors && !textOnly){
+      onSubmit(formData, input.teamNumber);
+    }
   }
 
   renderInput(input) {
@@ -69,7 +103,9 @@ class SingleForm extends React.Component {
               className={`input__textbox --huge ${input.className || ''}`}
               type="text" 
               value={formData[input.id]} 
-              onChange={(e) => this.updateValue(e)}
+              onChange={(e) => this.changeHandler(e)}
+              onFocus={(e) => this.focusHandler(e)}
+              onBlur={(e) => this.blurHandler(e)}
             />
           </div>
         )
@@ -85,7 +121,9 @@ class SingleForm extends React.Component {
               className={`input__textbox --huge ${input.className || ''}`}
               type="text" 
               value={formData[input.id]} 
-              onChange={(e) => this.updateValue(e)}
+              onChange={(e) => this.changeHandler(e)}
+              onFocus={(e) => this.focusHandler(e)}
+              onBlur={(e) => this.blurHandler(e)}
             />
           </div>
         )
@@ -95,13 +133,6 @@ class SingleForm extends React.Component {
     return html;
   }
 
-  submitForm() {
-    const { onSubmit } = this.props;
-    const { formData } = this.state;
-
-    onSubmit(formData);
-  }
-
   renderForm() {
     const { input, textOnly } = this.props;
 
@@ -109,7 +140,7 @@ class SingleForm extends React.Component {
       <div className="form-single__inner">
         {this.renderInput(input)}
         { !textOnly &&
-          <Button text="OK" onClick={this.submitForm}/>
+          <Button text="OK" onClick={this.submitForm.bind(this)}/>
         }
       </div>
     )
