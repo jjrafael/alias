@@ -33,16 +33,27 @@
 	&[data-size="xs"] {
 		height: 120px;
 	}
+	&[data-size="m"] {
+		height: 200px;
+	}
 	&__header {
-		width: 100%;
+		width: calc(100% - 30px);
 		height: 50px;
-		padding: 5px 10px;
-		@include gradient-sunset();
-		color: $midnight;
+		padding: 5px 10px 0px 20px;
+		@include gradient-summer();
+		border-radius: 10px 10px 0px 0px;
+		color: $white;
 		font-weight: $fw-bold;
+		text-transform: uppercase;
+		font-size: $fs-xs;
 		position: absolute;
 		top: 0px;
 		left: 0px;
+		line-height: 50px;
+		max-width: calc(100% - 30px);
+		text-overflow: ellipsis;
+		display: block;
+		text-align: left;
 	}
 	&__body {
 		padding: 10px 20px;
@@ -92,5 +103,13 @@
 			    };
 			}
 		}
+	}
+}
+
+/*responsiveness*/
+
+@include mobile {
+	.modal {
+		width: calc(100% - 20px);
 	}
 }

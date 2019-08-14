@@ -8,7 +8,7 @@ import Card from './common/Card';
 import CardsCol from './common/CardsCol';
 
 //actions
-import { initializeApp, addUser } from '../actions/app';
+import { initializeApp, addUser, toggleEnterCodeModal } from '../actions/app';
 
 //misc
 import { getNow, setLocalStorage } from '../utils';
@@ -28,7 +28,8 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       initializeApp,
-      addUser
+      addUser,
+      toggleEnterCodeModal
     },
     dispatch
   )
@@ -49,6 +50,10 @@ class SplashPage extends React.Component {
 				setLocalStorage('alias_userId', this.props.user.id);
 			}
 		}
+	}
+
+	enterCodeModal = () => {
+		this.props.toggleEnterCodeModal(true);
 	}
 
 	initApp(user) {
@@ -90,53 +95,55 @@ class SplashPage extends React.Component {
 	}
 
 	render() {
-		const { loadingOverlay, deviceDetails } = this.props;
+		const { loadingOverlay, deviceDetails, hasModals } = this.props;
 		const isMobile = deviceDetails.device === 'mobile';
+		const rouletteConds = !isMobile && !hasModals && !loadingOverlay;
+		const showLogo = !hasModals && !loadingOverlay;
 
 	    return (
 	      <div className="page-wrapper splash-page">
 	      	<div className="splash-tilt">
-	      		<CardsCol count={20} animDelay={'0.5s'} className={`${!isMobile ? '--roulette' : ''}`}>
+	      		<CardsCol count={20} animDelay={'0.5s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'3s'} className={`${!isMobile ? '--roulette' : ''}`}>
+	      		<CardsCol count={20} animDelay={'3s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'1s'} className={`flippy ${!isMobile ? '--roulette' : ''}`}>
+	      		<CardsCol count={20} animDelay={'1s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
 	      				<div className="card-inner">
 	      					<h3>Add Cards</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'0.5s'} className={`flippy ${!isMobile ? '--roulette' : ''}`}>
+	      		<CardsCol count={20} animDelay={'0.5s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
-	      				<div className="card-inner">
-	      					<h3>As Team Leader</h3>
+	      				<div className="card-inner" onClick={this.enterCodeModal}>
+	      					<h3>Enter Code</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'2s'} className={`flippy ${!isMobile ? '--roulette' : ''}`}>
+	      		<CardsCol count={20} animDelay={'2s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
 	      				<div className="card-inner" onClick={this.initUser}>
 	      					<h3>Start Game</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'2.5s'} className={`${!isMobile ? '--roulette' : ''}`}>
+	      		<CardsCol count={20} animDelay={'2.5s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'3s'} className={`${!isMobile ? '--roulette' : ''}`}>
+	      		<CardsCol count={20} animDelay={'3s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'1s'} className={`${!isMobile ? '--roulette' : ''}`}>
+	      		<CardsCol count={20} animDelay={'1s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'4s'} className={`${!isMobile ? '--roulette' : ''}`}>
+	      		<CardsCol count={20} animDelay={'4s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" flipBack type="splash-cards"/>
 	      		</CardsCol>
 	      	</div>
-	      	<div className={`splash-logo-wrapper ${loadingOverlay ? 'trans-hide' : ''}`}>
+	      	<div className={`splash-logo-wrapper ${showLogo ? '' : 'trans-hide'}`}>
 	      		<div className="logo-typography">
 	      			<span>A</span>
 	      			<span>L</span>

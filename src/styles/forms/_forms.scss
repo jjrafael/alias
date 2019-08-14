@@ -8,3 +8,24 @@
 		width: 250px;
 	}
 }
+
+.forms-single {
+	&.--on-modal {
+		.input__wrapper input {
+			margin: 0px;
+			color: $aqua-dark;
+		}
+	}
+}
+
+/*responsiveness*/
+
+@include mobile {
+	.forms-single {
+		&.--on-modal {
+			.input__wrapper input {
+			    width: calc(100% - 20px);
+			}
+		}
+	}
+}

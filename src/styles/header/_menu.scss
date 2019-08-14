@@ -43,7 +43,7 @@
 		float: left;
 		height: 2px;
 		transition: all 0.6s ease;
-		@include gradient-sunset();
+		@include gradient-sunbreeze();
 	};
 	&:hover {
 		background: $chrome;

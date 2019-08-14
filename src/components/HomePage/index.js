@@ -86,9 +86,11 @@ class HomePage extends React.Component {
 		return (
 			<div className="col --center" data-team={teamNumber}>
 				<SingleForm 
+					formName={`add_team_${teamNumber}`}
   					className={isTextOnly ? '--text-only' : ''}
   					onSubmit={this.submitForm} 
   					input={data} 
+  					payloadKey="teamNumber"
   					textOnly={isTextOnly}/>
       			{ haveNewTeam && !haveConnectedTeam &&
       				<div className="msg__connect-to-team">Connect to Team Code:

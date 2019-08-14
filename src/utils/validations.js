@@ -25,6 +25,12 @@ export function validateValues(inputs, formData) {
 							result.errors[key] = inputName + ' should not exceed 10 characters';
 						}
 					break;
+					case 'charMax-6':
+						if(value && value.length > 6){
+							result.count++;
+							result.errors[key] = inputName + ' should not exceed 6 characters';
+						}
+					break;
 					default:
 					break;
 				}

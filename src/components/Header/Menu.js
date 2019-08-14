@@ -8,7 +8,7 @@ import {
 	toggleResetGameModal,
 	toggleResetTeamModal,
 	toggleRestartGameModal,
-	toggleAsLeaderModal
+	toggleEnterCodeModal
 } from '../../actions/app';
 
 //misc
@@ -25,7 +25,7 @@ const mapDispatchToProps = dispatch => {
 		toggleResetGameModal,
 		toggleResetTeamModal,
 		toggleRestartGameModal,
-		toggleAsLeaderModal
+		toggleEnterCodeModal
     },
     dispatch
   )
@@ -78,6 +78,9 @@ class Menu extends React.Component {
 			break;
 			case 'reset_team':
 				this.props.toggleResetTeamModal(true);
+			break;
+			case 'enter_code':
+				this.props.toggleEnterCodeModal(true);
 			break;
 			default:
 			break;

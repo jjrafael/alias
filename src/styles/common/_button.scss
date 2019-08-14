@@ -14,7 +14,11 @@
 	line-height: 40px;
 	float: left;
     margin-left: 10px;
-	&:hover {
+    &:not(.--disabled):focus{
+		outline: none;
+		box-shadow: none;
+	};
+	&:not(.--disabled):hover {
 		border: 1px solid $midnight;
 		background: transparent;
 		color: $midnight;
@@ -36,5 +40,22 @@
 			background: $red;
 			color: $white;
 		};
+	}
+	&.--primary.--plain {
+		background: transparent;
+		color: $aqua-dark;
+		&:hover {
+			background: $aqua-dark;
+			color: $white;
+		};
+	}
+	&.--disabled.--plain {
+		background: $gray!important;
+		color: $white!important;
+		cursor: not-allowed;
+		:not(.--disabled) {
+			background: $gray!important;
+			color: $white!important;
+		}
 	}
 }

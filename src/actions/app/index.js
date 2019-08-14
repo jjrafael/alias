@@ -137,9 +137,9 @@ export function toggleRestartGameModal(show) {
     }
 }
 
-export function toggleAsLeaderModal(show) {
+export function toggleEnterCodeModal(show) {
     return {
-    	type: constants.MODAL_TOGGLE_AS_LEADER,
+    	type: constants.MODAL_TOGGLE_ENTER_CODE,
         data: show,
     }
 }

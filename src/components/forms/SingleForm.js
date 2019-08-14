@@ -43,7 +43,7 @@ class SingleForm extends React.Component {
 
   changeHandler(e){
     e.preventDefault();
-    const { input } = this.props;
+    const { input, updateHandler } = this.props;
     const value = e.target.value;
     let errors = null;
     let newValue = value;
@@ -54,10 +54,14 @@ class SingleForm extends React.Component {
       newValue = validResult.valid ? value : this.state.formData[input.id];
     }
 
+    if(updateHandler){
+      updateHandler({ [input.id]: newValue });
+    }
+
     this.setState({
       formData: { [input.id]: newValue },
       errors: errors
-    })
+    });
   }
 
   focusHandler() {
@@ -73,11 +77,12 @@ class SingleForm extends React.Component {
   }
 
   submitForm() {
-    const { onSubmit, input, textOnly } = this.props;
+    const { onSubmit, input, textOnly, payloadKey } = this.props;
+    const payload = payloadKey ? input[payloadKey] : null;
     const { formData, errors } = this.state;
 
     if(!errors && !textOnly){
-      onSubmit(formData, input.teamNumber);
+      onSubmit(formData, payload);
     }
   }
 
@@ -102,6 +107,7 @@ class SingleForm extends React.Component {
               {...generalProps}
               className={`input__textbox --huge ${input.className || ''}`}
               type="text" 
+              spellCheck="false"
               value={formData[input.id]} 
               onChange={(e) => this.changeHandler(e)}
               onFocus={(e) => this.focusHandler(e)}
@@ -120,6 +126,7 @@ class SingleForm extends React.Component {
               {...generalProps}
               className={`input__textbox --huge ${input.className || ''}`}
               type="text" 
+              spellCheck="false"
               value={formData[input.id]} 
               onChange={(e) => this.changeHandler(e)}
               onFocus={(e) => this.focusHandler(e)}
@@ -134,13 +141,13 @@ class SingleForm extends React.Component {
   }
 
   renderForm() {
-    const { input, textOnly } = this.props;
-
+    const { input, textOnly, noSubmitButton, submitLabel } = this.props;
+    
     return (
       <div className="form-single__inner">
         {this.renderInput(input)}
-        { !textOnly &&
-          <Button text="OK" onClick={this.submitForm.bind(this)}/>
+        { !textOnly && !noSubmitButton &&
+          <Button text={submitLabel || 'OK'} onClick={this.submitForm.bind(this)}/>
         }
       </div>
     )

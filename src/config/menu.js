@@ -6,9 +6,9 @@ export const signOut = {
 	dividerBelow: true,
 }
 
-export const asTeamLeader = {
-	id: 'as_team_leader',
-	label: 'As Team Leader',
+export const enterCode = {
+	id: 'enter_code',
+	label: 'Enter Code',
 	type: 'modal'
 }
 
@@ -25,11 +25,7 @@ export const homeMenu = [
 		label: 'Reset Team',
 		type: 'modal'
 	},
-	{
-		id: 'as_team_leader',
-		label: 'As Team Leader',
-		type: 'modal'
-	},
+	enterCode,
 	signOut,
 	about
 ]
@@ -41,15 +37,11 @@ export const splashMenu = [
 		type: 'func'
 	},
 	{
-		id: 'enter_code',
-		label: 'Enter Code',
-		type: 'modal'
-	},
-	{
 		id: 'add_cards',
 		label: 'Add Cards',
 		type: 'link'
 	},
+	enterCode,
 	about
 ]
 

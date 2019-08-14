@@ -113,7 +113,7 @@ class ModalSignOut extends React.Component {
       return (
         <Modal
             className="--flipping --confirmation" 
-            cxOverlay="signOUtModal" 
+            cxOverlay="signOutModal" 
             size="xs"
             id="signOutModal">
           <div className="modal__inner">

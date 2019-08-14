@@ -1,6 +1,5 @@
 .input__textbox {
 	@include wh(250px, 60px);
-	@include focus-switch-underlines();
 	border-radius: 10px;
 	background: none;
 	padding: 10px;
@@ -12,6 +11,8 @@
 	};
 	&:focus{
 		border: transparent;
+		outline: none;
+		box-shadow: none;
 	};
 	&.--error {
 		border-color: $coral;

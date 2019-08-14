@@ -29,6 +29,18 @@ export function isResponseExists(doc) {
 	return bool;
 }
 
+export function checkElExists(className) {
+	let count = 0;
+	if(Array.isArray(className)){
+		className.forEach(d => {
+			count = count + document.getElementsByClassName(className).length;
+		})
+	}else{
+		count = document.getElementsByClassName(className).length;
+	}
+	return count;
+}
+
 export function makeId(length=6) {
    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
    const charsLen = chars.length;

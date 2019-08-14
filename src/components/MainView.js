@@ -11,6 +11,7 @@ import HomePage from './HomePage';
 import BuildTeamPage from './BuildTeamPage';
 import Loading from './common/Loading';
 import ModalSignOut from './modal/ModalSignOut';
+import ModalEnterCode from './modal/ModalEnterCode';
 
 //actions
 import { 
@@ -37,6 +38,11 @@ const mapStateToProps = state => {return {
 	readingApp: state.app.readingApp,
 	readingUser: state.app.readingUser,
 	loading: state.app.loading,
+	hasModals: state.app.showModalSignout ||
+		state.app.showModalResetGame ||
+		state.app.showModalRestartGame ||
+		state.app.showModalResetTeam ||
+		state.app.showModalEnterCode,
 }}
 
 const mapDispatchToProps = dispatch => {
@@ -192,9 +198,9 @@ class MainView extends React.Component {
 	}
 
   	render() {
-  		const { user, appDetails } = this.props;
+  		const { user, appDetails, hasModals } = this.props;
   		const { verifyCacheDone, device } = this.state;
-  		const props = { variables };
+  		const props = { variables, hasModals };
   		const isLogged = user && user.is_logged;
   		const isAppReady = (isLogged && !!appDetails && verifyCacheDone);
   		const isTeamReady = isAppReady && false;
@@ -213,6 +219,7 @@ class MainView extends React.Component {
 	        	</Switch>
 	        </Body>
 	        <ModalSignOut />
+	        <ModalEnterCode />
 	        <Loading />
 	      </div>
 	    );
