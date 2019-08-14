@@ -19,6 +19,7 @@ const initialState = {
     },
     appDetails: null,
     user: null,
+    userType: 'player',
     isCustom: false,
     selectedDecks: [],
     decks: [],
@@ -32,12 +33,15 @@ const initialState = {
     decksLoading: false,
     settingsLoading: false,
     addingUser: false,
+    userLoading: false,
+    appLoading: false,
 
     //failures
     decksError: false,
     initializeError: false,
     settingsError: false,
     userError: false,
+    appError: false,
 
     //modals
     showModalSignout: false,
@@ -97,7 +101,27 @@ export default function App(state = initialState, action) {
                 initializeError: true,
             }
 
-        //INITIALIZE USER
+        case app.EDIT_APP_REQUEST:
+            return {
+                ...state,
+                appLoading: true,
+            }
+        case app.EDIT_APP_SUCCESS:
+            const isEnd = action.payload.status === 'inactive';
+            return {
+                ...state,
+                appLoading: false,
+                appError: false,
+                appDetails: isEnd ? null : action.payload
+            }
+        case app.EDIT_APP_FAILURE:
+            return {
+                ...state,
+                appLoading: false,
+                appError: true,
+            }
+
+        //USER
         case app.ADD_USER_REQUEST:
             return {
                 ...state,
@@ -119,7 +143,7 @@ export default function App(state = initialState, action) {
                 addingUser: false,
                 userError: true,
             }
-        //READ APP
+        
         case app.READ_USER_REQUEST:
             return {
                 ...state,
@@ -141,6 +165,26 @@ export default function App(state = initialState, action) {
                 ...state,
                 readingApp: false,
                 initializeError: true,
+            }
+
+        case app.EDIT_USER_REQUEST:
+            return {
+                ...state,
+                userLoading: true,
+            }
+        case app.EDIT_USER_SUCCESS:
+            const isSignedOut = action.payload.status === 'signed_out';
+            return {
+                ...state,
+                userLoading: false,
+                userError: false,
+                user: isSignedOut ? null : action.payload
+            }
+        case app.EDIT_USER_FAILURE:
+            return {
+                ...state,
+                userLoading: false,
+                userError: true,
             }
 
         //SETTINGS

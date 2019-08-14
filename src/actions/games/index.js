@@ -14,6 +14,20 @@ export function readGame(id) {
     }
 }
 
+export function editGame(id, data) {
+    const ref = baseURL.users.doc(id);
+    return {
+        types: [
+            constants.EDIT_GAME_REQUEST,
+            constants.EDIT_GAME_SUCCESS,
+            constants.EDIT_GAME_FAILURE
+        ],
+        method: 'set',
+        data,
+        callRef: ref,
+    }
+}
+
 //NON-API
 export function setGame(data) {
     return {

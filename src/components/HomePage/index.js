@@ -19,6 +19,7 @@ const mapStateToProps = state => {return {
 	team2: state.team.team2,
 	addingTeam: state.team.addingTeam,
 	user: state.app.user,
+	appDetails: state.app.appDetails
 }}
 
 const mapDispatchToProps = dispatch => {
@@ -53,7 +54,8 @@ class HomePage extends React.Component {
 	}
 
 	submitForm = (formData, teamNumber) => {
-		const { addTeam, user } = this.props;
+		const { addTeam, user, appDetails } = this.props;
+		const appId = appDetails ? appDetails.id : null;
 		const data = {
 			status: 'inactive',
 			team_number: teamNumber,
@@ -63,6 +65,7 @@ class HomePage extends React.Component {
 			game_key: makeId(),
 			created_by: user.id,
 			created_time: getNow(),
+			app_id: appId
 		}
 		this.setState({ 
 			textOnly: { ...this.state.textOnly, [teamNumber]: true}

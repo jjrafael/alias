@@ -17,6 +17,7 @@ const mapStateToProps = state => {
 	return {
 		deviceDetails: state.app.deviceDetails,
 		user: state.app.user,
+		userType: state.app.userType,
 		settings: state.app.settings,
 		appDetails: state.app.appDetails,
 		loadingOverlay: state.app.loadingOverlay,
@@ -46,7 +47,6 @@ class SplashPage extends React.Component {
 			if(this.props.user.id && !this.props.user.isCache){
 				this.initApp(this.props.user);
 				setLocalStorage('alias_userId', this.props.user.id);
-				setLocalStorage('alias_user', JSON.stringify(this.props.user));
 			}
 		}
 	}
@@ -71,17 +71,17 @@ class SplashPage extends React.Component {
 	}
 
 	initUser = () => {
-		const { deviceDetails, user } = this.props;
+		const { deviceDetails, userType } = this.props;
 		const now = getNow();
 		const data = {
-			name: 'tester5a',
-			email: 'tester5a@mail.co',
+			name: 'tester6',
+			email: 'tester6@mail.co',
 			platform: deviceDetails.platform,
-			is_logged: user ? user.is_logged : true,
+			is_logged: true,
 			device: deviceDetails.device,
 			browser: deviceDetails.browser,
-			status: 'active,',
-			type: user ? user.type : 'player',
+			status: 'active',
+			type: userType,
 			role: 'grid',
 			created_time: now,
 			last_logged_time: now,

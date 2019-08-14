@@ -7,12 +7,23 @@ import Modal from './index';
 import Button from '../common/Button';
 
 //actions
-import { toggleSignOutModal, toggleLoadingOverlay } from '../../actions/app';
+import { 
+  toggleSignOutModal, 
+  toggleLoadingOverlay,
+  editApp,
+  editUser,
+} from '../../actions/app';
+import { editGame } from '../../actions/games';
+
+//misc
+import { clearLocalStorage } from '../../utils';
 
 const mapStateToProps = state => {
   return {
     showModal: state.app.showModalSignout,
-    inGame: false,
+    gameDetails: state.game.gameDetails,
+    appDetails: state.app.appDetails,
+    user: state.app.user,
   }
 }
 
@@ -20,7 +31,10 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       toggleSignOutModal,
-      toggleLoadingOverlay
+      toggleLoadingOverlay,
+      editGame,
+      editApp,
+      editUser
     },
     dispatch
   )
@@ -30,6 +44,9 @@ class ModalSignOut extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      inGame: this.props.gameDetails && this.props.gameDetails.status === 'active',
+      haveActiveApp: this.props.appDetails && this.props.appDetail.status === 'active',
+      haveActiveUser: this.props.user && this.props.user.status === 'active',
       message: {
         inGame: 'Are you sure you want to Sign out and end your game?',
         inHome: 'Are you sure you want to Sign out?'
@@ -37,21 +54,59 @@ class ModalSignOut extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps){
+      if(prevProps.gameDetails !== this.props.gameDetails){
+        const inGame = this.props.gameDetails && this.props.gameDetails.status === 'active';
+        this.setState({ inGame });
+      }
+
+      if(prevProps.appDetails !== this.props.appDetails){
+        const haveActiveApp = this.props.appDetails && this.props.appDetails.status === 'active';
+        this.setState({ haveActiveApp });
+      }
+
+      if(prevProps.user !== this.props.user){
+        const haveActiveUser = this.props.user && this.props.user.status === 'active';
+        this.setState({ haveActiveUser });
+
+        if(!this.props.user && prevProps.user){
+          //successfully signed out
+          this.props.toggleLoadingOverlay();
+          clearLocalStorage();
+        }
+      }
+  }
+
   closeModal() {
     this.props.toggleSignOutModal(false);
   }
 
   signOut() {
+      const { appDetails, gameDetails, user, editApp, editUser, editGame } = this.props;
+      const { haveActiveUser , haveActiveApp, inGame } = this.state;
+
+      //start signing out
       this.props.toggleLoadingOverlay(true, 'Signing Out...');
       this.closeModal();
-      setTimeout(() => {
-        this.props.toggleLoadingOverlay();
-      }, 2000);
+      //in active game
+      if(inGame && gameDetails){
+          editGame(gameDetails.id, {...gameDetails, status: 'stopped'});
+      }
+
+      //has active app
+      if(haveActiveApp && appDetails){
+          editApp(appDetails.id, {...appDetails, status: 'inactive'});
+      }
+
+      //has active user
+      if(haveActiveUser && user){
+          editUser(user.id, {...user, status: 'signed_out', is_logged: false});
+      }
   }
 
   render() {
-    const { showModal, inGame } = this.props;
-    const { message } = this.state;
+    const { showModal } = this.props;
+    const { message, inGame } = this.state;
     const msg = inGame ? message.inGame : message.inHome;
 
     if(showModal){
@@ -77,4 +132,4 @@ class ModalSignOut extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps )(ModalSignOut);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalSignOut);

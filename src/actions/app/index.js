@@ -29,6 +29,20 @@ export function readApp(id) {
     }
 }
 
+export function editApp(id, data) {
+	const ref = baseURL.app.doc(id);
+    return {
+    	types: [
+    		constants.EDIT_APP_REQUEST,
+    		constants.EDIT_APP_SUCCESS,
+    		constants.EDIT_APP_FAILURE
+    	],
+    	method: 'set',
+    	data,
+    	callRef: ref,
+    }
+}
+
 //USER
 export function addUser(data) {
 	const ref = baseURL.users;
@@ -43,6 +57,21 @@ export function addUser(data) {
     	callRef: ref,
     }
 }
+
+export function editUser(id, data) {
+	const ref = baseURL.users.doc(id);
+    return {
+    	types: [
+    		constants.EDIT_USER_REQUEST,
+    		constants.EDIT_USER_SUCCESS,
+    		constants.EDIT_USER_FAILURE
+    	],
+    	method: 'set',
+    	data,
+    	callRef: ref,
+    }
+}
+
 
 export function readUser(id, isCache) {
 	const ref = baseURL.users.doc(id);

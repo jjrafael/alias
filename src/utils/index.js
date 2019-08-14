@@ -8,10 +8,9 @@ export function getNow() {
 
 export function getResponse(doc, cond) {
 	let value = null;
-
 	if(doc && doc.response && !doc.error){
 		const data = doc.response.data();
-		const condition = cond ? (data[cond.key] === cond.value) : true;
+		const condition = cond && data ? (data[cond.key] === cond.value) : true;
 		if(data && condition){
 			value = data;
 		}
@@ -69,16 +68,22 @@ export function setLocalStorage(key, value) {
 }
 
 export function deleteLocalStorage(key) {
-    localStorage.deleteItem(key);
+	if(Array.isArray(key)){
+		key.forEach(d => {
+			localStorage.removeItem(d);
+		})
+	}else{
+		localStorage.removeItem(key);
+	}
 }
 
 export function clearLocalStorage(key) {
-    localStorage.deleteItem('alias_appId');
-    localStorage.deleteItem('alias_userId');
-    localStorage.deleteItem('alias_gameId');
-    localStorage.deleteItem('alias_app');
-    localStorage.deleteItem('alias_user');
-    localStorage.deleteItem('alias_game');
+    localStorage.removeItem('alias_appId');
+    localStorage.removeItem('alias_userId');
+    localStorage.removeItem('alias_gameId');
+    localStorage.removeItem('alias_app');
+    localStorage.removeItem('alias_user');
+    localStorage.removeItem('alias_game');
 }
 
 export function hasCachedActiveGame() {

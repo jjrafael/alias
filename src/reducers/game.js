@@ -152,6 +152,26 @@ export default function Game(state = initialState, action) {
                 gameError: true,
             }
 
+        case game.EDIT_GAME_REQUEST:
+            return {
+                ...state,
+                gameLoading: true,
+            }
+        case game.EDIT_GAME_SUCCESS:
+            const isStopped = action.payload.status === 'stopped';
+            return {
+                ...state,
+                gameDetails: isStopped ? null : action.payload,
+                gameLoading: false,
+                gameError: false,
+            }
+        case game.EDIT_GAME_FAILURE:
+            return {
+                ...state,
+                gameLoading: false,
+                gameError: true,
+            }
+
 
         //ROUNDS
         case game.ADD_ROUND_REQUEST:

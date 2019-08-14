@@ -25,6 +25,8 @@ import { isMobile } from '../utils/app';
 import { 
 	setLocalStorage, 
 	getAllLocalStorage,
+	clearLocalStorage,
+	deleteLocalStorage,
 	getResponse } from '../utils';
 import { variables } from '../config';
 
@@ -89,7 +91,6 @@ class MainView extends React.Component {
 			//save to local app details
 			if(this.props.appDetails.id){
 				setLocalStorage('alias_appId', this.props.appDetails.id);
-				setLocalStorage('alias_app', JSON.stringify(this.props.appDetails));
 			}
 		}
 	}
@@ -124,6 +125,7 @@ class MainView extends React.Component {
 				if(getResponse(doc, cond)){
 					this.checkActiveApp();
 				}else{
+					clearLocalStorage();
 					this.closeLoading();
 					this.setState({ ...doneStates });
 				}
@@ -154,6 +156,7 @@ class MainView extends React.Component {
 					this.setState({cachedAppChecked: true, cacheLoaded: true});
 					this.checkActiveGame();
 				}else{
+					deleteLocalStorage(['alias_app', 'alias_appId', 'alias_game', 'alias_gameId']);
 					this.closeLoading();
 					this.setState({ ...doneStates });
 				}
@@ -182,6 +185,7 @@ class MainView extends React.Component {
 				this.setState({ ...doneStates });
 			})
 		}else{
+			deleteLocalStorage(['alias_game', 'alias_gameId']);
 			this.closeLoading();
 			this.setState({ ...doneStates });
 		}
