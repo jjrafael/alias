@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 //components
 import HeaderCenter from './HeaderCenter';
 import ScoreBar from './ScoreBar';
+import Menu from './Menu';
 
 const mapStateToProps = state => {
   return {
@@ -49,7 +50,9 @@ class Header extends React.Component {
               <div className="timerbar"></div>
             </div>
         }
-        <HeaderCenter timer={timer}/>
+        <HeaderCenter timer={timer}>
+          <Menu />
+        </HeaderCenter>
       </header>
     );
   }

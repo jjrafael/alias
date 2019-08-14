@@ -25,6 +25,36 @@
     text-align: center;
 }
 
+/*presets animations*/
+
+@mixin delay-child-sequence ($len: 10) {
+	@for $i from 1 through $len {
+	    &:nth-child(#{$i}n) {
+	        animation-delay: #{$i * 0.3}s;
+	    }
+	}
+}
+
+@mixin delay-show ($delay: 0.6s) {
+	opacity: 1;
+	display: block;
+	transition: display 0s ease, opacity 0.6s ease 0.3s;
+}
+
+@mixin delay-hide ($delay: 0.6s) {
+	opacity: 0;
+	display: none;
+	transition: display 0s ease 0.6s, opacity 0.6s ease;
+}
+
+@mixin fade-in () {
+	animation: fade-in 0.3s ease forwards;
+}
+
+@mixin fade-out () {
+	animation: fade-out 0.3s ease forwards;
+}
+
 /*gradients*/
 @mixin gradient-soltice ($deg: 45deg, $transparency: 1) {
 	background: rgb(105,2,115);

@@ -9,3 +9,61 @@
     margin-top: -3000;
   }
 }
+
+@keyframes smooth-unhide {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+  50% {
+    display: block;
+  }
+  100% {
+  	display: block;
+    opacity: 1;
+  }
+}
+
+@keyframes smooth-hide {
+ 0% {
+    opacity: 1;
+    display: block;
+  }
+  50% {
+    display: block;
+  }
+  100% {
+    display: none;
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    display: none;
+    opacity: 0;
+    margin-top: 50px;
+  }
+  50% {
+    display: block;
+  }
+  100% {
+    opacity: 1;
+    margin-top: 0px;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+    margin-top: 0px;
+  }
+  50% {
+    display: block;
+  }
+  100% {
+    display: none;
+    opacity: 0;
+    margin-top: 50px;
+  }
+}

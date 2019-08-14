@@ -38,6 +38,12 @@ const initialState = {
     initializeError: false,
     settingsError: false,
     userError: false,
+
+    //modals
+    showModalSignout: false,
+    showModalResetGame: false,
+    showModalRestartGame: false,
+    showModalResetTeam: false,
 };
 
 export default function App(state = initialState, action) {
@@ -196,6 +202,30 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 appDetails: action.data,
+            }
+
+        case app.MODAL_TOGGLE_SIGNOUT:
+            return {
+                ...state,
+                showModalSignout: action.data,
+            }
+
+        case app.MODAL_TOGGLE_RESET_GAME:
+            return {
+                ...state,
+                showModalResetGame: action.data,
+            }
+
+        case app.MODAL_TOGGLE_RESET_TEAM:
+            return {
+                ...state,
+                showModalResetTeam: action.data,
+            }
+
+        case app.MODAL_TOGGLE_RESTART_GAME:
+            return {
+                ...state,
+                showModalRestartGame: action.data,
             }
 
         default: 

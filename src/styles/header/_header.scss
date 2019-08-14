@@ -53,12 +53,26 @@ header {
 	position: absolute;
 	top: 0px;
 	transition: all 0.6s ease;
+	&:hover {
+		width: 100%;
+		.header-logo {
+			padding: 0px 20px;
+			float: left;
+		}
+		.menu__wrapper {
+			@include delay-show();
+			.menu__item {
+				@include delay-child-sequence();
+			}
+		}
+	};
 }
 
 .header-logo {
 	font-size: $fs-m;
 	font-family: $shrikhand;
 	line-height: 50px;
+	transition: all 0.6s ease;
 }
 
 /*responsiveness*/

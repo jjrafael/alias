@@ -79,3 +79,31 @@ export function setApp(data) {
         data,
     }
 }
+
+export function toggleSignOutModal(show) {
+    return {
+    	type: constants.MODAL_TOGGLE_SIGNOUT,
+        data: show,
+    }
+}
+
+export function toggleResetGameModal(show) {
+    return {
+    	type: constants.MODAL_TOGGLE_RESET_GAME,
+        data: show,
+    }
+}
+
+export function toggleResetTeamModal(show) {
+    return {
+    	type: constants.MODAL_TOGGLE_RESET_TEAM,
+        data: show,
+    }
+}
+
+export function toggleRestartGameModal(show) {
+    return {
+    	type: constants.MODAL_TOGGLE_RESTART_GAME,
+        data: show,
+    }
+}
