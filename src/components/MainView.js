@@ -203,9 +203,7 @@ class MainView extends React.Component {
   		
 	    return (
 	      <div className={`page --${cxDevice}`} id="MainPage">
-	      	{ isAppReady &&
-	      		<Header className={`app-header`} />
-	      	}
+	      	<Header className={`app-header ${isAppReady ? '' : '--splash'}`} isAppReady={isAppReady}/>
 	        <Body className="app-body">
 	        	<Switch>
 	        		<Route exact path="/"  render={() => isAppReady ? <HomePage {...props} /> : <SplashPage {...props} /> }/>

@@ -29,10 +29,31 @@ export const homeMenu = [
 		id: 'as_team_leader',
 		label: 'As Team Leader',
 		type: 'modal'
-	}
+	},
+	signOut,
+	about
 ]
 
-export const inGameMenu = [
+export const splashMenu = [
+	{
+		id: 'start_game',
+		label: 'Start Game',
+		type: 'func'
+	},
+	{
+		id: 'enter_code',
+		label: 'Enter Code',
+		type: 'modal'
+	},
+	{
+		id: 'add_cards',
+		label: 'Add Cards',
+		type: 'link'
+	},
+	about
+]
+
+export const inGridMenu = [
 	{
 		id: 'reset_game',
 		label: 'Reset Game',
@@ -48,12 +69,25 @@ export const inGameMenu = [
 		label: 'Pause',
 		type: 'func'
 	},
-	asTeamLeader, 
-	signOut
-]
-
-export default [
-	...homeMenu,
 	signOut,
 	about
-];
+]
+
+export const buildTeamMenu = [
+	signOut,
+	about
+]
+
+export const asTeamLeaderMenu = [
+	signOut,
+	about
+]
+
+export default {
+	homeMenu,
+	inGridMenu,
+	splashMenu,
+	buildTeamMenu,
+	asTeamLeaderMenu,
+	about: [about]
+};

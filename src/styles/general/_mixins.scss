@@ -25,6 +25,14 @@
     text-align: center;
 }
 
+@mixin clearfix () {
+	&:after {
+	  content: "";
+	  clear: both;
+	  display: table;
+	}
+}
+
 /*presets animations*/
 
 @mixin delay-child-sequence ($len: 10) {

@@ -12,9 +12,11 @@ import {
 } from '../../actions/app';
 
 //misc
-import defaultMenu from '../../config/menu';
+import menu from '../../config/menu';
 
-const mapStateToProps = state => {return {}}
+const mapStateToProps = state => {return {
+
+}}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
@@ -33,13 +35,33 @@ class Menu extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			menu: defaultMenu,
+			menu: menu.about,
 		}
 	}
 
 	componentDidMount(){
+		let menuData = menu.about;
 		if(this.props.menu){
-			this.setState({ menu: this.props.menu });
+			menuData = this.props.menu;
+		}else{
+			const pathname = window.location.pathname;
+			if(pathname === '/build-team'){
+				menuData =  menu.buildTeamMenu;
+			}else if(pathname === '/grid'){
+				menuData =  menu.inGridMenu;
+			}else if(pathname === '/leader'){
+				menuData =  menu.asTeamLeaderMenu;
+			}else{
+				menuData = this.props.isAppReady ? menu.homeMenu : menu.splashMenu;
+			}
+		}
+
+		this.setState({ menu: menuData });
+	}
+
+	componentDidUpdate(prevProps) {
+		if(prevProps.isAppReady !== this.props.isAppReady){
+			this.setState({ menu: this.props.isAppReady ? menu.homeMenu : menu.splashMenu });
 		}
 	}
 
@@ -81,7 +103,7 @@ class Menu extends React.Component {
 
  	render() {
 	    return (
-	      <div className="menu__wrapper">
+	      <div className="menu__wrapper clearfix">
 	        <ul className="menu">
 	        	{this.renderMenuItems()}
 	        </ul>

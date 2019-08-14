@@ -6,6 +6,9 @@ header {
 	z-index: 50;
 	color: $white;
 	$font-family: $shrikhand;
+	&.--splash {
+		display: none;
+	}
 }
 
 .app-header {
@@ -78,6 +81,9 @@ header {
 /*responsiveness*/
 
 @include mobile {
+	header.--splash {
+		display: block;
+	}
 	.header-center {
 		width: 50px;
 	}
