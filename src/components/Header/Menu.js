@@ -7,7 +7,8 @@ import {
 	toggleSignOutModal, 
 	toggleResetGameModal,
 	toggleResetTeamModal,
-	toggleRestartGameModal
+	toggleRestartGameModal,
+	toggleAsLeaderModal
 } from '../../actions/app';
 
 //misc
@@ -21,7 +22,8 @@ const mapDispatchToProps = dispatch => {
       	toggleSignOutModal, 
 		toggleResetGameModal,
 		toggleResetTeamModal,
-		toggleRestartGameModal
+		toggleRestartGameModal,
+		toggleAsLeaderModal
     },
     dispatch
   )
@@ -58,7 +60,6 @@ class Menu extends React.Component {
 			default:
 			break;
 		}
-		console.log('jj click menu: ', data.id);
 	}
 
 	renderMenuItems() {

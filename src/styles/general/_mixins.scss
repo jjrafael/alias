@@ -30,7 +30,7 @@
 @mixin delay-child-sequence ($len: 10) {
 	@for $i from 1 through $len {
 	    &:nth-child(#{$i}n) {
-	        animation-delay: #{$i * 0.3}s;
+	        animation-delay: #{$i * 0.2}s;
 	    }
 	}
 }

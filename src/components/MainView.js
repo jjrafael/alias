@@ -10,6 +10,7 @@ import SplashPage from './SplashPage';
 import HomePage from './HomePage';
 import BuildTeamPage from './BuildTeamPage';
 import Loading from './common/Loading';
+import ModalSignOut from './modal/ModalSignOut';
 
 //actions
 import { 
@@ -209,7 +210,7 @@ class MainView extends React.Component {
 	        		<Route  render={() => <SplashPage {...props} /> }/>
 	        	</Switch>
 	        </Body>
-
+	        <ModalSignOut />
 	        <Loading />
 	      </div>
 	    );

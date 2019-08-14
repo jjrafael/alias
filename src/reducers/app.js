@@ -44,6 +44,7 @@ const initialState = {
     showModalResetGame: false,
     showModalRestartGame: false,
     showModalResetTeam: false,
+    showModalAsLeader: false,
 };
 
 export default function App(state = initialState, action) {
@@ -226,6 +227,11 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 showModalRestartGame: action.data,
+            }
+        case app.MODAL_TOGGLE_AS_LEADER:
+            return {
+                ...state,
+                showModalAsLeader: action.data,
             }
 
         default: 

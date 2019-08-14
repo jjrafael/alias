@@ -107,3 +107,10 @@ export function toggleRestartGameModal(show) {
         data: show,
     }
 }
+
+export function toggleAsLeaderModal(show) {
+    return {
+    	type: constants.MODAL_TOGGLE_AS_LEADER,
+        data: show,
+    }
+}

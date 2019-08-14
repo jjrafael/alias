@@ -1,0 +1,96 @@
+.modal-overlay {
+	@include gradient-soltice(45deg, 0.75);
+    z-index: 60;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    @include center-flex();
+    &.signOutModal {
+    	z-index: 70;
+    }
+}
+
+.modal {
+	width: 400px;
+	height: 180px;
+	max-height: 420px;
+	border-radius: 10px;
+	background: $white;
+	position: relative;
+	background: $peach;
+	&.--flipping {
+		animation: flipping 1s ease forwards;
+		> * {
+			display: block;
+			transition: display 0s ease 1s;
+		}
+	}
+	> * {
+		display: none;
+	}
+	&[data-size="xs"] {
+		height: 120px;
+	}
+	&__header {
+		width: 100%;
+		height: 50px;
+		padding: 5px 10px;
+		@include gradient-sunset();
+		color: $midnight;
+		font-weight: $fw-bold;
+		position: absolute;
+		top: 0px;
+		left: 0px;
+	}
+	&__body {
+		padding: 10px 20px;
+		width: calc(100% - 40px);
+		height: calc(100% - 100px);
+		margin-top: 50px;
+		&.--no-header {
+			margin-top: 0px;
+			height: calc(100% - 50px);
+		}
+		&.--no-footer {
+			height: calc(100% - 50px);
+		}
+		&.--body-only {
+			margin-top: 20px;
+			height: 100%;
+		}
+	}
+	&__footer {
+		width: 100%;
+		height: 50px;
+		position: absolute;
+		bottom: 0px;
+		left: 0px;
+		background: $white-10;
+		border-radius: 0px 0px 10px 10px;
+		.btn {
+			text-transform: uppercase;
+			font-size: $fs-xxs;
+			color: $midnight;
+			background: transparent;
+			line-height: 50px;
+		}
+		&.--dual-buttons {
+			> .btn {
+				width: 50%;
+				text-align: center;
+				float: left;
+				margin: 0px;
+			    height: 50px;
+			    line-height: 50px;
+			    &:first-child {
+			    	border-radius: 0px 0px 0px 10px;
+			    };
+			    &:last-child {
+			    	border-radius: 0px 0px 10px 0px;
+			    };
+			}
+		}
+	}
+}
