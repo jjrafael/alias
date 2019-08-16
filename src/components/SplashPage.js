@@ -39,7 +39,8 @@ class SplashPage extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			loadingTitle: 'Initializing App...'
+			loadingTitle: 'Initializing App...',
+			disableRouletteFx: true,
 		}
 	}
 
@@ -65,8 +66,8 @@ class SplashPage extends React.Component {
 			grid_user_key: user.id,
 			name: user.name,
 			status: 'active',
-			team1_user_key: null,
-			team2_user_key: null,
+			team1_user_key: '',
+			team2_user_key: '',
 			timer: settings.timer,
 			total_connected_users: 1,
 			total_games: 0,
@@ -96,8 +97,9 @@ class SplashPage extends React.Component {
 
 	render() {
 		const { loadingOverlay, deviceDetails, hasModals } = this.props;
+		const { disableRouletteFx } = this.state;
 		const isMobile = deviceDetails.device === 'mobile';
-		const rouletteConds = !isMobile && !hasModals && !loadingOverlay;
+		const rouletteConds = !isMobile && !hasModals && !loadingOverlay && !disableRouletteFx;
 		const showLogo = !hasModals && !loadingOverlay;
 
 	    return (

@@ -1,6 +1,6 @@
 export const signOut = {
 	id: 'sign_out',
-	label: 'Sign Out',
+	label: 'Quit',
 	type: 'func',
 	dividerAbove: true,
 	dividerBelow: true,

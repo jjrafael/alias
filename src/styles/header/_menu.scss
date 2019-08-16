@@ -7,10 +7,6 @@
 	display: none;
 }
 
-.menu {
-
-}
-
 .menu__item {
 	float: left;
 	min-width: 100px;
@@ -43,7 +39,7 @@
 		float: left;
 		height: 2px;
 		transition: all 0.6s ease;
-		@include gradient-sunbreeze();
+		@include gradient-sunbreeze(0deg);
 	};
 	&:hover {
 		background: $chrome;

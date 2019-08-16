@@ -10,9 +10,10 @@ export function getResponse(doc, cond) {
 	let value = null;
 	if(doc && doc.response && !doc.error){
 		const data = doc.response.data();
+		const id = doc.response.id;
 		const condition = cond && data ? (data[cond.key] === cond.value) : true;
 		if(data && condition){
-			value = data;
+			value = id ? {...data, id} : data;
 		}
 	}
 
@@ -27,6 +28,11 @@ export function isResponseExists(doc) {
 	}
 
 	return bool;
+}
+
+export function isResType(res, type = 'success') {
+	const suffix = '_'+type.toUpperCase();
+	return res && res.type.indexOf(suffix) !== -1;
 }
 
 export function checkElExists(className) {
@@ -59,9 +65,9 @@ export function getAllLocalStorage() {
     	appId: localStorage.getItem('alias_appId'),
 	    userId: localStorage.getItem('alias_userId'),
 	    gameId: localStorage.getItem('alias_gameId'),
-	    app: JSON.parse(localStorage.getItem('alias_app')),
-	   	user: JSON.parse(localStorage.getItem('alias_user')),
-	    game: JSON.parse(localStorage.getItem('alias_game')),
+	    team1Id: localStorage.getItem('alias_team1Id'),
+	    team2Id: localStorage.getItem('alias_team2Id'),
+	    leaderId: localStorage.getItem('alias_leaderId'),
     }
 }
 
@@ -96,6 +102,9 @@ export function clearLocalStorage(key) {
     localStorage.removeItem('alias_app');
     localStorage.removeItem('alias_user');
     localStorage.removeItem('alias_game');
+    localStorage.removeItem('alias_team1Id');
+    localStorage.removeItem('alias_team2Id');
+    localStorage.removeItem('alias_leaderId');
 }
 
 export function hasCachedActiveGame() {

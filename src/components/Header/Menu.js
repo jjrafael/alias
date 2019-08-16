@@ -41,10 +41,11 @@ class Menu extends React.Component {
 
 	componentDidMount(){
 		let menuData = menu.about;
+		const pathname = window.location.pathname;
+
 		if(this.props.menu){
 			menuData = this.props.menu;
 		}else{
-			const pathname = window.location.pathname;
 			if(pathname === '/build-team'){
 				menuData =  menu.buildTeamMenu;
 			}else if(pathname === '/grid'){

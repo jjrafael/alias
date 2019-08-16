@@ -16,7 +16,7 @@ export function addTeam(data) {
     }
 }
 
-export function updateTeam(id, data) {
+export function editTeam(id, data) {
 	const ref = baseURL.teams.doc(id);
     return {
     	types: [
@@ -30,8 +30,9 @@ export function updateTeam(id, data) {
     }
 }
 
-export function readTeam(id) {
+export function readTeam(id, notStateSave) {
     const ref = baseURL.teams.doc(id);
+    console.log('jj readTeam: ', id);
     return {
         types: [
             constants.READ_TEAM_REQUEST,
@@ -39,6 +40,7 @@ export function readTeam(id) {
             constants.READ_TEAM_FAILURE
         ],
         method: 'get',
+        payload: { notStateSave },
         callRef: ref,
     }
 }
@@ -53,5 +55,43 @@ export function browseTeams(id) {
         ],
         method: 'get',
         callRef: ref,
+    }
+}
+
+// TEAM CODE
+
+export function verifyTeamCode(code) {
+    const ref = baseURL.teams.where('game_key','==',code);
+    return {
+        types: [
+            constants.VERIFY_TEAM_CODE_REQUEST,
+            constants.VERIFY_TEAM_CODE_SUCCESS,
+            constants.VERIFY_TEAM_CODE_FAILURE
+        ],
+        method: 'get',
+        callRef: ref,
+    }
+}
+
+// MEMBERS
+export function addMember(id, data) {
+    const ref = baseURL.teams.doc(id);
+    return {
+        types: [
+            constants.ADD_MEMBER_REQUEST,
+            constants.ADD_MEMBER_SUCCESS,
+            constants.ADD_MEMBER_FAILURE
+        ],
+        method: 'set',
+        callRef: ref,
+    }
+}
+
+//NON-API
+
+export function resetTeams(teamNumber) {
+    return {
+        type: constants.RESET_TEAMS,
+        data: teamNumber
     }
 }

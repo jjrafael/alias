@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -20,6 +20,7 @@ import {
 	readUser, 
 	toggleLoadingOverlay } from '../actions/app';
 import { readGame } from '../actions/games';
+import { readTeam } from '../actions/teams';
 
 //misc
 import { isMobile } from '../utils/app';
@@ -32,8 +33,11 @@ import {
 import { variables } from '../config';
 
 const mapStateToProps = state => {return {
+	team1: state.team.team1,
+	team2: state.team.team2,
 	user: state.app.user,
 	appDetails: state.app.appDetails,
+	gameDetails: state.game.gameDetails,
 	appInitializing: state.app.appInitializing,
 	readingApp: state.app.readingApp,
 	readingUser: state.app.readingUser,
@@ -52,7 +56,8 @@ const mapDispatchToProps = dispatch => {
       toggleLoadingOverlay,
       readGame,
       readApp,
-      readUser
+      readUser,
+      readTeam
     },
     dispatch
   )
@@ -68,20 +73,25 @@ class MainView extends React.Component {
 			cachedUserChecked: false,
 			cacheLoaded: false,
 			verifyCacheDone: false,
+			isTeamConnected: false,
 			cachedIds: null,
+			team: null,
+			role: 'grid',
+			inGame: false,
+			teamNumber: null,
 		}
 	}
 
 	componentDidMount() {
 		const navigator = window.navigator;
-		const { gameId, appId, userId } = getAllLocalStorage();
+		const cachedIds = getAllLocalStorage();
 		const device = {
 			device: isMobile(navigator.userAgent) ? 'mobile' : 'desktop',
 			platform: navigator.platform,
 			browser: navigator.appCodeName,
 		}
 		this.props.setDeviceDetails(device);
-		this.setState({ device, cachedIds: { gameId, appId, userId } });
+		this.setState({ device, cachedIds: cachedIds });
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -99,6 +109,13 @@ class MainView extends React.Component {
 				setLocalStorage('alias_appId', this.props.appDetails.id);
 			}
 		}
+
+		if(prevProps.gameDetails !== this.props.gameDetails && this.props.gameDetails){
+			if(this.props.gameDetails.status === 'active'){
+				this.setState({ inGame: true });
+			}
+		}
+
 	}
 
 	closeLoading() {
@@ -121,15 +138,20 @@ class MainView extends React.Component {
 			cacheLoaded: false,
 			verifyCacheDone: true
 		}
-		// let user = null;
 
 		if(userId){
 			this.updateLoading('Verifying Cache...');
 			this.props.readUser(userId, true).then((doc) => {
 				//if exists and active
 				const cond = {key: 'status', value: 'active'};
-				if(getResponse(doc, cond)){
+				const response = getResponse(doc, cond);
+				if(response){
+					const isTeam = response.role === 'team';
 					this.checkActiveApp();
+					if(isTeam){
+						this.setState({ role: response.role });
+						this.checkActiveTeam();
+					}
 				}else{
 					clearLocalStorage();
 					this.closeLoading();
@@ -162,7 +184,7 @@ class MainView extends React.Component {
 					this.setState({cachedAppChecked: true, cacheLoaded: true});
 					this.checkActiveGame();
 				}else{
-					deleteLocalStorage(['alias_app', 'alias_appId', 'alias_game', 'alias_gameId']);
+					deleteLocalStorage(['alias_appId', 'alias_gameId', 'alias_team1Id', 'alias_team2Id']);
 					this.closeLoading();
 					this.setState({ ...doneStates });
 				}
@@ -197,26 +219,80 @@ class MainView extends React.Component {
 		}
 	}
 
+	checkActiveTeam() {
+		const { user, appDetails, readTeam } = this.props;
+		const { cachedIds } = this.state;
+		const isLogged = user && user.is_logged;
+  		const isAppReady = (isLogged && appDetails && appDetails.status === 'active');
+  		const isTeam = isAppReady && user.role === 'team';
+  		const teamNumber = isTeam && user.id === appDetails.team1_user_key ? 1 : 2;
+  		const teamId = cachedIds['team'+teamNumber+'Id'];
+  		
+  		if(teamId){
+  			this.setState({ isTeamConnected: true, teamNumber });
+  			readTeam(teamId).then(doc => {
+  				const cond = {key: 'status', value: 'active'};
+  				const response = getResponse(doc, cond);
+  				if(response){
+  					this.setState({ team: response });
+  					console.log('jj debug 4A: ', response);
+  				}
+  			});
+  		}
+	}
+
+	renderPages(isAppReady) {
+		const { hasModals } = this.props;
+		const { role, team, isTeamConnected, inGame } = this.state;
+		const isTeam = role === 'team';
+		const generalProps = { variables, hasModals, team };
+		let html = null;
+		const props = {
+			general: generalProps,
+			home: {...generalProps, isTeamConnected},
+		}
+
+		if(isAppReady){
+			//user already logged, app is initialized
+			if(isTeam && inGame){
+				//team leader and already in play
+				html = <SplashPage {...props.general} />;
+			}else if(isTeam && !inGame && isTeamConnected){
+				//team leader and adding members
+				html = <BuildTeamPage {...props.general} />;
+			}else if(!isTeam && inGame){
+				//grid and already in play
+				html = <SplashPage {...props.general} />;
+			}else if(!isTeam && !inGame){
+				//grid and building team
+				html = <HomePage {...props.home} />;
+			}else{
+				//something went wrong
+				html = <SplashPage {...props.general} />;
+			}
+		}else{
+			//no user logged and/or app wasn't initialized yet
+			html = <SplashPage {...props.general} />;
+		}
+
+		return html;
+	}
+
   	render() {
-  		const { user, appDetails, hasModals } = this.props;
-  		const { verifyCacheDone, device } = this.state;
-  		const props = { variables, hasModals };
+  		const { user, appDetails } = this.props;
+  		const { verifyCacheDone, device, inGame } = this.state;
   		const isLogged = user && user.is_logged;
   		const isAppReady = (isLogged && !!appDetails && verifyCacheDone);
-  		const isTeamReady = isAppReady && false;
-  		const isGridReady = isAppReady && false;
   		const cxDevice = device ? device.device : 'desktop';
+  		const cxHeader = isAppReady ? '' : '--splash';
   		
 	    return (
 	      <div className={`page --${cxDevice}`} id="MainPage">
-	      	<Header className={`app-header ${isAppReady ? '' : '--splash'}`} isAppReady={isAppReady}/>
+	      	<Header
+	      		className={`app-header ${cxHeader}`}
+	      		isAppReady={isAppReady}/>
 	        <Body className="app-body">
-	        	<Switch>
-	        		<Route exact path="/"  render={() => isAppReady ? <HomePage {...props} /> : <SplashPage {...props} /> }/>
-	        		<Route exact path="/grid" render={() => isGridReady ? <HomePage {...props} /> : <SplashPage {...props} /> }/>
-	        		<Route exact path="/build-team" render={() => isTeamReady ? <BuildTeamPage {...props} /> : <SplashPage {...props} />}/>
-	        		<Route  render={() => <SplashPage {...props} /> }/>
-	        	</Switch>
+	        	{this.renderPages(isAppReady, inGame)}
 	        </Body>
 	        <ModalSignOut />
 	        <ModalEnterCode />

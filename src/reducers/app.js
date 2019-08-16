@@ -85,13 +85,14 @@ export default function App(state = initialState, action) {
                 readingApp: true,
             }
         case app.READ_APP_SUCCESS:
+            const data_read = action.notStateSave
+                ?   state.appDetails
+                : { ...action.response.data(),
+                    id: action.response.id }
             return {
                 ...state,
                 readingApp: false,
-                appDetails: {
-                    ...action.response.data(),
-                    id: action.response.id,
-                },
+                appDetails: data_read,
                 initializeError: false,
             }
         case app.READ_APP_FAILURE:
@@ -108,11 +109,17 @@ export default function App(state = initialState, action) {
             }
         case app.EDIT_APP_SUCCESS:
             const isEnd = action.payload.status === 'inactive';
+            let data_edit = state.appDetails;
+
+            if(!action.notStateSave){
+                data_edit = isEnd ? null : action.payload
+            }
+
             return {
                 ...state,
                 appLoading: false,
                 appError: false,
-                appDetails: isEnd ? null : action.payload
+                appDetails: data_edit
             }
         case app.EDIT_APP_FAILURE:
             return {

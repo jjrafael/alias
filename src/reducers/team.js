@@ -9,10 +9,12 @@ const initialState = {
     addingTeam: false,
     teamLoading: false,
     memberLoading: false,
+    verifyingTeamCode: false,
 
     //failures
     teamError: false,
     memberError: false,
+    teamCodeError: false,
 };
 
 export default function Team(state = initialState, action) {
@@ -77,6 +79,49 @@ export default function Team(state = initialState, action) {
                 teamError: true,
             }
 
+        case team.READ_TEAM_REQUEST:
+            return {
+                ...state,
+                teamLoading: true,
+            }
+        case team.READ_TEAM_SUCCESS:
+            const data_read = action.notStateSave
+                ?   state.appDetails
+                : { ...action.response.data(),
+                    id: action.response.id }
+            const team_number = data_read && data_read.team_number;
+            return {
+                ...state,
+                teamLoading: false,
+                teamError: false,
+                ['team'+team_number]: data_read
+            }
+        case team.READ_TEAM_FAILURE:
+            return {
+                ...state,
+                teamLoading: false,
+                teamError: true,
+            }
+
+        //TEAM CODE
+        case team.VERIFY_TEAM_CODE_REQUEST:
+            return {
+                ...state,
+                verifyingTeamCode: true,
+            }
+        case team.VERIFY_TEAM_CODE_SUCCESS:
+            return {
+                ...state,
+                verifyingTeamCode: false,
+                teamCodeError: false,
+            }
+        case team.VERIFY_TEAM_CODE_FAILURE:
+            return {
+                ...state,
+                verifyingTeamCode: false,
+                teamCodeError: true,
+            }
+
         //MEMBER
         case team.ADD_MEMBER_REQUEST:
             return {
@@ -133,6 +178,22 @@ export default function Team(state = initialState, action) {
                 ...state,
                 clueLoading: false,
                 clueError: true,
+            }
+
+        //NON-API
+        case team.RESET_TEAMS:
+            if(action.data && action.data.teamNumber){
+                return {
+                    ...state,
+                    team1: action.data.teamNumber === 1 ? null : state.team1,
+                    team2: action.data.teamNumber === 2 ? null : state.team2,
+                }
+            }else{
+                return {
+                    ...state,
+                    team1: null,
+                    team2: null,
+                }
             }
 
         default: 

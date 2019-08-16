@@ -1,6 +1,20 @@
 import constants from '../../constants/game';
 import { baseURL } from '../../Firebase';
 
+export function startGame(data) {
+    const ref = baseURL.games.doc();
+    return {
+        types: [
+            constants.ADD_GAME_REQUEST,
+            constants.ADD_GAME_SUCCESS,
+            constants.ADD_GAME_FAILURE
+        ],
+        method: 'add',
+        payload: data,
+        callRef: ref,
+    }
+}
+
 export function readGame(id) {
     const ref = baseURL.games.doc(id);
     return {

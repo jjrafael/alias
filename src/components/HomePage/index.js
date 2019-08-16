@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Redirect } from 'react-router-dom';
 
 // components
 import Footer from '../Footer';
@@ -11,7 +12,7 @@ import { shiftTurn } from '../../actions/games';
 import { addTeam } from '../../actions/teams';
 
 //misc
-import { makeId, getNow } from '../../utils';
+import { makeId, getNow, setLocalStorage } from '../../utils';
 
 const mapStateToProps = state => {return {
 	turnOf: state.game.turnOf,
@@ -19,16 +20,17 @@ const mapStateToProps = state => {return {
 	team2: state.team.team2,
 	addingTeam: state.team.addingTeam,
 	user: state.app.user,
-	appDetails: state.app.appDetails
+	appDetails: state.app.appDetails,
+	gameDetails: state.app.gameDetails,
 }}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    {
-      shiftTurn,
-      addTeam
-    },
-    dispatch
+	{
+	  shiftTurn,
+	  addTeam
+	},
+	dispatch
   )
 }
 
@@ -40,6 +42,47 @@ class HomePage extends React.Component {
 				1: false,
 				2: false,
 			},
+			footOptions: {
+				main: {
+					text: 'Play',
+					onClick: null,
+				},
+				left: {
+					text: 'Settings',
+					onClick: null,
+				},
+				right: {
+					text: 'Decks',
+					onClick: null,
+				},
+				copyright: false,
+			},
+			inputData: [
+				{
+					id: 'name',
+					type: 'text',
+					placeholder: 'Alpha',
+					label: 'Team Name',
+					showLabel: true,
+					required: true,
+					value: 'Alpha',
+					validations: ['charMax-10'],
+					teamNumber: 1,
+					enableEnter: true,
+				},
+				{
+					id: 'name',
+					type: 'text',
+					placeholder: 'Beta',
+					label: 'Team Name',
+					showLabel: true,
+					required: true,
+					value: 'Beta',
+					validations: ['charMax-10'],
+					teamNumber: 2,
+					enableEnter: true,
+				},
+			]
 		}
 	}
 
@@ -71,7 +114,10 @@ class HomePage extends React.Component {
 			textOnly: { ...this.state.textOnly, [teamNumber]: true}
 		});
 		
-		addTeam(data);
+		addTeam(data).then(doc => {
+			setLocalStorage('alias_team'+teamNumber+'Id', doc.response.id);
+		});
+		
 	}
 
 	renderForm(index, data) {
@@ -87,82 +133,51 @@ class HomePage extends React.Component {
 			<div className="col --center" data-team={teamNumber}>
 				<SingleForm 
 					formName={`add_team_${teamNumber}`}
-  					className={isTextOnly ? '--text-only' : ''}
-  					onSubmit={this.submitForm} 
-  					input={data} 
-  					payloadKey="teamNumber"
-  					textOnly={isTextOnly}/>
-      			{ haveNewTeam && !haveConnectedTeam &&
-      				<div className="msg__connect-to-team">Connect to Team Code:
-      					<h2>{team.game_key || '...'}</h2>
-      				</div>
-      			}
-      			{ addingTeam && !haveConnectedTeam &&
-      				<div className="team-grid">
-      					Initializing Team...
-      				</div>
-      			}
-      			{ haveNewTeam && !addingTeam && haveConnectedTeam &&
-      				<div>Add members</div>
-      			}
-      		</div>
+					className={isTextOnly ? '--text-only' : ''}
+					onSubmit={this.submitForm} 
+					input={data} 
+					payloadKey="teamNumber"
+					textOnly={isTextOnly}/>
+				{ haveNewTeam && !haveConnectedTeam &&
+					<div className="msg__connect-to-team">Connect to Team Code:
+						<h2>{team.game_key || '...'}</h2>
+					</div>
+				}
+				{ addingTeam && !haveConnectedTeam &&
+					<div className="team-grid">
+						Initializing Team...
+					</div>
+				}
+				{ haveNewTeam && !addingTeam && haveConnectedTeam &&
+					<div>Add members</div>
+				}
+			</div>
 		)
 	}
 
 	render() {
-		const { turnOf } = this.props;
-		const footOptions = {
-			main: {
-				text: 'Play',
-				onClick: null,
-			},
-			left: {
-				text: 'Settings',
-				onClick: null,
-			},
-			right: {
-				text: 'Decks',
-				onClick: null,
-			},
-			copyright: false,
-		}
-		const inputData = [
-			{
-				id: 'name',
-				type: 'text',
-				placeholder: 'Alpha',
-				label: 'Team Name',
-				showLabel: true,
-				required: true,
-				value: 'Alpha',
-				validations: ['charMax-10'],
-				teamNumber: 1,
-				enableEnter: true,
-			},
-			{
-				id: 'name',
-				type: 'text',
-				placeholder: 'Beta',
-				label: 'Team Name',
-				showLabel: true,
-				required: true,
-				value: 'Beta',
-				validations: ['charMax-10'],
-				teamNumber: 2,
-				enableEnter: true,
-			},
-		]
+		const { turnOf, user, gameDetails } = this.props;
+		const { footOptions, inputData } = this.state;
+		const hasActiveGame = gameDetails && gameDetails.status === 'active';
 
-	    return (
-	      <div className={`page-wrapper home-page`} data-team={turnOf}>
-	      	<div className="col-2">
-	      		{this.renderForm(0, inputData[0])}
-	      		{this.renderForm(1, inputData[1])}
-	      	</div>
-	      	<Footer options={footOptions}/>
-	      </div>
-	    );
-  	}
+		if(user.role === 'grid'){
+			return (
+			  <div className={`page-wrapper home-page`} data-team={turnOf}>
+					<div className="col-2">
+						{this.renderForm(0, inputData[0])}
+						{this.renderForm(1, inputData[1])}
+					</div>
+					<Footer options={footOptions}/>
+			  </div>
+			);
+		}else{
+			if(hasActiveGame){
+				return <Redirect to="/leader"/>
+			}else{
+				return <Redirect to="/build-team"/>
+			}
+		}
+	}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

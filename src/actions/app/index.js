@@ -16,7 +16,7 @@ export function initializeApp(data) {
     }
 }
 
-export function readApp(id) {
+export function readApp(id, notStateSave) {
 	const ref = baseURL.app.doc(id);
     return {
     	types: [
@@ -25,11 +25,12 @@ export function readApp(id) {
     		constants.READ_APP_FAILURE
     	],
     	method: 'get',
+    	payload: { notStateSave },
     	callRef: ref,
     }
 }
 
-export function editApp(id, data) {
+export function editApp(id, data, notStateSave) {
 	const ref = baseURL.app.doc(id);
     return {
     	types: [
@@ -39,6 +40,7 @@ export function editApp(id, data) {
     	],
     	method: 'set',
     	data,
+    	payload: { notStateSave },
     	callRef: ref,
     }
 }

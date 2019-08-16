@@ -48,8 +48,8 @@ class ModalSignOut extends React.Component {
       haveActiveApp: this.props.appDetails && this.props.appDetail.status === 'active',
       haveActiveUser: this.props.user && this.props.user.status === 'active',
       message: {
-        inGame: 'Are you sure you want to Sign out and end your game?',
-        inHome: 'Are you sure you want to Sign out?'
+        inGame: 'Are you sure you want to Quit and end your game?',
+        inHome: 'Are you sure you want to Quit?'
       }
     }
   }
@@ -118,7 +118,7 @@ class ModalSignOut extends React.Component {
             id="signOutModal">
           <div className="modal__inner">
               <div className="modal__header hide"></div>
-              <div className="modal__body --body-only">{msg}</div>
+              <div className="modal__body --no-header --text-only">{msg}</div>
                <div className="modal__footer --dual-buttons">
                   <Button text="OK" className="--red --plain" onClick={() => this.signOut()}/>
                   <Button text="Cancel" className="--plain" onClick={() => this.closeModal()}/>
