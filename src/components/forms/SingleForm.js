@@ -77,13 +77,26 @@ class SingleForm extends React.Component {
   }
 
   submitForm() {
-    const { onSubmit, input, textOnly, payloadKey } = this.props;
+    const { onSubmit, input, textOnly, payloadKey, clearOnSubmit } = this.props;
     const payload = payloadKey ? input[payloadKey] : null;
     const { formData, errors } = this.state;
 
     if(!errors && !textOnly){
       onSubmit(formData, payload);
     }
+
+    if(clearOnSubmit){
+      this.resetForm();
+    }
+  }
+
+  resetForm(){
+    this.setState({
+      formData: {
+        [this.props.input.id]: '',
+        errors: null,
+      },
+    })
   }
 
   renderInput(input) {

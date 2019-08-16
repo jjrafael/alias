@@ -235,7 +235,6 @@ class MainView extends React.Component {
   				const response = getResponse(doc, cond);
   				if(response){
   					this.setState({ team: response });
-  					console.log('jj debug 4A: ', response);
   				}
   			});
   		}

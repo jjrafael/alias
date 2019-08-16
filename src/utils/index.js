@@ -1,6 +1,7 @@
 //Utility for common functionalities throughtout the project
 import moment from 'moment';
 import { variables } from '../config';
+import colors from '../config/colorPalette';
 
 export function getNow() {
     return moment().format(variables.timeFormat);
@@ -57,6 +58,10 @@ export function makeId(length=6) {
    }
 
    return result;
+}
+
+export function randomNumber(length=100) {
+   return Math.floor(Math.random() * length);
 }
 
 // local storage
@@ -121,4 +126,38 @@ export function hasCachedActiveApp() {
 	return (localStored && localStored.appId
 			&& app &&  app.status === 'active')
 		? localStored.appId : null;
+}
+
+// colors
+export function generateColor(count, index, returnArr) {
+	const i = index && index > -1 ? index : 0;
+	const colorLen = colors.length;
+    let light = null;
+    let color = null;
+
+    if(i < colorLen){
+            let _split = colors[i].split(',');
+            color = 'hsl('+_split[0]+', '+_split[1]+'%, '+_split[2]+'%)';
+        } else {
+            let quotient = parseFloat(count / colorLen);
+            let remainder = parseFloat(i % colorLen);
+            let _split = colors[remainder].split(',');
+            if(parseFloat(_split[2]) > 60){
+                light = parseFloat(_split[2]) - ((_split[2]) / quotient);
+            } else {
+                light = parseFloat(_split[2]) + ((100 - _split[2]) / quotient);
+            }
+            color = 'hsl('+_split[0]+', '+_split[1]+'%, '+light+'%)';
+        }
+
+    if(returnArr){
+      color = color
+        .replace('hsl','')
+        .replace('rgb','')
+        .replace('(','')
+        .replace(')','')
+        .split(',');
+    }
+
+    return color;
 }

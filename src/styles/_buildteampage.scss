@@ -1,0 +1,56 @@
+.build-team-page {
+	@include gradient-summer();
+	@include sq(100%);
+	@include center-flex();
+	&[data-team=""], [data-team="none"] {
+		@include gradient-summer();
+	}
+	&[data-team="1"] {
+		@include gradient-sunglaze();
+	}
+	&[data-team="2"] {
+		@include gradient-sunbreeze();
+	}
+
+	.board {
+		width: 400px;
+		height: 0%;
+		transition: all 0.6s ease;
+		position: relative;
+		color: $black;
+		border: 1px solid $white;
+		border-radius: 10px;
+		margin: 20px 0px;
+		font-family: $josefin;
+		font-size: $fs-xs;
+		opacity: 0;
+		padding: 0px;
+		overflow-y: auto;
+		&.active {
+			height: 300px;
+			opacity: 1;
+			padding: 20px;
+		    margin-top: -200px;
+		};
+		> div {
+			width: 100%;
+			display: block;
+			transition: all 0.3s ease;
+			padding: 10px 0px;
+			border-bottom: 1px solid $black-10;
+			cursor: pointer;
+			&:hover {
+				@include gradient-summer(90deg);
+			};
+		}
+	}
+}
+
+.forms-single {
+	width: 400px;
+	&.--text-only {
+		position: absolute;
+		top: 0px;
+		left: 5%;
+	}
+}

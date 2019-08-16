@@ -32,7 +32,6 @@ export function editTeam(id, data) {
 
 export function readTeam(id, notStateSave) {
     const ref = baseURL.teams.doc(id);
-    console.log('jj readTeam: ', id);
     return {
         types: [
             constants.READ_TEAM_REQUEST,
