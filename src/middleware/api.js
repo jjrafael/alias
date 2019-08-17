@@ -8,10 +8,15 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       callRef,
       data,
       shouldCallAPI = () => true,
+      listenData = {},
       payload = {}
     } = action;
     const { disableAPI, readOnlyAPI } = config;
     const writeMethods = ['set', 'add', 'delete', 'update'];
+    const changeTypes = ['added', 'modified', 'removed'];
+    const listenMethods = ['listen','listenBrowse'];
+    const isListen = listenMethods.indexOf(method) !== -1;
+    const { isColl, changeType, returnData } = listenData;
 
     if (!types) {
       // Normal action: pass it on
@@ -38,21 +43,65 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       })
     )
     
-    return callRef[method](data).then((response) => {
-      return dispatch(
-        Object.assign({}, payload, {
-          response,
-          type: successType,
-          payload: data
-        })
-      )
-    }).catch((error) => {
-      dispatch(
-        Object.assign({}, payload, {
-          error,
-          type: failureType
-        })
-      )
-    })
+    if(isListen && isColl){
+      return callRef.onSnapshot(snapshot => {
+        let snapshotVal = [];
+        let changes = snapshot.docChanges();
+
+        changes.forEach(d => {
+          if(changeType === 'all'){
+            const _data = returnData ? d.doc.data() : d.doc;
+            snapshotVal.push(_data);
+          }else if(changeTypes.indexOf(changeType) !== -1){
+            if(d.type === changeType){
+              const _data = returnData ? d.doc.data() : d.doc;
+              snapshotVal.push(_data);
+            }
+          }else{
+            if(d.type !== 'removed'){
+              const _data = returnData ? d.doc.data() : d.doc;
+              snapshotVal.push(_data);
+            }
+          }
+        });
+
+        return dispatch(
+          Object.assign({}, payload, {
+            response: snapshotVal,
+            type: successType,
+            payload: data
+          })
+        )
+
+      })
+    }else if(isListen && !isColl){
+      callRef.onSnapshot(snapshot => {
+        return dispatch(
+          Object.assign({}, payload, {
+            response: snapshot,
+            type: successType,
+            payload: data
+          })
+        )
+      })
+      
+    }else{
+      return callRef[method](data).then((response) => {
+        return dispatch(
+          Object.assign({}, payload, {
+            response,
+            type: successType,
+            payload: data
+          })
+        )
+      }).catch((error) => {
+        dispatch(
+          Object.assign({}, payload, {
+            error,
+            type: failureType
+          })
+        )
+      })
+    }
   }
 }

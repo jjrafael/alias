@@ -44,6 +44,23 @@ export function readTeam(id, notStateSave) {
     }
 }
 
+export function listenTeam(id) {
+    const ref = baseURL.teams.doc(id);
+    const listenData = {
+        returnData: true
+    }
+    return {
+        types: [
+            constants.LISTEN_TEAM_REQUEST,
+            constants.LISTEN_TEAM_SUCCESS,
+            constants.LISTEN_TEAM_FAILURE
+        ],
+        method: 'listen',
+        callRef: ref,
+        listenData,
+    }
+}
+
 export function browseTeams(id) {
     const ref = baseURL.teams.doc(id);
     return {

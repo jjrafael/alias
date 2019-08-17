@@ -102,6 +102,29 @@ export default function Team(state = initialState, action) {
                 teamLoading: false,
                 teamError: true,
             }
+        case team.LISTEN_TEAM_REQUEST:
+            return {
+                ...state,
+                teamLoading: true,
+            }
+        case team.LISTEN_TEAM_SUCCESS:
+            const listen_team = action.notStateSave
+                ?   state.appDetails
+                : { ...action.response.data(),
+                    id: action.response.id }
+            const listen_team_number = listen_team && listen_team.team_number;
+            return {
+                ...state,
+                teamLoading: false,
+                teamError: false,
+                ['team'+listen_team_number]: listen_team
+            }
+        case team.LISTEN_TEAM_FAILURE:
+            return {
+                ...state,
+                teamLoading: false,
+                teamError: true,
+            }
 
         //TEAM CODE
         case team.VERIFY_TEAM_CODE_REQUEST:

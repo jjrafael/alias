@@ -8,7 +8,7 @@ import SingleForm from '../forms/SingleForm';
 
 // actions
 import { shiftTurn } from '../../actions/games';
-import { addTeam, readTeam } from '../../actions/teams';
+import { addTeam, readTeam, listenTeam } from '../../actions/teams';
 
 //misc
 import { 
@@ -35,7 +35,8 @@ const mapDispatchToProps = dispatch => {
 	{
 	  shiftTurn,
 	  addTeam,
-	  readTeam
+	  readTeam,
+	  listenTeam
 	},
 	dispatch
   )
@@ -45,6 +46,8 @@ class HomePage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			listenTeam1: false,
+			listenTeam2: false,
 			teamStatus: {
 				1: '',
 				2: '',
@@ -104,13 +107,19 @@ class HomePage extends React.Component {
 		}
 	}
 
+	componentWillUnmount() {
+		this.unListenData('all');
+	}
+
 	checkActiveTeam(teamNumber, id) {
 		this.props.readTeam(id).then(doc => {
 			const response = getResponse(doc);
 			const arr = ['active', 'inactive'];
-			if(!response || (response && arr.indexOf(response.status) === -1)){
+			if(response && arr.indexOf(response.status) !== -1){
 				//team is either not existing or unavailable
-				console.log('jj debug: ',response);
+				this.listenData('Team'+teamNumber, id);
+			}else{
+				//team is either not existing or unavailable
 				deleteLocalStorage('alias_team'+teamNumber+'Id');
 			}
 		})
@@ -120,8 +129,32 @@ class HomePage extends React.Component {
 		this.props.shiftTurn();
 	}
 
+	listenData(type, id) {
+		const key = 'listen'+type;
+		if(!this.state[key]){
+			this.setState({ key: true });
+			if(['Team1', 'Team2'].indexOf(type) !== -1){
+				this.props.listenTeam(id);
+			}
+		}
+	}
+
+	unListenData(type) {
+		if(type === 'all'){
+			this.setState({
+				listenTeam1: false,
+				listenTeam2: false,
+			});
+		}else{
+			const key = 'listen'+type;
+			this.setState({ [key]: false });
+		}
+		
+	}
+
 	submitForm = (formData, teamNumber) => {
 		const { addTeam, user, appDetails } = this.props;
+		const { teamStatus } = this.state;
 		const appId = appDetails ? appDetails.id : null;
 		const data = {
 			status: 'inactive',
@@ -135,16 +168,21 @@ class HomePage extends React.Component {
 			app_id: appId
 		}
 		this.setState({ 
-			teamStatus: { ...this.state.teamStatus, [teamNumber]: 'adding'}
+			teamStatus: { ...teamStatus, [teamNumber]: 'adding'}
 		});
 		
 		addTeam(data).then(doc => {
 			setLocalStorage('alias_team'+teamNumber+'Id', doc.response.id);
+			this.setState({ 
+				teamStatus: { ...teamStatus, [teamNumber]: 'added'},
+			});
+			
+			this.listenData('Team'+teamNumber, doc.response.id);
 		});
 		
 	}
 
-	renderForm(index, data) {
+	renderContent(index, data) {
 		const { team1, team2 } = this.props;
 		const { teamStatus } = this.state;
 		const team = index === 0 ? team1 : team2;
@@ -212,8 +250,8 @@ class HomePage extends React.Component {
 		return (
 		  <div className={`page-wrapper home-page`} data-team={turnOf}>
 				<div className="col-2">
-					{this.renderForm(0, inputData[0])}
-					{this.renderForm(1, inputData[1])}
+					{this.renderContent(0, inputData[0])}
+					{this.renderContent(1, inputData[1])}
 				</div>
 				<Footer options={footOptions}/>
 		  </div>
