@@ -11,6 +11,19 @@
 	&[data-team="2"] {
 		@include gradient-sunbreeze();
 	}
+	.forms-single {
+		@include fade-out();
+		&.active {
+			display: block;
+		}
+	}
+
+	.msg__connect-to-team,
+	.msg__adding-iteam {
+		color: $midnight;
+		@include fade-in();
+		display: block;
+	}
 }
 
 .col-2 {
@@ -18,8 +31,11 @@
 		.forms-single .input__wrapper .input__textbox {
 			color: $chrome-dark;
 		}
+		.col__header h2 {
+			@include text-gradient-sunglaze();
+		}
 		.msg__connect-to-team h2 {
-			@include text-gradient-sunglaze;
+			@include text-gradient-sunglaze();
 		}
 	}
 	.col[data-team="2"] {
@@ -28,20 +44,11 @@
 				color: $aqua-dark;
 			}
 		}
+		.col__header h2 {
+			@include text-gradient-sunbreeze();
+		}
 		.msg__connect-to-team h2 {
 			@include text-gradient-sunbreeze;
 		}
 	}
-}
-
-.forms-single {
-	&.--text-only {
-		position: absolute;
-		top: 0px;
-		left: 5%;
-	}
-}
-
-.msg__connect-to-team {
-	color: $midnight;
 }

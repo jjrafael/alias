@@ -114,7 +114,7 @@ class ModalEnterCode extends React.Component {
           this.setState({ progressBar: 20 });
           this.verifyApp(data[0]);
         }else{
-          this.closeLoading('Code was not active anymore');
+          this.closeLoading('Code was not available anymore');
         }
       }else{
         this.closeLoading('Error while verifying team code');

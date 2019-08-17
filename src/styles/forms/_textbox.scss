@@ -6,6 +6,7 @@
 	color: $chrome;
 	margin: 20px 0px;
 	border: 1px solid transparent;
+	float: left;
 	&:hover {
 		border: 1px solid $white;
 	};

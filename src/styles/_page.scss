@@ -35,6 +35,25 @@
 			@include center-flex();
 		}
 	}
+	.col__header {
+		position: absolute;
+		top: 20px;
+		left: 0px;
+		width: 100%;
+		height: auto;
+		@include fade-in();
+		h3 {
+			font-family: $shrikhand;
+			display: block;
+			color: $chrome-dark;
+		}
+		h4 {
+			display: block;
+			font-size: $fs-xs;
+			color: $black;
+			text-transform: uppercase;
+		}
+	}
 }
 
 /*responsiveness*/

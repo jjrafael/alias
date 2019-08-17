@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Redirect } from 'react-router-dom';
 
 // components
 import Footer from '../Footer';
@@ -9,10 +8,17 @@ import SingleForm from '../forms/SingleForm';
 
 // actions
 import { shiftTurn } from '../../actions/games';
-import { addTeam } from '../../actions/teams';
+import { addTeam, readTeam } from '../../actions/teams';
 
 //misc
-import { makeId, getNow, setLocalStorage } from '../../utils';
+import { 
+	makeId, 
+	getNow, 
+	setLocalStorage, 
+	getAllLocalStorage,
+	getResponse,
+	deleteLocalStorage,
+} from '../../utils';
 
 const mapStateToProps = state => {return {
 	turnOf: state.game.turnOf,
@@ -28,7 +34,8 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
 	{
 	  shiftTurn,
-	  addTeam
+	  addTeam,
+	  readTeam
 	},
 	dispatch
   )
@@ -38,9 +45,9 @@ class HomePage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			textOnly: {
-				1: false,
-				2: false,
+			teamStatus: {
+				1: '',
+				2: '',
 			},
 			footOptions: {
 				main: {
@@ -86,10 +93,27 @@ class HomePage extends React.Component {
 		}
 	}
 
-	componentDidUpdate(prevProps){
-		if(prevProps.team1 !== this.props.team1){
-			//updated
+	componentDidMount(){
+		const { team1Id, team2Id } = getAllLocalStorage();
+		if(team1Id){
+			this.checkActiveTeam(1, team1Id);
 		}
+
+		if(team2Id){
+			this.checkActiveTeam(2, team2Id);
+		}
+	}
+
+	checkActiveTeam(teamNumber, id) {
+		this.props.readTeam(id).then(doc => {
+			const response = getResponse(doc);
+			const arr = ['active', 'inactive'];
+			if(!response || (response && arr.indexOf(response.status) === -1)){
+				//team is either not existing or unavailable
+				console.log('jj debug: ',response);
+				deleteLocalStorage('alias_team'+teamNumber+'Id');
+			}
+		})
 	}
 
 	shiftTurn = () => {
@@ -111,7 +135,7 @@ class HomePage extends React.Component {
 			app_id: appId
 		}
 		this.setState({ 
-			textOnly: { ...this.state.textOnly, [teamNumber]: true}
+			teamStatus: { ...this.state.teamStatus, [teamNumber]: 'adding'}
 		});
 		
 		addTeam(data).then(doc => {
@@ -121,62 +145,79 @@ class HomePage extends React.Component {
 	}
 
 	renderForm(index, data) {
-		const { team1, team2, addingTeam } = this.props;
-		const { textOnly } = this.state;
+		const { team1, team2 } = this.props;
+		const { teamStatus } = this.state;
 		const team = index === 0 ? team1 : team2;
 		const teamNumber = team ? team.team_number : (Number(index) + 1);
-		const isTextOnly = textOnly[data.teamNumber];
+		const isTeamAdded = teamStatus[data.teamNumber] === 'added';
+		const isTeamAdding = teamStatus[data.teamNumber] === 'adding';
 		const haveNewTeam = team && team.status === 'inactive';
 		const haveConnectedTeam = team && team.status === 'active';
+		const members = team ? team.members : null;
+		const cxForm = haveConnectedTeam ? '' : 'active';
+		const cxBoard = members ? 'active' : '';
+		const cxTextOnly = isTeamAdded ? '--text-only' : '';
+		const showEl = {
+			members: team && !isTeamAdded && haveConnectedTeam,
+			form: !team,
+			addingMsg: isTeamAdding && !haveConnectedTeam,
+			teamCode: haveNewTeam && !haveConnectedTeam,
+		}
 		
 		return (
 			<div className="col --center" data-team={teamNumber}>
-				<SingleForm 
-					formName={`add_team_${teamNumber}`}
-					className={isTextOnly ? '--text-only' : ''}
-					onSubmit={this.submitForm} 
-					input={data} 
-					payloadKey="teamNumber"
-					textOnly={isTextOnly}/>
-				{ haveNewTeam && !haveConnectedTeam &&
-					<div className="msg__connect-to-team">Connect to Team Code:
-						<h2>{team.game_key || '...'}</h2>
+				{ showEl.form ?
+					<SingleForm 
+						formName={`add_team_${teamNumber}`}
+						className={`${cxTextOnly} ${cxForm}`}
+						onSubmit={this.submitForm} 
+						input={data} 
+						payloadKey="teamNumber"
+						textOnly={isTeamAdded}/> :
+					<div className="col__header">
+						<h2>{team.name}</h2>
+						{members ? members+' members' : ''}
 					</div>
 				}
-				{ addingTeam && !haveConnectedTeam &&
-					<div className="team-grid">
+				{ showEl.addingMsg &&
+					<div className="msg__adding-iteam">
 						Initializing Team...
 					</div>
 				}
-				{ haveNewTeam && !addingTeam && haveConnectedTeam &&
-					<div>Add members</div>
+				{ showEl.members && members &&
+					<div className={`board --cards ${cxBoard}`}>
+						Members here
+					</div>
+				}
+				{ showEl.members && !members &&
+					<div className="msg__connect-to-team">
+						You're connected, add members:
+						<h2>{team.game_key || '...'}</h2>
+					</div>
+				}
+				{ showEl.teamCode &&
+					<div className="msg__connect-to-team">
+						Connect to Team Code:
+						<h2>{team.game_key || '...'}</h2>
+					</div>
 				}
 			</div>
 		)
 	}
 
 	render() {
-		const { turnOf, user, gameDetails } = this.props;
+		const { turnOf, gameDetails } = this.props;
 		const { footOptions, inputData } = this.state;
-		const hasActiveGame = gameDetails && gameDetails.status === 'active';
 
-		if(user.role === 'grid'){
-			return (
-			  <div className={`page-wrapper home-page`} data-team={turnOf}>
-					<div className="col-2">
-						{this.renderForm(0, inputData[0])}
-						{this.renderForm(1, inputData[1])}
-					</div>
-					<Footer options={footOptions}/>
-			  </div>
-			);
-		}else{
-			if(hasActiveGame){
-				return <Redirect to="/leader"/>
-			}else{
-				return <Redirect to="/build-team"/>
-			}
-		}
+		return (
+		  <div className={`page-wrapper home-page`} data-team={turnOf}>
+				<div className="col-2">
+					{this.renderForm(0, inputData[0])}
+					{this.renderForm(1, inputData[1])}
+				</div>
+				<Footer options={footOptions}/>
+		  </div>
+		);
 	}
 }
 
