@@ -90,16 +90,51 @@ export function verifyTeamCode(code) {
 }
 
 // MEMBERS
-export function addMember(id, data) {
-    const ref = baseURL.teams.doc(id);
+export function addMember(id, data, team_number) {
+    const ref = baseURL.teams.doc(id).collection('members');
     return {
         types: [
             constants.ADD_MEMBER_REQUEST,
             constants.ADD_MEMBER_SUCCESS,
             constants.ADD_MEMBER_FAILURE
         ],
-        method: 'set',
+        method: 'add',
+        data,
+        payload: { team_number },
         callRef: ref,
+    }
+}
+
+export function browseMembers(id, team_number) {
+    const ref = baseURL.teams.doc(id).collection('members');
+    return {
+        types: [
+            constants.BROWSE_MEMBER_REQUEST,
+            constants.BROWSE_MEMBER_SUCCESS,
+            constants.BROWSE_MEMBER_FAILURE
+        ],
+        method: 'get',
+        callRef: ref,
+        payload: { team_number }
+    }
+}
+
+export function listenMembers(id, team_number) {
+    const ref = baseURL.teams.doc(id).collection('members').orderBy('created_time', 'asc');
+    const listenData = {
+        returnData: true,
+        isColl: true,
+    }
+    return {
+        types: [
+            constants.LISTEN_MEMBER_REQUEST,
+            constants.LISTEN_MEMBER_SUCCESS,
+            constants.LISTEN_MEMBER_FAILURE
+        ],
+        method: 'listenBrowse',
+        payload: { team_number },
+        callRef: ref,
+        listenData,
     }
 }
 

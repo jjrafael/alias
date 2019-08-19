@@ -134,7 +134,6 @@ class ModalEnterCode extends React.Component {
         const isTeamUnAvail = response['team'+team_number+'_user_key'];
         if(!isTeamUnAvail){
           const teamData = {...data, status: 'active'};
-
           this.setState({ 
             teamNumber: team_number,
             progressBar: 40,

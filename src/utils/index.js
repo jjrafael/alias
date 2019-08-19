@@ -1,10 +1,19 @@
 //Utility for common functionalities throughtout the project
 import moment from 'moment';
+import * as firebase from 'firebase';
 import { variables } from '../config';
 import colors from '../config/colorPalette';
 
-export function getNow() {
-    return moment().format(variables.timeFormat);
+export function getNow(isString) {
+	let now = null;
+
+	if(isString){
+		now = moment().format(variables.timeFormat);
+	}else{
+		now = firebase.firestore.Timestamp.fromDate(new Date());
+	}
+
+    return now;
 }
 
 export function getResponse(doc, cond) {
@@ -62,6 +71,10 @@ export function makeId(length=6) {
 
 export function randomNumber(length=100) {
    return Math.floor(Math.random() * length);
+}
+
+export function pluralizeString(string, len){
+	return len > 1 ? string+'s' : string;
 }
 
 // local storage

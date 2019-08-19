@@ -1,0 +1,64 @@
+.board {
+	border: 1px dashed $white;
+	width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    height: 0px;
+    overflow: auto;
+    opacity: 0;
+    transition: all 0.3s ease;
+    font-family: $josefin;
+	font-size: $fs-xs;
+    &.active {
+		height: 400px;
+		opacity: 1;
+		padding: 20px;
+	};
+	.board__card {
+		@include wh($card-w, $card-h);
+	    margin: 0px 15px 15px 0px;
+	    float: left;
+	    border-radius: 10px;
+		cursor: pointer;
+		color: $midnight;
+		transition: all 0.3s ease;
+		position: relative;
+		@include fade-in();
+		@include center-flex();
+		&:after {
+			content: '';
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			margin: 20px;
+			border: 1px solid $coral;
+			border-radius: 10px;
+			width: calc(100% - 40px);
+			height: calc(100% - 40px);
+			display: none;
+		};
+		&:hover {
+			background: $midnight!important;
+			color: $white;
+			&:after {
+				display: block;
+			};
+		};
+	}
+}
+
+/*responsiveness*/
+
+@include mobile {
+	.board {
+		width: calc(100% - 70px);
+	    height: 150px;
+	    margin-top: 50px;
+	    display: flex;
+	    flex-direction: column;
+	    flex-wrap: wrap;
+	    &__card {
+	    	margin: 0px 10px!important;
+	    }
+	}
+}

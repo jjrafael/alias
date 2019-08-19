@@ -8,7 +8,13 @@ import SingleForm from '../forms/SingleForm';
 
 // actions
 import { shiftTurn } from '../../actions/games';
-import { addTeam, readTeam, listenTeam } from '../../actions/teams';
+import { 
+	addTeam, 
+	readTeam, 
+	listenTeam, 
+	listenMembers,
+	browseMembers
+} from '../../actions/teams';
 
 //misc
 import { 
@@ -18,16 +24,18 @@ import {
 	getAllLocalStorage,
 	getResponse,
 	deleteLocalStorage,
+	pluralizeString
 } from '../../utils';
 
 const mapStateToProps = state => {return {
 	turnOf: state.game.turnOf,
 	team1: state.team.team1,
 	team2: state.team.team2,
+	team1members: state.team.team1members,
+	team2members: state.team.team2members,
 	addingTeam: state.team.addingTeam,
 	user: state.app.user,
 	appDetails: state.app.appDetails,
-	gameDetails: state.app.gameDetails,
 }}
 
 const mapDispatchToProps = dispatch => {
@@ -36,7 +44,9 @@ const mapDispatchToProps = dispatch => {
 	  shiftTurn,
 	  addTeam,
 	  readTeam,
-	  listenTeam
+	  listenTeam,
+	  listenMembers,
+	  browseMembers
 	},
 	dispatch
   )
@@ -118,6 +128,7 @@ class HomePage extends React.Component {
 			if(response && arr.indexOf(response.status) !== -1){
 				//team is either not existing or unavailable
 				this.listenData('Team'+teamNumber, id);
+				this.props.browseMembers(id, teamNumber);
 			}else{
 				//team is either not existing or unavailable
 				deleteLocalStorage('alias_team'+teamNumber+'Id');
@@ -134,7 +145,9 @@ class HomePage extends React.Component {
 		if(!this.state[key]){
 			this.setState({ key: true });
 			if(['Team1', 'Team2'].indexOf(type) !== -1){
+				const teamNumber = type === 'Team1' ? 1 : 2;
 				this.props.listenTeam(id);
+				this.props.listenMembers(id, teamNumber);
 			}
 		}
 	}
@@ -182,21 +195,31 @@ class HomePage extends React.Component {
 		
 	}
 
+	renderMembers(data) {
+		let html = [];
+		data.forEach((d, i) => {
+			html.push(<div className="board__card" key={i} style={{backgroundColor: d.color}} title={d.avatar}>{d.name}</div>)
+		})
+
+		return html;
+	}
+
 	renderContent(index, data) {
-		const { team1, team2 } = this.props;
+		const { team1, team2, team1members, team2members } = this.props;
 		const { teamStatus } = this.state;
 		const team = index === 0 ? team1 : team2;
+		const members = index === 0 ? team1members : team2members;
+		const hasMembers = members && members.length;
 		const teamNumber = team ? team.team_number : (Number(index) + 1);
 		const isTeamAdded = teamStatus[data.teamNumber] === 'added';
 		const isTeamAdding = teamStatus[data.teamNumber] === 'adding';
 		const haveNewTeam = team && team.status === 'inactive';
 		const haveConnectedTeam = team && team.status === 'active';
-		const members = team ? team.members : null;
 		const cxForm = haveConnectedTeam ? '' : 'active';
-		const cxBoard = members ? 'active' : '';
+		const cxBoard = hasMembers ? 'active' : '';
 		const cxTextOnly = isTeamAdded ? '--text-only' : '';
 		const showEl = {
-			members: team && !isTeamAdded && haveConnectedTeam,
+			members: hasMembers && !isTeamAdding && haveConnectedTeam,
 			form: !team,
 			addingMsg: isTeamAdding && !haveConnectedTeam,
 			teamCode: haveNewTeam && !haveConnectedTeam,
@@ -212,39 +235,41 @@ class HomePage extends React.Component {
 						input={data} 
 						payloadKey="teamNumber"
 						textOnly={isTeamAdded}/> :
-					<div className="col__header">
+					<div className="heading-wrapper">
 						<h2>{team.name}</h2>
-						{members ? members+' members' : ''}
+						{ hasMembers ?
+							members.length+' '+pluralizeString('member', members.length) : ''
+						}
 					</div>
 				}
-				{ showEl.addingMsg &&
+				{ showEl.addingMsg ?
 					<div className="msg__adding-iteam">
 						Initializing Team...
-					</div>
+					</div> : ''
 				}
-				{ showEl.members && members &&
+				{ showEl.members && members.length ?
 					<div className={`board --cards ${cxBoard}`}>
-						Members here
-					</div>
+						{this.renderMembers(members)}
+					</div> : ''
 				}
-				{ showEl.members && !members &&
+				{ showEl.members && !members.length ?
 					<div className="msg__connect-to-team">
 						You're connected, add members:
 						<h2>{team.game_key || '...'}</h2>
-					</div>
+					</div> : ''
 				}
-				{ showEl.teamCode &&
+				{ showEl.teamCode ?
 					<div className="msg__connect-to-team">
 						Connect to Team Code:
 						<h2>{team.game_key || '...'}</h2>
-					</div>
+					</div> : ''
 				}
 			</div>
 		)
 	}
 
 	render() {
-		const { turnOf, gameDetails } = this.props;
+		const { turnOf } = this.props;
 		const { footOptions, inputData } = this.state;
 
 		return (

@@ -49,19 +49,19 @@ export default function callAPIMiddleware({ dispatch, getState }) {
         let changes = snapshot.docChanges();
 
         changes.forEach(d => {
-          if(changeType === 'all'){
-            const _data = returnData ? d.doc.data() : d.doc;
-            snapshotVal.push(_data);
-          }else if(changeTypes.indexOf(changeType) !== -1){
+          if(changeTypes.indexOf(changeType) !== -1){
             if(d.type === changeType){
-              const _data = returnData ? d.doc.data() : d.doc;
+              const _data = returnData ? {...d.doc.data(), id: d.doc.id} : d.doc;
+              snapshotVal.push(_data);
+            }
+          }else if(changeType === 'no-removed'){
+            if(d.type !== 'removed'){
+              const _data = returnData ? {...d.doc.data(), id: d.doc.id} : d.doc;
               snapshotVal.push(_data);
             }
           }else{
-            if(d.type !== 'removed'){
-              const _data = returnData ? d.doc.data() : d.doc;
-              snapshotVal.push(_data);
-            }
+            const _data = returnData ? {...d.doc.data(), id: d.doc.id} : d.doc;
+            snapshotVal.push(_data);
           }
         });
 
@@ -87,9 +87,18 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       
     }else{
       return callRef[method](data).then((response) => {
+        const isArray = response && !!response.docs;
+        let res = response;
+
+        if(isArray){
+          res = response.docs.map(d => {
+            return { ...d.data(), id: d.id };
+          })
+        }
+        
         return dispatch(
           Object.assign({}, payload, {
-            response,
+            response: res,
             type: successType,
             payload: data
           })

@@ -3,15 +3,16 @@
 	position: absolute;
 	top: 0px;
 	right: 0px;
-	overflow: hidden;
 }
 
 .page-body {
-	@include sq(100%);
+	width: 100%;
+    height: calc(100% - 50px);
 }
 
 .page-wrapper {
 	transition: all 0.5s ease;
+	overflow: hidden;
 }
 
 .col-2 {
@@ -35,24 +36,25 @@
 			@include center-flex();
 		}
 	}
-	.col__header {
-		position: absolute;
-		top: 20px;
-		left: 0px;
-		width: 100%;
-		height: auto;
-		@include fade-in();
-		h3 {
-			font-family: $shrikhand;
-			display: block;
-			color: $chrome-dark;
-		}
-		h4 {
-			display: block;
-			font-size: $fs-xs;
-			color: $black;
-			text-transform: uppercase;
-		}
+}
+
+.heading-wrapper {
+	position: absolute;
+	top: 20px;
+	left: 0px;
+	width: 100%;
+	height: auto;
+	@include fade-in();
+	h2 {
+		font-family: $shrikhand;
+		display: block;
+		color: $midnight;
+	}
+	h4 {
+		display: block;
+		font-size: $fs-xs;
+		color: $black;
+		text-transform: uppercase;
 	}
 }
 

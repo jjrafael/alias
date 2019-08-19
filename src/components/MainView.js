@@ -146,12 +146,7 @@ class MainView extends React.Component {
 				const cond = {key: 'status', value: 'active'};
 				const response = getResponse(doc, cond);
 				if(response){
-					const isTeam = response.role === 'team';
 					this.checkActiveApp();
-					if(isTeam){
-						this.setState({ role: response.role });
-						this.checkActiveTeam();
-					}
 				}else{
 					clearLocalStorage();
 					this.closeLoading();
@@ -166,7 +161,9 @@ class MainView extends React.Component {
 
 	checkActiveApp() {
 		//check if there's cached active app
+		const { user } = this.props;
 		const { appId } = this.state.cachedIds;
+		const isTeam = user && user.role === 'team';
 		const doneStates = {
 			cachedGameChecked: true,
 			cachedAppChecked: true,
@@ -180,9 +177,15 @@ class MainView extends React.Component {
 			this.props.readApp(appId).then((doc) => {
 				//if exists and active
 				const cond = {key: 'status', value: 'active'};
-				if(getResponse(doc, cond)){
+				const response = getResponse(doc, cond)
+				if(response){
 					this.setState({cachedAppChecked: true, cacheLoaded: true});
 					this.checkActiveGame();
+
+					if(isTeam){
+						this.setState({ role: 'team' });
+						this.checkActiveTeam();
+					}
 				}else{
 					deleteLocalStorage(['alias_appId', 'alias_gameId', 'alias_team1Id', 'alias_team2Id']);
 					this.closeLoading();
@@ -228,7 +231,7 @@ class MainView extends React.Component {
   		const teamNumber = isTeam && user.id === appDetails.team1_user_key ? 1 : 2;
   		const teamId = cachedIds['team'+teamNumber+'Id'];
   		
-  		if(teamId){
+  		if(teamId && isAppReady){
   			this.setState({ isTeamConnected: true, teamNumber });
   			readTeam(teamId).then(doc => {
   				const cond = {key: 'status', value: 'active'};
@@ -254,13 +257,13 @@ class MainView extends React.Component {
 		if(isAppReady){
 			//user already logged, app is initialized
 			if(isTeam && inGame){
-				//team leader and already in play
+				//team leader and already in play: LeaderPage
 				html = <SplashPage {...props.general} />;
 			}else if(isTeam && !inGame && isTeamConnected){
 				//team leader and adding members
 				html = <BuildTeamPage {...props.general} />;
 			}else if(!isTeam && inGame){
-				//grid and already in play
+				//grid and already in play: GamePage
 				html = <SplashPage {...props.general} />;
 			}else if(!isTeam && !inGame){
 				//grid and building team

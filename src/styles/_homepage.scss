@@ -25,6 +25,12 @@
 		@include fade-in();
 		display: block;
 	}
+	.board {
+		width: 432px;
+		.board__card:nth-child(even) {
+			margin-right: 0px;
+		};
+	}
 }
 
 .col-2 {
@@ -32,7 +38,7 @@
 		.forms-single .input__wrapper .input__textbox {
 			color: $chrome-dark;
 		}
-		.col__header h2 {
+		.heading-wrapper h2 {
 			@include text-gradient-sunglaze();
 		}
 		.msg__connect-to-team h2 {
@@ -45,7 +51,7 @@
 				color: $aqua-dark;
 			}
 		}
-		.col__header h2 {
+		.heading-wrapper h2 {
 			@include text-gradient-sunbreeze();
 		}
 		.msg__connect-to-team h2 {

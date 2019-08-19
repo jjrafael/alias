@@ -8,15 +8,16 @@ import Footer from '../Footer';
 import SingleForm from '../forms/SingleForm';
 
 //actions
-import { addMember, editTeam } from '../../actions/teams';
+import { addMember, editTeam, listenMembers } from '../../actions/teams';
 import { startGame } from '../../actions/games';
 
 //misc
 import avatars from '../../config/avatars';
-import { randomNumber, generateColor } from '../../utils';
+import { randomNumber, generateColor, getNow } from '../../utils';
 
 const mapStateToProps = state => {return {
 	team: state.team.team1 || state.team.team2 || null,
+	members: state.team.team1members || state.team.team2members || [],
 	user: state.app.user,
 	appDetails: state.app.appDetails,
 	gameDetails: state.app.gameDetails,
@@ -28,6 +29,7 @@ const mapDispatchToProps = dispatch => {
 	  addMember,
 	  editTeam,
 	  startGame,
+	  listenMembers,
 	},
 	dispatch
   )
@@ -59,14 +61,31 @@ class BuildTeamPage extends React.Component {
 		}
 	}
 
-	componentDidUpdate(prevProps){
-		if(!prevProps.team && this.props.team){
-			this.setState({ teamNumber: this.props.team.team_number });
+	componentDidMount(){
+		if(this.props.team){
+			this.setPage(this.props.team);
 		}
 	}
 
+	componentDidUpdate(prevProps){
+		if(!prevProps.team && this.props.team){
+			this.setPage(this.props.team);
+		}
+
+		if(prevProps.members !== this.props.members){
+			this.setState({ members: this.props.members });
+		}
+	}
+
+	setPage(team){
+		const { team_number, id } = team;
+		this.setState({ teamNumber: team_number });
+		this.props.listenMembers(id, team_number);
+	}
+
 	submitForm = (formData) => {
-		const { members } = this.state;
+		const { members, teamNumber } = this.state;
+		const { team, addMember } = this.props;
 		const { name } = formData;
 		const r = randomNumber(50);
 		const i = randomNumber(r);
@@ -74,10 +93,12 @@ class BuildTeamPage extends React.Component {
 			const data = {
 				name,
 				avatar: avatars[randomNumber(10)].id,
-				color: generateColor(r, i)
+				color: generateColor(r, i),
+				created_time: getNow(true),
 			}
-
+			
 			this.setState({ members: [...members, data] });
+			addMember(team.id, data, teamNumber);
 		}
 	}
 
@@ -87,15 +108,16 @@ class BuildTeamPage extends React.Component {
 		let html = [];
 
 		if(members.length){
-			members.forEach(d => {
+			members.forEach((d, i) => {
 				let avatar = avatars.filter(ava => ava.id === d.avatar);
-				avatar = !!avatar ? avatar[0].label : 'No-avatar';
-				html.push(
-					<div style={{backgroundColor: d.color}} title={avatar}>{d.name}</div>
-				)
+				avatar = !!avatar && avatar[0] ? avatar[0].label : 'No-avatar';
+				if(d && d.name){
+					html.push(
+						<div className="board__card" key={i} style={{backgroundColor: d.color}} title={avatar}>{d.name}</div>
+					)
+				}
 			})
 		}
-
 
 		return html;
 	}
@@ -107,11 +129,15 @@ class BuildTeamPage extends React.Component {
 		const hasMembers = members.length;
 		const teamNumber = team && team.team_number;
 		const cxBoard = hasMembers ? 'active' : '';
-
 		if(user.role === 'team'){
 			return (
 			  <div className={`page-wrapper build-team-page`} data-team={teamNumber}>
 					<div className="page-inner">
+						{ team &&
+							<div className="heading-wrapper">
+								<h2>{team.name}</h2>
+							</div>
+						}
 						<div className={`board --cards ${cxBoard}`}>
 							{this.renderList()}
 						</div>

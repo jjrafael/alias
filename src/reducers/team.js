@@ -1,8 +1,11 @@
+import { unionBy } from 'lodash';
 import constants from '../constants';
 
 const initialState = {
     team1: null,
     team2: null,
+    team1members: [],
+    team2members: [],
     selectedTeamMembers: [],
 
     //requests
@@ -19,7 +22,10 @@ const initialState = {
 
 export default function Team(state = initialState, action) {
     const team = constants.team;
-    const teamObj = action.payload && action.payload.team_number ? 'team'+action.payload.team_number : 'team1';
+    let teamObj = action.payload && action.payload.team_number
+        ? 'team'+action.payload.team_number : 'team1';
+    let teamMemberObj = action.team_number && action.team_number
+        ? 'team'+action.team_number+'members' : 'team1members';
     switch(action.type) {
         //TEAM
         case team.ADD_TEAM_REQUEST:
@@ -89,12 +95,12 @@ export default function Team(state = initialState, action) {
                 ?   state.appDetails
                 : { ...action.response.data(),
                     id: action.response.id }
-            const team_number = data_read && data_read.team_number;
+            teamObj = 'team'+data_read.team_number;
             return {
                 ...state,
                 teamLoading: false,
                 teamError: false,
-                ['team'+team_number]: data_read
+                [teamObj]: data_read
             }
         case team.READ_TEAM_FAILURE:
             return {
@@ -112,12 +118,12 @@ export default function Team(state = initialState, action) {
                 ?   state.appDetails
                 : { ...action.response.data(),
                     id: action.response.id }
-            const listen_team_number = listen_team && listen_team.team_number;
+            teamObj = 'team'+listen_team.team_number;
             return {
                 ...state,
                 teamLoading: false,
                 teamError: false,
-                ['team'+listen_team_number]: listen_team
+                [teamObj]: listen_team
             }
         case team.LISTEN_TEAM_FAILURE:
             return {
@@ -152,17 +158,20 @@ export default function Team(state = initialState, action) {
                 memberLoading: true,
             }
         case team.ADD_MEMBER_SUCCESS:
+            teamMemberObj = 'team'+action.team_number+'members';
+            const ADD_MEMBER_val = unionBy( state[teamMemberObj],
+                    [{...action.payload, id: action.response.id}], 'id')
             return {
                 ...state,
                 memberLoading: false,
-                [teamObj]: action.payload,
-                clueError: false,
+                [teamMemberObj]: ADD_MEMBER_val,
+                memberError: false,
             }
         case team.ADD_MEMBER_FAILURE:
             return {
                 ...state,
-                clueLoading: false,
-                clueError: true,
+                memberLoading: false,
+                memberError: true,
             }
 
         case team.EDIT_MEMBER_REQUEST:
@@ -171,17 +180,21 @@ export default function Team(state = initialState, action) {
                 memberLoading: true,
             }
         case team.EDIT_MEMBER_SUCCESS:
+            teamMemberObj = 'team'+action.team_number+'members';
             return {
                 ...state,
                 memberLoading: false,
-                [teamObj]: action.payload,
-                clueError: false,
+                [teamMemberObj]: [
+                    ...state[teamMemberObj],
+                    action.response.data(),
+                ],
+                memberError: false,
             }
         case team.EDIT_MEMBER_FAILURE:
             return {
                 ...state,
-                clueLoading: false,
-                clueError: true,
+                memberLoading: false,
+                memberError: true,
             }
 
         case team.BROWSE_MEMBER_REQUEST:
@@ -190,17 +203,39 @@ export default function Team(state = initialState, action) {
                 memberLoading: true,
             }
         case team.BROWSE_MEMBER_SUCCESS:
+        teamMemberObj = 'team'+action.team_number+'members';
             return {
                 ...state,
                 memberLoading: false,
-                selectedTeamMembers: action.response.data,
-                clueError: false,
+                [teamMemberObj]: action.response,
+                memberError: false,
             }
         case team.BROWSE_MEMBER_FAILURE:
             return {
                 ...state,
-                clueLoading: false,
-                clueError: true,
+                memberLoading: false,
+                memberError: true,
+            }
+
+        case team.LISTEN_MEMBER_REQUEST:
+            return {
+                ...state,
+                teamLoading: true,
+            }
+        case team.LISTEN_MEMBER_SUCCESS:
+            teamMemberObj = 'team'+action.team_number+'members';
+            const LISTEN_MEMBER_val = unionBy(state[teamMemberObj], action.response, 'id')
+            return {
+                ...state,
+                teamLoading: false,
+                teamError: false,
+                [teamMemberObj]: LISTEN_MEMBER_val
+            }
+        case team.LISTEN_MEMBER_FAILURE:
+            return {
+                ...state,
+                teamLoading: false,
+                teamError: true,
             }
 
         //NON-API

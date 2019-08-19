@@ -16,12 +16,8 @@ export function dbRef(collectionKey, ref) {
 export function checkQuerySize(data, returnArray) {
 	let result = null;
 
-	if(data && data.response && data.response.docs && !data.error && !data.response.empty){
-		result = returnArray
-			? data.response.docs.map(d => {
-				return {...d.data(), id: d.id}
-			})
-			: true;
+	if(data && data.response && data.response.length){
+		result = returnArray ? data.response : true;
 	}else{
 		result = returnArray ? [] : false;
 	}

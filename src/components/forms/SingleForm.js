@@ -112,7 +112,7 @@ class SingleForm extends React.Component {
     switch(input.type){
       case 'text':
         html = (
-          <div className="input__wrapper">
+          <div className="input__wrapper clearfix">
             {input.showLabel && !textOnly &&
               <h4 className="input__label">{input.label || input.id}</h4>
             }
