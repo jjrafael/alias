@@ -9,6 +9,7 @@ import Body from './Body';
 import SplashPage from './SplashPage';
 import HomePage from './HomePage';
 import BuildTeamPage from './BuildTeamPage';
+import GridPage from './GridPage';
 import Loading from './common/Loading';
 import ModalSignOut from './modal/ModalSignOut';
 import ModalEnterCode from './modal/ModalEnterCode';
@@ -41,6 +42,7 @@ const mapStateToProps = state => {return {
 	appInitializing: state.app.appInitializing,
 	readingApp: state.app.readingApp,
 	readingUser: state.app.readingUser,
+	gameStarting: state.game.gameStarting,
 	loading: state.app.loading,
 	hasModals: state.app.showModalSignout ||
 		state.app.showModalResetGame ||
@@ -110,9 +112,14 @@ class MainView extends React.Component {
 			}
 		}
 
+		if(prevProps.gameStarting !== this.props.gameStarting){
+			this.props.toggleLoadingOverlay(this.props.gameStarting, 'Starting Game...');
+		}
+
 		if(prevProps.gameDetails !== this.props.gameDetails && this.props.gameDetails){
 			if(this.props.gameDetails.status === 'active'){
 				this.setState({ inGame: true });
+				setLocalStorage('alias_gameId', this.props.gameDetails.id);
 			}
 		}
 
@@ -177,7 +184,7 @@ class MainView extends React.Component {
 			this.props.readApp(appId).then((doc) => {
 				//if exists and active
 				const cond = {key: 'status', value: 'active'};
-				const response = getResponse(doc, cond)
+				const response = getResponse(doc, cond);
 				if(response){
 					this.setState({cachedAppChecked: true, cacheLoaded: true});
 					this.checkActiveGame();
@@ -187,7 +194,12 @@ class MainView extends React.Component {
 						this.checkActiveTeam();
 					}
 				}else{
-					deleteLocalStorage(['alias_appId', 'alias_gameId', 'alias_team1Id', 'alias_team2Id']);
+					deleteLocalStorage([
+						'alias_appId', 
+						'alias_gameId', 
+						'alias_team1Id', 
+						'alias_team2Id'
+					]);
 					this.closeLoading();
 					this.setState({ ...doneStates });
 				}
@@ -263,8 +275,8 @@ class MainView extends React.Component {
 				//team leader and adding members
 				html = <BuildTeamPage {...props.general} />;
 			}else if(!isTeam && inGame){
-				//grid and already in play: GamePage
-				html = <SplashPage {...props.general} />;
+				//grid and already in play: GridPage
+				html = <GridPage {...props.general} />;
 			}else if(!isTeam && !inGame){
 				//grid and building team
 				html = <HomePage {...props.home} />;

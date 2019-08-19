@@ -4,12 +4,13 @@ const initialState = {
     rounds: [],
     turnOf: '',
     hasMod: false,
-    ModDetails: null,
+    modDetails: null,
     gameWinner: null,
     gameLoser: null,
     gameEnded: false,
     isPause: false,
     gameDetails: null,
+    isCustom: false,
 
     //requests
     endingGame: false,
@@ -18,6 +19,7 @@ const initialState = {
     roundLoading: false,
     modLoading: false,
     gameLoading: false,
+    gameStarting: false,
 
     //failures
     endingError: false,
@@ -31,6 +33,29 @@ const initialState = {
 export default function Game(state = initialState, action) {
     const { game } = constants;
     switch(action.type) {
+        //ADD GAME
+        case game.ADD_GAME_REQUEST:
+            return {
+                ...state,
+                gameStarting: true,
+            }
+        case game.ADD_GAME_SUCCESS:
+            return {
+                ...state,
+                gameStarting: false,
+                gameDetails: {
+                    ...action.payload,
+                    id: action.response.id
+                },
+                gameError: false,
+            }
+        case game.ADD_GAME_FAILURE:
+            return {
+                ...state,
+                gameStarting: false,
+                gameError: true,
+            }
+
         //END GAME
         case game.END_GAME_REQUEST:
             return {
@@ -140,7 +165,7 @@ export default function Game(state = initialState, action) {
                 ...state,
                 gameLoading: false,
                 gameDetails: {
-                    ...action,
+                    ...action.response.data(),
                     id: action.response.id
                 },
                 gameError: false,
@@ -183,7 +208,7 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 roundLoading: false,
-                rounds: action.response.data,
+                rounds: [ ...state.rounds, action.response],
                 roundError: false,
             }
         case game.ADD_ROUND_FAILURE:
@@ -222,8 +247,7 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 modLoading: false,
-                hasMod: true,
-                ModDetails: action.response.data,
+                modDetails: action.response.data,
                 modError: false,
             }
         case game.ADD_MOD_FAILURE:
@@ -241,8 +265,7 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 modLoading: false,
-                hasMod: false,
-                ModDetails: null,
+                modDetails: null,
                 modError: false,
             }
         case game.DELETE_MOD_FAILURE:
@@ -290,7 +313,7 @@ export default function Game(state = initialState, action) {
                 rounds: [],
                 turnOf: '',
                 hasMod: false,
-                ModDetails: null,
+                modDetails: null,
                 gameWinner: null,
                 gameLoser: null,
                 gameEnded: false,

@@ -2,6 +2,7 @@ import constants from '../constants';
 
 const initialState = {
     playingCards: [],
+    playingDecks: [],
     cardsOnGrid: [],
     selectedCardsOnGrid: [],
     decks: [],

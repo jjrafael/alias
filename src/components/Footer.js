@@ -3,18 +3,19 @@ import React from 'react';
 class Footer extends React.Component {
   render() {
     const { className, copyright, options } = this.props;
+    const { main, left, right } = options;
 
     return (
       <footer className={`app-footer ${className || ''}`}>
-        <div className={`footer__options ${options.main ? '--have-main' : ''}`}>
-          { options.left &&
-            <div className="footer__options--left">{options.left.text}</div>
+        <div className={`footer__options ${main ? '--have-main' : ''}`}>
+          { left &&
+            <div className="footer__options--left" onClick={() => left.onClick()}>{left.text}</div>
           }
-          { options.main &&
-            <div className="footer__options--main">{options.main.text}</div>
+          { main &&
+            <div className="footer__options--main" onClick={() => main.onClick()}>{main.text}</div>
           }
-          { options.right &&
-            <div className="footer__options--right">{options.right.text}</div>
+          { right &&
+            <div className="footer__options--right" onClick={() => right.onClick()}>{right.text}</div>
           }
         </div>
         { copyright &&

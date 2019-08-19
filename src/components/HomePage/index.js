@@ -62,21 +62,6 @@ class HomePage extends React.Component {
 				1: '',
 				2: '',
 			},
-			footOptions: {
-				main: {
-					text: 'Play',
-					onClick: null,
-				},
-				left: {
-					text: 'Settings',
-					onClick: null,
-				},
-				right: {
-					text: 'Decks',
-					onClick: null,
-				},
-				copyright: false,
-			},
 			inputData: [
 				{
 					id: 'name',
@@ -269,7 +254,7 @@ class HomePage extends React.Component {
 
 	render() {
 		const { turnOf } = this.props;
-		const { footOptions, inputData } = this.state;
+		const { inputData } = this.state;
 
 		return (
 		  <div className={`page-wrapper home-page`} data-team={turnOf}>
@@ -277,7 +262,7 @@ class HomePage extends React.Component {
 					{this.renderContent(0, inputData[0])}
 					{this.renderContent(1, inputData[1])}
 				</div>
-				<Footer options={footOptions}/>
+				<Footer/>
 		  </div>
 		);
 	}

@@ -2,7 +2,7 @@ import constants from '../../constants/game';
 import { baseURL } from '../../Firebase';
 
 export function startGame(data) {
-    const ref = baseURL.games.doc();
+    const ref = baseURL.games;
     return {
         types: [
             constants.ADD_GAME_REQUEST,
@@ -10,7 +10,7 @@ export function startGame(data) {
             constants.ADD_GAME_FAILURE
         ],
         method: 'add',
-        payload: data,
+        data,
         callRef: ref,
     }
 }
@@ -37,6 +37,21 @@ export function editGame(id, data) {
             constants.EDIT_GAME_FAILURE
         ],
         method: 'set',
+        data,
+        callRef: ref,
+    }
+}
+
+// ROUNDS
+export function addRound(id, data) {
+    const ref = baseURL.games.doc(id).collection('rounds');
+    return {
+        types: [
+            constants.ADD_ROUND_REQUEST,
+            constants.ADD_ROUND_SUCCESS,
+            constants.ADD_ROUND_FAILURE
+        ],
+        method: 'add',
         data,
         callRef: ref,
     }

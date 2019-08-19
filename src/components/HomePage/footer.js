@@ -1,5 +1,36 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+//Components
 import Footer from '../Footer';
+
+// actions
+import { startGame } from '../../actions/games';
+
+//misc
+import { makeId, getNow } from '../../utils';
+
+const mapStateToProps = state => {
+	return {
+		playingDecks: state.cards.playingDecks,
+		modDetails: state.game.modDetails,
+		isCustom: state.game.isCustom,
+		team1: state.team.team1,
+		team2: state.team.team2,
+		team1members: state.team.team1members,
+		team2members: state.team.team2members,
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+		{
+		  startGame
+		},
+		dispatch
+	 )
+}
 
 class HomeFooter extends React.Component {
 	constructor(props) {
@@ -8,18 +39,47 @@ class HomeFooter extends React.Component {
 			footOptions: {
 				main: {
 					text: 'Play',
-					onClick: null,
+					onClick: this.startGame,
 				},
 				left: {
 					text: 'Settings',
-					onClick: null,
+					onClick: () => {},
 				},
 				right: {
 					text: 'Decks',
-					onClick: null,
+					onClick: () => {},
 				},
 				copyright: false,
 			},
+		}
+	}
+
+	startGame = () => {
+		const { 
+			playingDecks, 
+			modDetails, 
+			isCustom, 
+			team1, 
+			team2, 
+			team1members, 
+			team2members
+		} = this.props;
+		const teamCompleted = team1 && team2 && team1members && team2members;
+		
+		if(teamCompleted){
+			const data = {
+				decks: playingDecks,
+				game_key: 'g::'+makeId(),
+				game_loser: '',
+				game_winner: '',
+				have_mod: !!modDetails,
+				is_custom: isCustom,
+				started_time: getNow(),
+				status: 'active',
+				teams: [team1.id, team2.id],
+			}
+			
+			this.props.startGame(data);
 		}
 	}
 
@@ -31,4 +91,4 @@ class HomeFooter extends React.Component {
   }
 }
 
-export default HomeFooter;
+export default connect(mapStateToProps, mapDispatchToProps)(HomeFooter);
