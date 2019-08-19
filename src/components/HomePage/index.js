@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 // components
-import Footer from '../Footer';
+import Footer from './footer';
 import SingleForm from '../forms/SingleForm';
 
 // actions

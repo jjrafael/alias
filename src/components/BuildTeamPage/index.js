@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Redirect } from 'react-router-dom';
 
 //components
-import Footer from '../Footer';
 import SingleForm from '../forms/SingleForm';
 
 //actions
@@ -39,13 +37,6 @@ class BuildTeamPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			footOptions: {
-				main: {
-					text: 'Play',
-					onClick: null,
-				},
-				copyright: false,
-			},
 			input: {
 				id: 'name',
 				type: 'text',
@@ -89,7 +80,7 @@ class BuildTeamPage extends React.Component {
 		const { name } = formData;
 		const r = randomNumber(50);
 		const i = randomNumber(r);
-		
+
 		if(name && team){
 			const data = {
 				name,
@@ -105,7 +96,6 @@ class BuildTeamPage extends React.Component {
 
 	renderList() {
 		const { members } = this.state;
-		// const { team } = this.props;
 		let html = [];
 
 		if(members.length){
@@ -124,40 +114,30 @@ class BuildTeamPage extends React.Component {
 	}
 
 	render() {
-		const { user, team } = this.props;
-		const { footOptions, input, members } = this.state;
-		const hasActiveGame = false;
+		const { team } = this.props;
+		const { input, members } = this.state;
 		const hasMembers = members.length;
 		const teamNumber = team && team.team_number;
 		const cxBoard = hasMembers ? 'active' : '';
-		if(user.role === 'team'){
-			return (
-			  <div className={`page-wrapper build-team-page`} data-team={teamNumber}>
-					<div className="page-inner">
-						{ team &&
-							<div className="heading-wrapper">
-								<h2>{team.name}</h2>
-							</div>
-						}
-						<div className={`board --cards ${cxBoard}`}>
-							{this.renderList()}
+		return (
+		  <div className={`page-wrapper build-team-page`} data-team={teamNumber}>
+				<div className="page-inner">
+					{ team &&
+						<div className="heading-wrapper">
+							<h2>{team.name}</h2>
 						</div>
-						<SingleForm 
-							formName={`build_team_${teamNumber}`}
-							onSubmit={this.submitForm} 
-							clearOnSubmit={true}
-							input={input}/>
+					}
+					<div className={`board --cards ${cxBoard}`}>
+						{this.renderList()}
 					</div>
-					<Footer options={footOptions}/>
-			  </div>
-			);
-		}else{
-			if(hasActiveGame){
-				return <Redirect to="/leader"/>
-			}else{
-				return <Redirect to="/build-team"/>
-			}
-		}
+					<SingleForm 
+						formName={`build_team_${teamNumber}`}
+						onSubmit={this.submitForm} 
+						clearOnSubmit={true}
+						input={input}/>
+				</div>
+		  </div>
+		);
 	}
 }
 
