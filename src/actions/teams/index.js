@@ -147,6 +147,13 @@ export function resetTeams(teamNumber) {
     }
 }
 
+export function resetMembers(teamNumber) {
+    return {
+        type: constants.RESET_MEMBERS,
+        data: teamNumber
+    }
+}
+
 export function clearRdxTeam() {
     return {
         type: constants.CLEAR_STATES,
