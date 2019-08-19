@@ -29,7 +29,7 @@ const initialState = {
 };
 
 export default function Game(state = initialState, action) {
-    const game = constants.game;
+    const { game } = constants;
     switch(action.type) {
         //END GAME
         case game.END_GAME_REQUEST:
@@ -281,6 +281,21 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 turnOf: state.turnOf === '1' ? '2' : '1',
+            }
+
+        //SIGNOUT
+        case game.CLEAR_STATES:
+            return {
+                ...state,
+                rounds: [],
+                turnOf: '',
+                hasMod: false,
+                ModDetails: null,
+                gameWinner: null,
+                gameLoser: null,
+                gameEnded: false,
+                isPause: false,
+                gameDetails: null,
             }
 
         default: 

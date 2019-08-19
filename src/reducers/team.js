@@ -21,7 +21,7 @@ const initialState = {
 };
 
 export default function Team(state = initialState, action) {
-    const team = constants.team;
+    const { team } = constants;
     let teamObj = action.payload && action.payload.team_number
         ? 'team'+action.payload.team_number : 'team1';
     let teamMemberObj = action.team_number && action.team_number
@@ -240,11 +240,11 @@ export default function Team(state = initialState, action) {
 
         //NON-API
         case team.RESET_TEAMS:
-            if(action.data && action.data.teamNumber){
+            if(action.data && action.data){
                 return {
                     ...state,
-                    team1: action.data.teamNumber === 1 ? null : state.team1,
-                    team2: action.data.teamNumber === 2 ? null : state.team2,
+                    team1: action.data === 1 ? null : state.team1,
+                    team2: action.data === 2 ? null : state.team2,
                 }
             }else{
                 return {
@@ -252,6 +252,32 @@ export default function Team(state = initialState, action) {
                     team1: null,
                     team2: null,
                 }
+            }
+
+        case team.RESET_MEMBERS:
+            if(action.data && action.data){
+                return {
+                    ...state,
+                    team1members: action.data === 1 ? null : state.team1members,
+                    team2members: action.data === 2 ? null : state.team2members,
+                }
+            }else{
+                return {
+                    ...state,
+                    team1members: null,
+                    team2members: null,
+                }
+            }
+
+        //SIGNOUT
+        case team.CLEAR_STATES:
+            return {
+                ...state,
+                team1: null,
+                team2: null,
+                team1members: [],
+                team2members: [],
+                selectedTeamMembers: [],
             }
 
         default: 

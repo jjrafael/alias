@@ -89,7 +89,8 @@ class BuildTeamPage extends React.Component {
 		const { name } = formData;
 		const r = randomNumber(50);
 		const i = randomNumber(r);
-		if(name){
+		
+		if(name && team){
 			const data = {
 				name,
 				avatar: avatars[randomNumber(10)].id,

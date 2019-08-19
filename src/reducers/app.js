@@ -52,7 +52,7 @@ const initialState = {
 };
 
 export default function App(state = initialState, action) {
-    const app = constants.app;
+    const { app } = constants;
     switch(action.type) {
         //INITIALIZE_APP
         case app.INITIALIZE_APP_REQUEST:
@@ -283,6 +283,24 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 showModalEnterCode: action.data,
+            }
+
+        //SIGNOUT
+        case app.CLEAR_STATES:
+            return {
+                ...state,
+                gameKey: null,
+                appDetails: null,
+                user: null,
+                userType: 'player',
+                isCustom: false,
+                selectedDecks: [],
+                decks: [],
+                showModalSignout: false,
+                showModalResetGame: false,
+                showModalRestartGame: false,
+                showModalResetTeam: false,
+                showModalEnterCode: false,
             }
 
         default: 

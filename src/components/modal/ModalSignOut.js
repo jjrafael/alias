@@ -12,6 +12,7 @@ import {
   toggleLoadingOverlay,
   editApp,
   editUser,
+  clearRdxApp,
 } from '../../actions/app';
 import { editGame } from '../../actions/games';
 
@@ -34,7 +35,8 @@ const mapDispatchToProps = dispatch => {
       toggleLoadingOverlay,
       editGame,
       editApp,
-      editUser
+      editUser,
+      clearRdxApp,
     },
     dispatch
   )
@@ -87,6 +89,7 @@ class ModalSignOut extends React.Component {
 
       //start signing out
       this.props.toggleLoadingOverlay(true, 'Signing Out...');
+      this.props.clearRdxApp();
       this.closeModal();
       //in active game
       if(inGame && gameDetails){

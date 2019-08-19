@@ -145,3 +145,9 @@ export function toggleEnterCodeModal(show) {
         data: show,
     }
 }
+
+export function clearRdxApp() {
+    return {
+    	type: constants.CLEAR_STATES,
+    }
+}

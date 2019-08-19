@@ -19,7 +19,8 @@ import {
 import { 
   verifyTeamCode,
   editTeam,
-  resetTeams
+  resetTeams,
+  resetMembers
 } from '../../actions/teams';
 
 //misc
@@ -58,6 +59,7 @@ const mapDispatchToProps = dispatch => {
       initializeApp,
       editApp,
       resetTeams,
+      resetMembers,
     },
     dispatch
   )
@@ -100,10 +102,10 @@ class ModalEnterCode extends React.Component {
           setLocalStorage('alias_userId', this.props.user.id);
         }
       }
+  }
 
-      if(prevState.verificationError !== this.state.verificationError){
-        console.log('jj verificationError: ', this.state.verificationError);
-      }
+  removeErrorMsg() {
+    this.setState({ verificationError: '' });
   }
 
   verifyCode(code) {
@@ -146,7 +148,8 @@ class ModalEnterCode extends React.Component {
                 data: response
               }, team_number);
               this.setState({ progressBar: 60 });
-              this.props.resetTeams();
+              this.props.resetTeams(oppositeTeam);
+              this.props.resetMembers();
               setLocalStorage('alias_team'+team_number+'Id', id);
               deleteLocalStorage('alias_team'+oppositeTeam+'Id');
             }
@@ -218,9 +221,9 @@ class ModalEnterCode extends React.Component {
 
   render() {
     const { showModal, submittingCode } = this.props;
-    const { code, maxChar } = this.state;
+    const { code, maxChar, verificationError } = this.state;
     const cxDisabled = !code || (code && code.length !== maxChar) ? '--disabled' : '';
-    const shouldFlip = false;
+    const shouldFlip = verificationError;
     const cxFlipover = shouldFlip ? '--flip' : '';
     const input = {
       id: 'code',
@@ -236,14 +239,15 @@ class ModalEnterCode extends React.Component {
     if(showModal){
       return (
         <Modal
-            className="--flipping --flippable" 
+            className={`--flipping --flippable ${cxFlipover}`} 
             cxOverlay="signOutModal" 
             size="m"
             id="signOutModal">
-          <div className={`modal__back-card --modal-card ${cxFlipover}`}>
-
+          <div className={`modal-card --back`}>
+            <div className="unflip" onClick={this.removeErrorMsg.bind(this)}>X</div>
+            <div className="modal-form-msg">{verificationError}</div>
           </div>
-          <div className={`modal__front-card --modal-card ${cxFlipover}`}>
+          <div className={`modal-card --front`}>
             <div className="modal__inner">
               <div className="modal__header">Code Verification</div>
                 { !submittingCode ?

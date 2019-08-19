@@ -100,7 +100,7 @@ class SplashPage extends React.Component {
 		const { disableRouletteFx } = this.state;
 		const isMobile = deviceDetails.device === 'mobile';
 		const rouletteConds = !isMobile && !hasModals && !loadingOverlay && !disableRouletteFx;
-		const showLogo = !hasModals && !loadingOverlay;
+		const showLogo = !loadingOverlay;
 
 	    return (
 	      <div className="page-wrapper splash-page">

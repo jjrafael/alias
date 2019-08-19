@@ -58,7 +58,7 @@ export function checkElExists(className) {
 }
 
 export function makeId(length=6) {
-   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789?!@';
    const charsLen = chars.length;
    let result = '';
 

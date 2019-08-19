@@ -55,3 +55,9 @@ export function shiftTurn() {
         type: constants.SHIFT_TURN,
     }
 }
+
+export function clearRdxGame() {
+    return {
+        type: constants.CLEAR_STATES,
+    }
+}

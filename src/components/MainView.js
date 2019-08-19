@@ -244,9 +244,9 @@ class MainView extends React.Component {
 	}
 
 	renderPages(isAppReady) {
-		const { hasModals } = this.props;
-		const { role, team, isTeamConnected, inGame } = this.state;
-		const isTeam = role === 'team';
+		const { hasModals, user } = this.props;
+		const { team, isTeamConnected, inGame } = this.state;
+		const isTeam = user && user.role === 'team';
 		const generalProps = { variables, hasModals, team };
 		let html = null;
 		const props = {
@@ -259,7 +259,7 @@ class MainView extends React.Component {
 			if(isTeam && inGame){
 				//team leader and already in play: LeaderPage
 				html = <SplashPage {...props.general} />;
-			}else if(isTeam && !inGame && isTeamConnected){
+			}else if(isTeam && !inGame){
 				//team leader and adding members
 				html = <BuildTeamPage {...props.general} />;
 			}else if(!isTeam && inGame){

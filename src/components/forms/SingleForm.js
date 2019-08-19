@@ -34,6 +34,10 @@ class SingleForm extends React.Component {
     })
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyPress, false);
+  }
+
   onKeyPress = (e) => {
     const { keyCode } = variables;
     if(e.keyCode === keyCode.enter || e.key === keyCode.enter) {

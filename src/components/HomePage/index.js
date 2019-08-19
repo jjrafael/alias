@@ -186,10 +186,7 @@ class HomePage extends React.Component {
 		
 		addTeam(data).then(doc => {
 			setLocalStorage('alias_team'+teamNumber+'Id', doc.response.id);
-			this.setState({ 
-				teamStatus: { ...teamStatus, [teamNumber]: 'added'},
-			});
-			
+			this.setState({ teamStatus: { ...teamStatus, [teamNumber]: 'added'} });		
 			this.listenData('Team'+teamNumber, doc.response.id);
 		});
 		
@@ -220,8 +217,10 @@ class HomePage extends React.Component {
 		const cxTextOnly = isTeamAdded ? '--text-only' : '';
 		const showEl = {
 			members: hasMembers && !isTeamAdding && haveConnectedTeam,
+			connectedNoMembers: !hasMembers && !isTeamAdding && haveConnectedTeam,
 			form: !team,
-			addingMsg: isTeamAdding && !haveConnectedTeam,
+			// addingMsg: isTeamAdding && !haveConnectedTeam,
+			addingMsg: false,
 			teamCode: haveNewTeam && !haveConnectedTeam,
 		}
 		
@@ -247,12 +246,12 @@ class HomePage extends React.Component {
 						Initializing Team...
 					</div> : ''
 				}
-				{ showEl.members && members.length ?
+				{ showEl.members ?
 					<div className={`board --cards ${cxBoard}`}>
 						{this.renderMembers(members)}
 					</div> : ''
 				}
-				{ showEl.members && !members.length ?
+				{ showEl.connectedNoMembers ?
 					<div className="msg__connect-to-team">
 						You're connected, add members:
 						<h2>{team.game_key || '...'}</h2>
