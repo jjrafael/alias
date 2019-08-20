@@ -127,6 +127,28 @@ export default function App(state = initialState, action) {
                 appLoading: false,
                 appError: true,
             }
+         case app.LISTEN_APP_REQUEST:
+            return {
+                ...state,
+                teamLoading: true,
+            }
+        case app.LISTEN_APP_SUCCESS:
+            const LISTEN_APP = {
+                ...action.response.data(),
+                id: action.response.id
+            };
+            return {
+                ...state,
+                teamLoading: false,
+                teamError: false,
+                appDetails: LISTEN_APP
+            }
+        case app.LISTEN_APP_FAILURE:
+            return {
+                ...state,
+                teamLoading: false,
+                teamError: true,
+            }
 
         //USER
         case app.ADD_USER_REQUEST:

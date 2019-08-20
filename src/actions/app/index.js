@@ -45,6 +45,23 @@ export function editApp(id, data, notStateSave) {
     }
 }
 
+export function listenApp(id) {
+    const ref = baseURL.app.doc(id);
+    const listenData = {
+        returnData: true
+    }
+    return {
+        types: [
+            constants.LISTEN_APP_REQUEST,
+            constants.LISTEN_APP_SUCCESS,
+            constants.LISTEN_APP_FAILURE
+        ],
+        method: 'listen',
+        callRef: ref,
+        listenData,
+    }
+}
+
 //USER
 export function addUser(data) {
 	const ref = baseURL.users;

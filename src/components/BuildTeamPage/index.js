@@ -7,7 +7,8 @@ import SingleForm from '../forms/SingleForm';
 
 //actions
 import { addMember, editTeam, listenMembers } from '../../actions/teams';
-import { startGame } from '../../actions/games';
+import { startGame, readGame } from '../../actions/games';
+import { listenApp, toggleLoadingOverlay } from '../../actions/app';
 
 //misc
 import avatars from '../../config/avatars';
@@ -28,6 +29,9 @@ const mapDispatchToProps = dispatch => {
 	  editTeam,
 	  startGame,
 	  listenMembers,
+	  listenApp,
+	  readGame,
+	  toggleLoadingOverlay
 	},
 	dispatch
   )
@@ -53,8 +57,19 @@ class BuildTeamPage extends React.Component {
 	}
 
 	componentDidMount(){
-		if(this.props.team){
-			this.setPage(this.props.team);
+		const { team, appDetails, gameDetails } = this.props;
+		const inGame = gameDetails && gameDetails.status !== 'ended';
+		if(team){
+			this.setPage(team);
+		}
+
+		if(appDetails && appDetails.id){
+			const currentGameId = appDetails.current_game_id;
+			const sameGameId = inGame && currentGameId === gameDetails.id;
+			this.props.listenApp(appDetails.id);
+			if(currentGameId && (!gameDetails || !sameGameId)){
+				this.newGame(appDetails.current_game_id);
+			}
 		}
 	}
 
@@ -65,6 +80,22 @@ class BuildTeamPage extends React.Component {
 
 		if(prevProps.members !== this.props.members){
 			this.setState({ members: this.props.members });
+		}
+
+		if(prevProps.appDetails !== this.props.appDetails){
+			const { appDetails } = this.props;
+			if(prevProps.appDetails.current_game_id !== appDetails.current_game_id){
+				this.newGame(appDetails.current_game_id);
+			}
+		}
+	}
+
+	newGame(id){
+		if(id){
+			this.props.toggleLoadingOverlay(true, 'Starting Game...');
+			this.props.readGame(id).then(doc => {
+				this.props.toggleLoadingOverlay();
+			});
 		}
 	}
 

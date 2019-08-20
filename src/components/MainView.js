@@ -6,13 +6,16 @@ import { bindActionCreators } from 'redux';
 //components
 import Header from './Header';
 import Body from './Body';
+import Loading from './common/Loading';
+import ModalSignOut from './modal/ModalSignOut';
+import ModalEnterCode from './modal/ModalEnterCode';
+
+//pages
 import SplashPage from './SplashPage';
 import HomePage from './HomePage';
 import BuildTeamPage from './BuildTeamPage';
 import GridPage from './GridPage';
-import Loading from './common/Loading';
-import ModalSignOut from './modal/ModalSignOut';
-import ModalEnterCode from './modal/ModalEnterCode';
+import LeaderPage from './LeaderPage';
 
 //actions
 import { 
@@ -188,11 +191,7 @@ class MainView extends React.Component {
 				if(response){
 					this.setState({cachedAppChecked: true, cacheLoaded: true});
 					this.checkActiveGame();
-
-					if(isTeam){
-						this.setState({ role: 'team' });
-						this.checkActiveTeam();
-					}
+					this.checkActiveTeam();
 				}else{
 					deleteLocalStorage([
 						'alias_appId', 
@@ -238,21 +237,32 @@ class MainView extends React.Component {
 		const { user, appDetails, readTeam } = this.props;
 		const { cachedIds } = this.state;
 		const isLogged = user && user.is_logged;
-  		const isAppReady = (isLogged && appDetails && appDetails.status === 'active');
-  		const isTeam = isAppReady && user.role === 'team';
-  		const teamNumber = isTeam && user.id === appDetails.team1_user_key ? 1 : 2;
-  		const teamId = cachedIds['team'+teamNumber+'Id'];
-  		
-  		if(teamId && isAppReady){
-  			this.setState({ isTeamConnected: true, teamNumber });
-  			readTeam(teamId).then(doc => {
-  				const cond = {key: 'status', value: 'active'};
-  				const response = getResponse(doc, cond);
-  				if(response){
-  					this.setState({ team: response });
-  				}
-  			});
-  		}
+		const isAppReady = (isLogged && appDetails && appDetails.status === 'active');
+		const isTeam = isAppReady && user.role === 'team';
+		const teamNumber = isTeam && user.id === appDetails.team1_user_key ? 1 : 2;
+		const teamId = cachedIds['team'+teamNumber+'Id'];
+
+		if(isAppReady && isTeam){
+			//for build team page
+			this.setState({ role: 'team' });
+			if(teamId){
+				this.setState({ isTeamConnected: true, teamNumber });
+				readTeam(teamId).then(doc => {
+					const cond = {key: 'status', value: 'active'};
+					const response = getResponse(doc, cond);
+					if(response){
+						this.setState({ team: response });
+					}
+				});
+			}
+		}else if(isAppReady && !isTeam){
+			//for grid page
+			const { team1Id, team2Id } = cachedIds;
+			if(team1Id && team2Id){
+				readTeam(team1Id);
+				readTeam(team2Id);
+			}
+		}
 	}
 
 	renderPages(isAppReady) {
@@ -270,7 +280,7 @@ class MainView extends React.Component {
 			//user already logged, app is initialized
 			if(isTeam && inGame){
 				//team leader and already in play: LeaderPage
-				html = <SplashPage {...props.general} />;
+				html = <LeaderPage {...props.general} />;
 			}else if(isTeam && !inGame){
 				//team leader and adding members
 				html = <BuildTeamPage {...props.general} />;

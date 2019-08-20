@@ -7,6 +7,7 @@ import Footer from '../Footer';
 
 // actions
 import { startGame } from '../../actions/games';
+import { editApp } from '../../actions/app';
 
 //misc
 import { makeId, getNow } from '../../utils';
@@ -26,7 +27,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
 		{
-		  startGame
+		  startGame,
+		  editApp,
 		},
 		dispatch
 	 )
@@ -62,7 +64,8 @@ class HomeFooter extends React.Component {
 			team1, 
 			team2, 
 			team1members, 
-			team2members
+			team2members,
+			appDetails
 		} = this.props;
 		const teamCompleted = team1 && team2 && team1members && team2members;
 		
@@ -79,7 +82,10 @@ class HomeFooter extends React.Component {
 				teams: [team1.id, team2.id],
 			}
 			
-			this.props.startGame(data);
+			this.props.startGame(data).then(doc => {
+				const id = doc.response.id;
+				this.props.editApp({...appDetails, current_game_id: id});
+			});
 		}
 	}
 

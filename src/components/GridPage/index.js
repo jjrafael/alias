@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 
 //Components
 import Footer from './footer';
+import Button from '../common/Button';
 
 // actions
 import { addRound } from '../../actions/games';
@@ -31,6 +32,10 @@ class GridPage extends React.Component {
 		super(props);
 		this.state = {
 		}
+	}
+
+	pickTeam(){
+
 	}
 
 	renderGrid() {
@@ -61,7 +66,8 @@ class GridPage extends React.Component {
 							{this.renderGrid()}
 						</div> :
 						<div>
-							Pick team randomly, and start round!
+							<h4>Pick team leader randomly, and start round!</h4>
+							<Button className="--pick-leader" text={'Start'} onClick={this.pickTeam.bind(this)}/>
 						</div>
 					}
 				</div>

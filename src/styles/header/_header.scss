@@ -30,6 +30,9 @@ header {
 		}
 		.header-center {
 			margin-left: calc(50% - 250px);
+			&:hover {
+				margin-left: 0px;
+			}
 		}
 	}
 	&[data-team='2'] {
@@ -44,6 +47,9 @@ header {
 		}
 		.header-center {
 			margin-left: calc(-50% + 250px);
+			&:hover {
+				margin-left: 0px;
+			}
 		}
 	}
 }

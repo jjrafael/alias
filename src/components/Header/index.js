@@ -11,6 +11,8 @@ const mapStateToProps = state => {
     settings: state.app.settings,
     gameDetails: state.game.gameDetails,
     turnOf: state.game.turnOf,
+    team1: state.team.team1,
+    team2: state.team.team2,
   }
 }
 
@@ -29,24 +31,16 @@ class Header extends React.Component {
   }
 
   render() {
-    const { className, gameDetails, turnOf, isAppReady } = this.props;
+    const { className, gameDetails, turnOf, isAppReady, team1, team2 } = this.props;
     const { timer } = this.state;
     const inGame = gameDetails && gameDetails.status === 'active';
-    const team = {
-      team_1: {
-        team_number: '1'
-      },
-      team_2: {
-        team_number: '2'
-      },
-    }
 
     return (
       <header className={`app-header ${className || ''}`} data-team={turnOf}>
-        { inGame &&
+        { inGame && team1 && team2 &&
             <div>
-              <ScoreBar team={team.team_1}/>
-              <ScoreBar team={team.team_2}/>
+              <ScoreBar team={team1}/>
+              <ScoreBar team={team2}/>
               <div className="timerbar"></div>
             </div>
         }
