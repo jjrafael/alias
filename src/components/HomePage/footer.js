@@ -21,6 +21,7 @@ const mapStateToProps = state => {
 		team2: state.team.team2,
 		team1members: state.team.team1members,
 		team2members: state.team.team2members,
+		appDetails: state.app.appDetails,
 	}
 }
 
@@ -84,7 +85,7 @@ class HomeFooter extends React.Component {
 			
 			this.props.startGame(data).then(doc => {
 				const id = doc.response.id;
-				this.props.editApp({...appDetails, current_game_id: id});
+				this.props.editApp(appDetails.id, {...appDetails, current_game_id: id});
 			});
 		}
 	}

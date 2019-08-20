@@ -53,6 +53,7 @@ class BuildTeamPage extends React.Component {
 			},
 			teamNumber: null,
 			members: [],
+			listenApp: false,
 		}
 	}
 
@@ -66,7 +67,9 @@ class BuildTeamPage extends React.Component {
 		if(appDetails && appDetails.id){
 			const currentGameId = appDetails.current_game_id;
 			const sameGameId = inGame && currentGameId === gameDetails.id;
-			this.props.listenApp(appDetails.id);
+			if(!this.state.listenApp){
+				this.listenData('App',appDetails.id);
+			}
 			if(currentGameId && (!gameDetails || !sameGameId)){
 				this.newGame(appDetails.current_game_id);
 			}
@@ -84,9 +87,34 @@ class BuildTeamPage extends React.Component {
 
 		if(prevProps.appDetails !== this.props.appDetails){
 			const { appDetails } = this.props;
+			if(!this.state.listenApp){
+				this.listenData('App',appDetails.id);
+			}
 			if(prevProps.appDetails.current_game_id !== appDetails.current_game_id){
 				this.newGame(appDetails.current_game_id);
 			}
+		}
+	}
+
+	listenData(type, id) {
+		const key = 'listen'+type;
+		if(!this.state[key]){
+			this.setState({ [key]: true });
+			if(type === 'App'){
+				this.props.listenApp(id);
+			}
+		}
+	}
+
+	unListenData(type) {
+		if(type === 'all'){
+			this.setState({
+				listenTeam1: false,
+				listenTeam2: false,
+			});
+		}else{
+			const key = 'listen'+type;
+			this.setState({ [key]: false });
 		}
 	}
 

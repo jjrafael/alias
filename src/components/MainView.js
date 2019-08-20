@@ -24,7 +24,7 @@ import {
 	readUser, 
 	toggleLoadingOverlay } from '../actions/app';
 import { readGame } from '../actions/games';
-import { readTeam } from '../actions/teams';
+import { readTeam, resetTeams } from '../actions/teams';
 
 //misc
 import { isMobile } from '../utils/app';
@@ -62,7 +62,8 @@ const mapDispatchToProps = dispatch => {
       readGame,
       readApp,
       readUser,
-      readTeam
+      readTeam,
+      resetTeams
     },
     dispatch
   )
@@ -119,13 +120,29 @@ class MainView extends React.Component {
 			this.props.toggleLoadingOverlay(this.props.gameStarting, 'Starting Game...');
 		}
 
-		if(prevProps.gameDetails !== this.props.gameDetails && this.props.gameDetails){
-			if(this.props.gameDetails.status === 'active'){
-				this.setState({ inGame: true });
+		if(prevProps.gameDetails !== this.props.gameDetails){
+			this.setState({ inGame: this.props.gameDetails && this.props.gameDetails.status === 'active' });
+			if(this.props.gameDetails && this.props.gameDetails.status === 'active'){
 				setLocalStorage('alias_gameId', this.props.gameDetails.id);
 			}
 		}
+	}
 
+	setDefaultState() {
+		this.setState({
+			device: null,
+			cachedGameChecked: false,
+			cachedAppChecked: false,
+			cachedUserChecked: false,
+			cacheLoaded: false,
+			verifyCacheDone: false,
+			isTeamConnected: false,
+			cachedIds: null,
+			team: null,
+			role: 'grid',
+			inGame: false,
+			teamNumber: null,
+		})
 	}
 
 	closeLoading() {
@@ -171,9 +188,7 @@ class MainView extends React.Component {
 
 	checkActiveApp() {
 		//check if there's cached active app
-		const { user } = this.props;
 		const { appId } = this.state.cachedIds;
-		const isTeam = user && user.role === 'team';
 		const doneStates = {
 			cachedGameChecked: true,
 			cachedAppChecked: true,
@@ -234,14 +249,15 @@ class MainView extends React.Component {
 	}
 
 	checkActiveTeam() {
-		const { user, appDetails, readTeam } = this.props;
+		const { user, appDetails, readTeam, resetTeams } = this.props;
 		const { cachedIds } = this.state;
 		const isLogged = user && user.is_logged;
 		const isAppReady = (isLogged && appDetails && appDetails.status === 'active');
 		const isTeam = isAppReady && user.role === 'team';
 		const teamNumber = isTeam && user.id === appDetails.team1_user_key ? 1 : 2;
 		const teamId = cachedIds['team'+teamNumber+'Id'];
-
+		const oppositeTeam = teamNumber === 1 ? 2 : 1;
+		
 		if(isAppReady && isTeam){
 			//for build team page
 			this.setState({ role: 'team' });
@@ -252,6 +268,8 @@ class MainView extends React.Component {
 					const response = getResponse(doc, cond);
 					if(response){
 						this.setState({ team: response });
+						deleteLocalStorage('alias_team'+oppositeTeam+'Id');
+						resetTeams(oppositeTeam);
 					}
 				});
 			}
@@ -275,7 +293,7 @@ class MainView extends React.Component {
 			general: generalProps,
 			home: {...generalProps, isTeamConnected},
 		}
-
+		
 		if(isAppReady){
 			//user already logged, app is initialized
 			if(isTeam && inGame){

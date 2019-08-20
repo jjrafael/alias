@@ -128,7 +128,7 @@ class HomePage extends React.Component {
 	listenData(type, id) {
 		const key = 'listen'+type;
 		if(!this.state[key]){
-			this.setState({ key: true });
+			this.setState({ [key]: true });
 			if(['Team1', 'Team2'].indexOf(type) !== -1){
 				const teamNumber = type === 'Team1' ? 1 : 2;
 				this.props.listenTeam(id);
@@ -147,7 +147,6 @@ class HomePage extends React.Component {
 			const key = 'listen'+type;
 			this.setState({ [key]: false });
 		}
-		
 	}
 
 	submitForm = (formData, teamNumber) => {

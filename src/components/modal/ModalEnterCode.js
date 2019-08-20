@@ -128,7 +128,7 @@ class ModalEnterCode extends React.Component {
     const { app_id, id, team_number } = data;
     const isTeam1 = (['1', 1]).indexOf(team_number) !== -1;
     const oppositeTeam = isTeam1 ? 2 : 1;
-    this.props.readApp(app_id, true).then((doc) => {
+    this.props.readApp(app_id).then((doc) => {
       //if exists and active
       const cond = {key: 'status', value: 'active'};
       const response = getResponse(doc, cond);
