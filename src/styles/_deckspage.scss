@@ -1,0 +1,16 @@
+.decks-page {
+	@include wh(100%, 200%);
+	@include gradient-summer();
+	.col-2 {
+		width: 100%;
+		height: 50%;
+		float: left;
+		transition: margin 1.2s ease;
+		&.col-decks {
+			margin-top: -77%;
+		}
+		&.col-decks.show {
+			margin-top: 0px;
+		}
+	}
+}

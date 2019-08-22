@@ -264,6 +264,12 @@ export default function Cards(state = initialState, action) {
                 voteError: true,
             }
 
+        case cards.SET_PLAYING_DECKS: 
+            return {
+                ...state,
+                playingDecks: action.data,
+            }
+
         default: 
             return state;
     }

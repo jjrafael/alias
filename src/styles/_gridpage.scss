@@ -1,23 +1,10 @@
 .grid-page {
 	@include gradient-summer();
 	@include sq(100%);
-	@include center-flex();
-	&[data-team=""], [data-team="none"] {
-		@include gradient-summer();
-	}
-	&[data-team="1"] {
-		@include gradient-sunglaze();
-	}
-	&[data-team="2"] {
-		@include gradient-sunbreeze();
-	}
-
 	.page-inner {
 		width: 100%;
   	padding: 0px 20px;
-  	@include center-flex();
 	}
-
 	.btn {
 		&.--pick-leader {
 	    float: unset;

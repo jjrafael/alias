@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router-dom';
 
 //Components
 import Footer from '../Footer';
@@ -22,6 +23,7 @@ const mapStateToProps = state => {
 		team1members: state.team.team1members,
 		team2members: state.team.team2members,
 		appDetails: state.app.appDetails,
+		settings: state.app.settings,
 	}
 }
 
@@ -50,7 +52,7 @@ class HomeFooter extends React.Component {
 				},
 				right: {
 					text: 'Decks',
-					onClick: () => {},
+					onClick: () => { props.history.push('/decks') },
 				},
 				copyright: false,
 			},
@@ -66,7 +68,8 @@ class HomeFooter extends React.Component {
 			team2, 
 			team1members, 
 			team2members,
-			appDetails
+			appDetails,
+			settings
 		} = this.props;
 		const teamCompleted = team1 && team2 && team1members && team2members;
 		
@@ -81,6 +84,10 @@ class HomeFooter extends React.Component {
 				started_time: getNow(),
 				status: 'active',
 				teams: [team1.id, team2.id],
+				include_jinx_cards: settings.include_jinx_cards,
+				include_death_card: settings.include_death_card,
+				timer: settings.timer,
+				violation_limit: settings.violation_limit,
 			}
 			
 			this.props.startGame(data).then(doc => {
@@ -98,4 +105,4 @@ class HomeFooter extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeFooter);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(HomeFooter));

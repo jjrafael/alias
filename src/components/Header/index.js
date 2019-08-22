@@ -31,7 +31,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { className, gameDetails, turnOf, isAppReady, team1, team2 } = this.props;
+    const { className, gameDetails, turnOf, headerProps, team1, team2 } = this.props;
     const { timer } = this.state;
     const inGame = gameDetails && gameDetails.status === 'active';
 
@@ -45,7 +45,7 @@ class Header extends React.Component {
             </div>
         }
         <HeaderCenter timer={timer}>
-          <Menu isAppReady={isAppReady}/>
+          <Menu {...headerProps}/>
         </HeaderCenter>
       </header>
     );

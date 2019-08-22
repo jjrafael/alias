@@ -47,7 +47,7 @@ class LeaderPage extends React.Component {
     return (
       <div className={`page-wrapper grid-page`} data-team={turnOf}>
 				<div className="page-inner">
-					{gridReady ? 'Submit Alias' : 'Leader page'}
+					{gridReady ? 'Submit Alias' : 'Preparing Game...'}
 				</div>
 				<Footer/>
 		  </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -16,6 +16,7 @@ import HomePage from './HomePage';
 import BuildTeamPage from './BuildTeamPage';
 import GridPage from './GridPage';
 import LeaderPage from './LeaderPage';
+import DecksPage from './DecksPage';
 
 //actions
 import { 
@@ -283,10 +284,9 @@ class MainView extends React.Component {
 		}
 	}
 
-	renderPages(isAppReady) {
-		const { hasModals, user } = this.props;
+	renderPages(isAppReady, isTeam) {
+		const { hasModals } = this.props;
 		const { team, isTeamConnected, inGame } = this.state;
-		const isTeam = user && user.role === 'team';
 		const generalProps = { variables, hasModals, team };
 		let html = null;
 		const props = {
@@ -307,7 +307,12 @@ class MainView extends React.Component {
 				html = <GridPage {...props.general} />;
 			}else if(!isTeam && !inGame){
 				//grid and building team
-				html = <HomePage {...props.home} />;
+				html = (
+					<Switch>
+						<Route exact path="/" render={() => <HomePage {...props.home} />}/>
+						<Route exact path="/decks" render={() => <DecksPage {...props.general} />}/>
+					</Switch>
+				);
 			}else{
 				//something went wrong
 				html = <SplashPage {...props.general} />;
@@ -325,16 +330,16 @@ class MainView extends React.Component {
   		const { verifyCacheDone, device, inGame } = this.state;
   		const isLogged = user && user.is_logged;
   		const isAppReady = (isLogged && !!appDetails && verifyCacheDone);
+  		const isTeam = user && user.role === 'team';
   		const cxDevice = device ? device.device : 'desktop';
   		const cxHeader = isAppReady ? '' : '--splash';
-  		
+  		const headerProps = { isAppReady, isTeam, inGame };
+
 	    return (
 	      <div className={`page --${cxDevice}`} id="MainPage">
-	      	<Header
-	      		className={`app-header ${cxHeader}`}
-	      		isAppReady={isAppReady}/>
+	      	<Header className={`app-header ${cxHeader}`} headerProps={headerProps}/>
 	        <Body className="app-body">
-	        	{this.renderPages(isAppReady, inGame)}
+	        	{this.renderPages(isAppReady, isTeam)}
 	        </Body>
 	        <ModalSignOut />
 	        <ModalEnterCode />

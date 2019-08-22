@@ -86,6 +86,7 @@ class ModalSignOut extends React.Component {
   signOut() {
       const { appDetails, gameDetails, user, editApp, editUser, editGame } = this.props;
       const { haveActiveUser , haveActiveApp, inGame } = this.state;
+      const isTeam = user && user.role === 'team';
 
       //start signing out
       this.props.toggleLoadingOverlay(true, 'Signing Out...');
@@ -97,8 +98,8 @@ class ModalSignOut extends React.Component {
       }
 
       //has active app
-      if(haveActiveApp && appDetails){
-          editApp(appDetails.id, {...appDetails, status: 'inactive'});
+      if(haveActiveApp && appDetails && !isTeam){
+        editApp(appDetails.id, {...appDetails, status: 'inactive'});
       }
 
       //has active user

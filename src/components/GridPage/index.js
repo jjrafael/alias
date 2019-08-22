@@ -35,7 +35,7 @@ class GridPage extends React.Component {
 	}
 
 	pickTeam(){
-
+		
 	}
 
 	renderGrid() {

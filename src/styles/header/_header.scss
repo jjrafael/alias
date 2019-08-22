@@ -92,6 +92,13 @@ header {
 	}
 	.header-center {
 		width: 50px;
+		&:hover {
+			.header-logo {
+				@include fade-in();
+				display: block;
+				background: $peach;
+			}
+		}
 	}
 	.header-logo {
 		display: none;

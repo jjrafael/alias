@@ -36,11 +36,6 @@ export const splashMenu = [
 		label: 'Start Game',
 		type: 'func'
 	},
-	{
-		id: 'add_cards',
-		label: 'Add Cards',
-		type: 'link'
-	},
 	enterCode,
 	about
 ]

@@ -9,11 +9,11 @@ const initialState = {
     gameKey: null,
     settings: {
         timer: 180000, //3mins default timer for team members
-        leaderTimer: 0, //0 means no timer for leaders
-        violationLimit: 5, //min of 5 violations to lose the game
-        includeJinxCards: false,
-        includeDeathCard: true,
-        addMod: false,
+        leader_timer: 0, //0 means no timer for leaders
+        violation_limit: 5, //min of 5 violations to lose the game
+        include_jinx_cards: false,
+        include_death_card: true,
+        add_mod: false,
         soundFx: false,
         music: false,
     },
