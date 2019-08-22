@@ -26,8 +26,9 @@
 		display: block;
 	}
 	.board {
-		width: 432px;
-		.board__card:nth-child(even) {
+		width: 467px;
+		padding: 10px;
+		.card:nth-child(even) {
 			margin-right: 0px;
 		};
 	}
@@ -39,10 +40,12 @@
 			color: $chrome-dark;
 		}
 		.heading-wrapper h2 {
-			@include text-gradient-sunglaze();
+			/*@include text-gradient-sunglaze();*/
+			color: $chrome;
 		}
 		.msg__connect-to-team h2 {
-			@include text-gradient-sunglaze();
+			/*@include text-gradient-sunglaze();*/
+			color: $chrome;
 		}
 	}
 	.col[data-team="2"] {
@@ -52,10 +55,12 @@
 			}
 		}
 		.heading-wrapper h2 {
-			@include text-gradient-sunbreeze();
+			/*@include text-gradient-sunbreeze();*/
+			color: $aqua-dark;
 		}
 		.msg__connect-to-team h2 {
-			@include text-gradient-sunbreeze;
+			/*@include text-gradient-sunbreeze;*/
+			color: $aqua-dark;
 		}
 	}
 }

@@ -6,6 +6,19 @@
 	&.--pointer {
 		cursor: pointer;
 	}
+	&.card-reg {
+		width: 200px;
+  	height: 140px;
+  	padding: 10px;
+		.card-front,
+		.card-back {
+			width: 200px;
+    	height: 140px;
+    	.card-back__emblem {
+    		font-size: $fs-l;
+    	}
+		}
+	}
 	.card-inner {
 		position: absolute;
 		top: 0px;
@@ -47,6 +60,7 @@
 			font-family: $shrikhand;
 			font-size: $fs-xl;
 			text-align: center;
+			padding: 0px 3px;
 			@include text-gradient-soltice();
 		}
 	}
@@ -62,6 +76,7 @@
 		transition: all 0.4s ease;
 		z-index: 1;
 	}
+	
 	&:hover {
 		.card-front {
 			transform: rotateY(0deg);
@@ -74,6 +89,72 @@
 		}
 	};
 }
+
+/*flipover default*/
+.card.--flipover {
+	.card-front {
+		transform: rotateY(0deg);
+		transition: transform 0.4s ease 0s, z-index 0.2s;
+		z-index: 2;
+	}
+	.card-back {
+		transform: rotateY(180deg);
+		z-index: 1;
+	}
+	&:hover {
+		.card-front {
+			transform: rotateY(180deg);
+			transition: transform 0.4s ease 0s, z-index 0.2s;
+			z-index: 1;
+		}
+		.card-back {
+			transform: rotateY(0deg);
+			z-index: 2;
+		}
+	};
+}
+
+/*card types*/
+.card.members-card {
+	float: left;
+	margin: 0px 10px 10px 0px;
+	.card-front,
+	.card-back {
+		text-align: center;
+    line-height: 140px;
+    font-size: $fs-s;
+    left: 0px;
+	}
+	.card-back {
+		color: $white;
+	}
+}
+
+/*team specific*/
+.card.--team1 {
+	.card-back {
+		&:after {
+			border-color: $chrome;
+		}
+		&__emblem {
+			-webkit-text-fill-color: unset;
+			color: $chrome;
+		}
+	}
+}
+
+.card.--team2 {
+	.card-back {
+		&:after {
+			border-color: $aqua;
+		}
+		&__emblem {
+			-webkit-text-fill-color: unset;
+			color: $aqua;
+		}
+	}
+}
+
 
 .cardscol {
 	float: left;

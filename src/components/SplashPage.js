@@ -106,43 +106,43 @@ class SplashPage extends React.Component {
 	      <div className="page-wrapper splash-page">
 	      	<div className="splash-tilt">
 	      		<CardsCol count={20} animDelay={'0.5s'} className={`${rouletteConds ? '--roulette' : ''}`}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
+	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
 	      		<CardsCol count={20} animDelay={'3s'} className={`${rouletteConds ? '--roulette' : ''}`}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
+	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
 	      		<CardsCol count={20} animDelay={'1s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
-	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
+	      			<Card size="medium" type="splash-cards" className="--pointer">
 	      				<div className="card-inner">
 	      					<h3>Add Cards</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
 	      		<CardsCol count={20} animDelay={'0.5s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
-	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
+	      			<Card size="medium" type="splash-cards" className="--pointer">
 	      				<div className="card-inner" onClick={this.enterCodeModal}>
 	      					<h3>Enter Code</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
 	      		<CardsCol count={20} animDelay={'2s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
-	      			<Card size="medium" flipBack type="splash-cards" className="--pointer">
+	      			<Card size="medium" type="splash-cards" className="--pointer">
 	      				<div className="card-inner" onClick={this.initUser}>
 	      					<h3>Start Game</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
 	      		<CardsCol count={20} animDelay={'2.5s'} className={`${rouletteConds ? '--roulette' : ''}`}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
+	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
 	      		<CardsCol count={20} animDelay={'3s'} className={`${rouletteConds ? '--roulette' : ''}`}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
+	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
 	      		<CardsCol count={20} animDelay={'1s'} className={`${rouletteConds ? '--roulette' : ''}`}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
+	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
 	      		<CardsCol count={20} animDelay={'4s'} className={`${rouletteConds ? '--roulette' : ''}`}>
-	      			<Card size="medium" flipBack type="splash-cards"/>
+	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
 	      	</div>
 	      	<div className={`splash-logo-wrapper ${showLogo ? '' : 'trans-hide'}`}>

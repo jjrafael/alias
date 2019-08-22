@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../../styles/app.css';
 
 class Button extends React.Component {
   render() {

@@ -62,6 +62,7 @@ header {
 	position: absolute;
 	top: 0px;
 	transition: all 0.6s ease;
+	text-align: center;
 	&:hover {
 		width: 100%;
 		.header-logo {
@@ -92,6 +93,7 @@ header {
 	}
 	.header-center {
 		width: 50px;
+		left: 0px;
 		&:hover {
 			.header-logo {
 				@include fade-in();

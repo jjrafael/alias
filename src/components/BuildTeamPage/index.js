@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 
 //components
 import SingleForm from '../forms/SingleForm';
+import Board from '../common/Board';
 
 //actions
 import { addMember, editTeam, listenMembers } from '../../actions/teams';
@@ -153,31 +154,38 @@ class BuildTeamPage extends React.Component {
 		}
 	}
 
-	renderList() {
+	getMembers() {
+		const { team } = this.props;
 		const { members } = this.state;
-		let html = [];
+		const teamNumber = team && team.team_number;
+		const cxTeam = '--team'+teamNumber;
+		let arr = [];
 
 		if(members.length){
 			members.forEach((d, i) => {
 				let avatar = avatars.filter(ava => ava.id === d.avatar);
-				avatar = !!avatar && avatar[0] ? avatar[0].label : 'No-avatar';
+				avatar =  !!avatar ? avatar[0] : null;
 				if(d && d.name){
-					html.push(
-						<div className="board__card" key={i} style={{backgroundColor: d.color}} title={avatar}>{d.name}</div>
-					)
+					arr.push({
+						data: { ...d, avatarObj: avatar},
+						type: 'members-card',
+						className: cxTeam,
+					});
 				}
 			})
 		}
 
-		return html;
+		return arr;
 	}
 
 	render() {
 		const { team } = this.props;
-		const { input, members } = this.state;
+		const { input } = this.state;
+		const members = this.getMembers();
 		const hasMembers = members.length;
 		const teamNumber = team && team.team_number;
 		const cxBoard = hasMembers ? 'active' : '';
+
 		return (
 		  <div className={`page-wrapper build-team-page`} data-team={teamNumber}>
 				<div className="page-inner">
@@ -186,9 +194,10 @@ class BuildTeamPage extends React.Component {
 							<h2>{team.name}</h2>
 						</div>
 					}
-					<div className={`board --cards ${cxBoard}`}>
-						{this.renderList()}
-					</div>
+					<Board
+						data={members}
+						className={`--hor-scroll ${cxBoard}`}
+						type="cards"/>
 					<SingleForm 
 						formName={`build_team_${teamNumber}`}
 						onSubmit={this.submitForm} 

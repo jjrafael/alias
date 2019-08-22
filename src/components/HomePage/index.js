@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 // components
 import Footer from './footer';
 import SingleForm from '../forms/SingleForm';
+import Board from '../common/Board';
 
 // actions
 import { shiftTurn } from '../../actions/games';
@@ -26,6 +27,7 @@ import {
 	deleteLocalStorage,
 	pluralizeString
 } from '../../utils';
+import avatars from '../../config/avatars';
 
 const mapStateToProps = state => {return {
 	turnOf: state.game.turnOf,
@@ -176,13 +178,24 @@ class HomePage extends React.Component {
 		
 	}
 
-	renderMembers(data) {
-		let html = [];
-		data.forEach((d, i) => {
-			html.push(<div className="board__card" key={i} style={{backgroundColor: d.color}} title={d.avatar}>{d.name}</div>)
-		})
+	getMembers(members, teamNumber) {
+		let arr = [];
 
-		return html;
+		if(members.length){
+			members.forEach((d, i) => {
+				let avatar = avatars.filter(ava => ava.id === d.avatar);
+				avatar =  !!avatar ? avatar[0] : null;
+				if(d && d.name){
+					arr.push({
+						data: { ...d, avatarObj: avatar},
+						type: 'members-card',
+						className: '--team'+ teamNumber
+					});
+				}
+			})
+		}
+
+		return arr;
 	}
 
 	renderContent(index, data) {
@@ -231,9 +244,7 @@ class HomePage extends React.Component {
 					</div> : ''
 				}
 				{ showEl.members ?
-					<div className={`board --cards ${cxBoard}`}>
-						{this.renderMembers(members)}
-					</div> : ''
+					<Board data={this.getMembers(members, teamNumber)} className={`--hor-scroll ${cxBoard}`} type="cards"/> : ''
 				}
 				{ showEl.connectedNoMembers ?
 					<div className="msg__connect-to-team">
