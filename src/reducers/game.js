@@ -1,7 +1,7 @@
 import constants from '../constants';
 
 const initialState = {
-    rounds: [],
+    rounds: null,
     turnOf: '',
     hasMod: false,
     modDetails: null,
@@ -208,7 +208,10 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 roundLoading: false,
-                rounds: [ ...state.rounds, action.response],
+                rounds: {
+                    ...state.rounds,
+                    [action.response.id]: action.response
+                },
                 roundError: false,
             }
         case game.ADD_ROUND_FAILURE:
@@ -301,16 +304,18 @@ export default function Game(state = initialState, action) {
                 gameDetails: action.data,
             }
         case game.SHIFT_TURN:
+            const SHIFT_TURN_val = action.data ||
+                (state.turnOf === '1' ? '2' : '1')
             return {
                 ...state,
-                turnOf: state.turnOf === '1' ? '2' : '1',
+                turnOf: SHIFT_TURN_val,
             }
 
         //SIGNOUT
         case game.CLEAR_STATES:
             return {
                 ...state,
-                rounds: [],
+                rounds: null,
                 turnOf: '',
                 hasMod: false,
                 modDetails: null,

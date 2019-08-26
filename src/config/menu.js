@@ -1,73 +1,76 @@
-export const signOut = {
-	id: 'sign_out',
-	label: 'Quit',
-	type: 'func',
-	dividerAbove: true,
-	dividerBelow: true,
-}
-
-export const enterCode = {
-	id: 'enter_code',
-	label: 'Enter Code',
-	type: 'modal'
-}
-
-export const about = {
-	id: 'about_dev',
-	label: 'About JJ Rafael',
-	type: 'modal',
-	dividerAbove: true,
-}
-
-export const homeMenu = [
-	{
+const menu = {
+	signOut: {
+		id: 'sign_out',
+		label: 'Quit',
+		type: 'func',
+		dividerAbove: true,
+		dividerBelow: true,
+	},
+	enterCode: {
+		id: 'enter_code',
+		label: 'Enter Code',
+		type: 'modal'
+	},
+	about: {
+		id: 'about_dev',
+		label: 'About JJ Rafael',
+		type: 'modal',
+		dividerAbove: true,
+	},
+	resetTeam: {
 		id: 'reset_team',
 		label: 'Reset Team',
 		type: 'modal'
 	},
-	enterCode,
-	signOut,
-	about
-]
-
-export const splashMenu = [
-	{
+	startGame:{
 		id: 'start_game',
 		label: 'Start Game',
 		type: 'func'
 	},
-	enterCode,
-	about
-]
-
-export const inGridMenu = [
-	{
-		id: 'reset_game',
-		label: 'Reset Game',
-		type: 'modal'
-	},
-	{
+	restartGame: {
 		id: 'restart_game',
 		label: 'Restart Game',
 		type: 'modal'
 	},
-	{
+	pauseGame: {
 		id: 'pause_game',
 		label: 'Pause',
 		type: 'func'
-	},
-	signOut,
-	about
+	}
+}
+
+export const homeMenu = [
+	menu.resetTeam,
+	menu.enterCode,
+	menu.signOut,
+	menu.about
+]
+
+export const splashMenu = [
+	menu.startGame,
+	menu.enterCode,
+	menu.about
+]
+
+export const inGridMenu = [
+	menu.restartGame,
+	menu.pauseGame,
+	menu.signOut,
+	menu.about
 ]
 
 export const buildTeamMenu = [
-	signOut,
-	about
+	menu.signOut,
+	menu.about
 ]
 
-export const asTeamLeaderMenu = [
-	signOut,
-	about
+export const teamLeaderMenu = [
+	menu.signOut,
+	menu.about
+]
+
+export const aboutMenu = [
+	menu.about
 ]
 
 export default {
@@ -75,6 +78,6 @@ export default {
 	inGridMenu,
 	splashMenu,
 	buildTeamMenu,
-	asTeamLeaderMenu,
-	about: [about]
+	teamLeaderMenu,
+	aboutMenu,
 };

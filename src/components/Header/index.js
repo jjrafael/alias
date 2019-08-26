@@ -31,7 +31,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { className, gameDetails, turnOf, headerProps, team1, team2 } = this.props;
+    const { className, gameDetails, turnOf, headerProps, team1, team2, settings } = this.props;
     const { timer } = this.state;
     const inGame = gameDetails && gameDetails.status === 'active';
 
@@ -39,8 +39,8 @@ class Header extends React.Component {
       <header className={`app-header ${className || ''}`} data-team={turnOf}>
         { inGame && team1 && team2 &&
             <div>
-              <ScoreBar team={team1}/>
-              <ScoreBar team={team2}/>
+              <ScoreBar team={team1} settings={settings}/>
+              <ScoreBar team={team2} settings={settings}/>
               <div className="timerbar"></div>
             </div>
         }

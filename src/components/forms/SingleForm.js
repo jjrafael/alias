@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 //components
 import Button from '../common/Button';
@@ -7,13 +6,6 @@ import Button from '../common/Button';
 //misc
 import { variables } from '../../config';
 import { validateSingleValue } from '../../utils/validations';
-
-const mapStateToProps = state => {
-  return {
-    settings: state.app.settings,
-    gameDetails: state.game.gameDetails,
-  }
-}
 
 class SingleForm extends React.Component {
   constructor(props) {
@@ -45,7 +37,7 @@ class SingleForm extends React.Component {
     }
   }
 
-  changeHandler(e){
+  updateHandler(e){
     e.preventDefault();
     const { input, updateHandler } = this.props;
     const value = e.target.value;
@@ -126,7 +118,7 @@ class SingleForm extends React.Component {
               type="text" 
               spellCheck="false"
               value={formData[input.id]} 
-              onChange={(e) => this.changeHandler(e)}
+              onChange={(e) => this.updateHandler(e)}
               onFocus={(e) => this.focusHandler(e)}
               onBlur={(e) => this.blurHandler(e)}
             />
@@ -145,7 +137,7 @@ class SingleForm extends React.Component {
               type="text" 
               spellCheck="false"
               value={formData[input.id]} 
-              onChange={(e) => this.changeHandler(e)}
+              onChange={(e) => this.updateHandler(e)}
               onFocus={(e) => this.focusHandler(e)}
               onBlur={(e) => this.blurHandler(e)}
             />
@@ -181,4 +173,4 @@ class SingleForm extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(SingleForm);
+export default SingleForm;

@@ -27,6 +27,12 @@ class Card extends React.Component {
           <div className="card-back">{this.renderCardBack()}</div>
         </div>
       break;
+      case 'alias-card':
+        html = <div className={`card ${cxSize} ${cxClassName} ${cxType} ${cxFlip}`}>
+          <div className="card-front">{data ? data.text : ''}</div>
+          <div className="card-back">{this.renderCardBack()}</div>
+        </div>
+      break;
   		default:
   			html = <div className={`card ${cxSize} ${cxClassName} ${cxType} ${cxFlip}`}>
           <div className="card-front">{children}</div>

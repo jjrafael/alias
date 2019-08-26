@@ -16,6 +16,11 @@
 			color: $aqua-dark;
 		}
 	}
+	&.--show-border {
+		.input__wrapper input {
+			border: 1px solid $white;
+		}
+	}
 }
 
 /*responsiveness*/

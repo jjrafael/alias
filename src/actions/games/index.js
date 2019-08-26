@@ -43,7 +43,21 @@ export function editGame(id, data) {
 }
 
 // ROUNDS
-export function addRound(id, data) {
+export function addRound(id, roundId, data) {
+    const ref = baseURL.games.doc(id).collection('rounds').doc(roundId);
+    return {
+        types: [
+            constants.ADD_ROUND_REQUEST,
+            constants.ADD_ROUND_SUCCESS,
+            constants.ADD_ROUND_FAILURE
+        ],
+        method: 'set',
+        data,
+        callRef: ref,
+    }
+}
+
+export function clearRounds(id) {
     const ref = baseURL.games.doc(id).collection('rounds');
     return {
         types: [
@@ -51,8 +65,8 @@ export function addRound(id, data) {
             constants.ADD_ROUND_SUCCESS,
             constants.ADD_ROUND_FAILURE
         ],
-        method: 'add',
-        data,
+        method: 'delete',
+        data: [],
         callRef: ref,
     }
 }
@@ -65,9 +79,10 @@ export function setGame(data) {
     }
 }
 
-export function shiftTurn() {
+export function shiftTurn(data) {
     return {
         type: constants.SHIFT_TURN,
+        data,
     }
 }
 

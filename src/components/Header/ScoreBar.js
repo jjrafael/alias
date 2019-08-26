@@ -14,13 +14,14 @@ class ScoreBar extends React.Component {
 	}
 
 	render (){
-		const { team, round } = this.props;
+		const { team, round, settings } = this.props;
 		
 		return (
 			<div className="scorebar scorebar-team" data-team={team.team_number}>
 				<div className="scorebar__avatar"></div>
 				<div className="scorebar__round-score">
-						{round ? round.team1_score : 0}<span className="over-score">/8</span>
+						{round ? round.team1_score : 0}
+						<span className="over-score">/{settings.cards_per_team}</span>
 				</div>
 				<div className="scorebar__info">
 					<div className="scorebar__name">{team.name}</div>

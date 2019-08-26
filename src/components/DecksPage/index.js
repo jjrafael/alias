@@ -31,6 +31,7 @@ class DecksPage extends React.Component {
 		this.state = {
 			selectedDecks: [],
 			showBoard: 'decks',
+			newDeck: null,
 		}
 	}
 
@@ -46,6 +47,17 @@ class DecksPage extends React.Component {
 
 	toggleBoards = () => {
 		this.setState({ showBoard: this.state.showBoard === 'decks' ? 'cards' : 'decks'});
+	}
+
+	uploadDeck = () => {
+		const { newDeck } = this.state;
+		if(newDeck){
+			this.props.addDeck(newDeck);
+		}
+	}
+
+	updateNewDeck = (data) => {
+		this.setState({ newDeck: data });
 	}
 
 	setSelectedDecks() {
@@ -69,14 +81,18 @@ class DecksPage extends React.Component {
 
   render() {
   	const { showBoard } = this.state;
+  	const cardsProps = {
+  		updateNewDeck: this.updateNewDeck,
+  	}
 
     return (
       <div className={`page-wrapper decks-page`}>
 				<DecksBoard show={showBoard === 'decks'}/>
-				<CardsBoard show={showBoard !== 'decks'}/>
+				<CardsBoard show={showBoard !== 'decks'} {...cardsProps}/>
 				<Footer
 					toggleBoards={this.toggleBoards} 
 					loadDecks={this.loadDecks} 
+					uploadDeck={this.uploadDeck}
 					board={showBoard}/>
 		  </div>
     );

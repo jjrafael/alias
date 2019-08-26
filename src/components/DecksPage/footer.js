@@ -44,12 +44,23 @@ class DecksFooter extends React.Component {
 	toggleBoards = () => {
 		const { footOptions } = this.state;
 		const isDecksBoard = footOptions.left.text === 'New Deck';
-		const newText = isDecksBoard ? 'Decks' : 'New Deck';
+		const text = {
+			main: isDecksBoard ? 'Upload' : 'Load',
+			left: isDecksBoard ? 'Decks' : 'New Deck',
+		}
+		const onClick = {
+			main: isDecksBoard ? this.props.uploadDeck : this.props.loadDecks,
+		}
 		const data = {
 			...footOptions,
+			main: {
+				...footOptions.main,
+				text: text.main,
+				onClick: onClick.main,
+			},
 			left: {
 				...footOptions.left,
-				text: newText,
+				text: text.left,
 			}
 		}
 

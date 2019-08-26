@@ -42,7 +42,7 @@ class LeaderPage extends React.Component {
 
   render() {
   	const { turnOf, cardsForTeam, rounds } = this.props;
-  	const gridReady = !!rounds && !!cardsForTeam;
+  	const gridReady = rounds && !!cardsForTeam;
 
     return (
       <div className={`page-wrapper grid-page`} data-team={turnOf}>

@@ -88,6 +88,7 @@ class HomeFooter extends React.Component {
 				include_death_card: settings.include_death_card,
 				timer: settings.timer,
 				violation_limit: settings.violation_limit,
+				is_pause: false,
 			}
 			
 			this.props.startGame(data).then(doc => {

@@ -26,7 +26,7 @@ class Board extends React.Component {
   	const { className, data, type } = this.props;
     const cx = className || '';
     const cxType = type ? `--${type}` : '--cards';
-
+    
     return (
       <div className={`board ${cxType} ${cx}`}>
         {data ? this.renderItems(data) : ''}

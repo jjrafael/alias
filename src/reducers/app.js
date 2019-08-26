@@ -16,6 +16,8 @@ const initialState = {
         add_mod: false,
         soundFx: false,
         music: false,
+        winning_score: 3,
+        cards_per_team: 8,
     },
     appDetails: null,
     user: null,

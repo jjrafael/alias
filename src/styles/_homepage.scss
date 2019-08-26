@@ -40,11 +40,9 @@
 			color: $chrome-dark;
 		}
 		.heading-wrapper h2 {
-			/*@include text-gradient-sunglaze();*/
 			color: $chrome;
 		}
 		.msg__connect-to-team h2 {
-			/*@include text-gradient-sunglaze();*/
 			color: $chrome;
 		}
 	}
@@ -55,12 +53,12 @@
 			}
 		}
 		.heading-wrapper h2 {
-			/*@include text-gradient-sunbreeze();*/
 			color: $aqua-dark;
+			text-align: center;
 		}
 		.msg__connect-to-team h2 {
-			/*@include text-gradient-sunbreeze;*/
 			color: $aqua-dark;
+			text-align: center;
 		}
 	}
 }

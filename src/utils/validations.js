@@ -1,4 +1,4 @@
-export function validateValues(inputs, formData) {
+export function validateValues(inputs, formData, isSubmit) {
 	let result = {
 		valid: true,
 		count: 0,
@@ -10,11 +10,12 @@ export function validateValues(inputs, formData) {
 		const validations = input.validations;
 		const value = formData[key];
 		const inputName = input.label || input.id;
-		if(validations && validations.length){
+		
+		if(!!validations){
 			validations.forEach(rule => {
 				switch(rule){
 					case 'required':
-						if(!value){
+						if(!value && isSubmit){
 							result.count++;
 							result.errors[key] = inputName + ' is required';
 						}
@@ -27,6 +28,12 @@ export function validateValues(inputs, formData) {
 					break;
 					case 'charMax-6':
 						if(value && value.length > 6){
+							result.count++;
+							result.errors[key] = inputName + ' should not exceed 6 characters';
+						}
+					break;
+					case 'charMax-50':
+						if(value && value.length > 50){
 							result.count++;
 							result.errors[key] = inputName + ' should not exceed 6 characters';
 						}

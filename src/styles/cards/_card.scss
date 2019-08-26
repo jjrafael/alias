@@ -14,6 +14,9 @@
 		.card-back {
 			width: 200px;
     	height: 140px;
+    	overflow: hidden;
+    	text-overflow: ellipsis;
+    	text-align: center;
     	.card-back__emblem {
     		font-size: $fs-l;
     	}
@@ -47,14 +50,14 @@
 		&:after {
 			content: '';
 			position: absolute;
-			top: 0px;
-			left: 0px;
+			top: 3px;
+			left: 3px;
 			margin: 10px;
 			border: 1px solid $coral;
 			background: none;
-		    width: calc(100% - 20px);
-	        height: calc(100% - 20px);
-	        border-radius: 8px;
+	    width: calc(100% - 30px);
+      height: calc(100% - 30px);
+      border-radius: 8px;
 		};
 		&__emblem {
 			font-family: $shrikhand;
@@ -75,6 +78,7 @@
 		transform: rotateY(180deg);
 		transition: all 0.4s ease;
 		z-index: 1;
+		@include center-flex();
 	}
 	
 	&:hover {
@@ -127,6 +131,19 @@
 	}
 	.card-back {
 		color: $white;
+	}
+}
+
+.card.alias-card {
+	float: left;
+	margin: 0px 10px 10px 0px;
+	.card-front {
+		background: $cream;
+	}
+	.card-back {
+		color: $white;
+		background: $peach;
+		&:after { border-color: $white; }
 	}
 }
 

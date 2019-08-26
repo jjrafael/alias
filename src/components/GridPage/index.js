@@ -7,7 +7,10 @@ import Footer from './footer';
 import Button from '../common/Button';
 
 // actions
-import { addRound } from '../../actions/games';
+import { addRound, shiftTurn } from '../../actions/games';
+
+//misc
+import { randomNumber } from '../../utils';
 
 const mapStateToProps = state => {return {
 	turnOf: state.game.turnOf,
@@ -16,12 +19,14 @@ const mapStateToProps = state => {return {
 	gridCards: state.game.gridCards,
 	team1members: state.team.team1members,
 	team2members: state.team.team2members,
+	cardsOnGrid: state.cards.cardsOnGrid,
 }}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
 		{
 		  addRound,
+		  shiftTurn
 		},
 		dispatch
 	 )
@@ -35,7 +40,19 @@ class GridPage extends React.Component {
 	}
 
 	pickTeam(){
-		
+		const { gameDetails, cardsOnGrid } = this.props;
+		const team = randomNumber(2);
+		this.props.shiftTurn(team);
+		//Start first round
+		this.props.addRound(gameDetails.id, 'r1', {
+			playing_cards: cardsOnGrid,
+			turn_of: team,
+			team1_score: 0,
+			team2_score: 0,
+			team1_violations: 0,
+			team2_violations: 0,
+			status: 'active',
+		});
 	}
 
 	renderGrid() {
@@ -56,7 +73,7 @@ class GridPage extends React.Component {
 
   render() {
   	const { turnOf, gridCards, rounds } = this.props;
-  	const gridReady = !!rounds && !!gridCards;
+  	const gridReady = rounds && !!gridCards;
 
     return (
       <div className={`page-wrapper grid-page`} data-team={turnOf}>

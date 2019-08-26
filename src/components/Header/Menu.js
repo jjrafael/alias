@@ -36,7 +36,7 @@ class Menu extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			menu: menu.about,
+			menuData: menu.splashMenu || [],
 		}
 	}
 
@@ -44,34 +44,39 @@ class Menu extends React.Component {
 		if((prevProps.isAppReady !== this.props.isAppReady) ||
 			(prevProps.inGame !== this.props.inGame) ||
 			(prevProps.isTeam !== this.props.isTeam)){
-			const { isAppReady, isTeam, inGame } = this.props;
-			let menuData = menu.about;
-			
-			if(isAppReady){
-				//user already logged, app is initialized
-				if(isTeam && inGame){
-					//team leader and already in play: LeaderPage
-					menuData = menu.asTeamLeaderMenu
-				}else if(isTeam && !inGame){
-					//team leader and adding members: buildTeamPage
-					menuData = menu.buildTeamMenu
-				}else if(!isTeam && inGame){
-					//grid and already in play: GridPage
-					menuData = menu.inGridMenu
-				}else if(!isTeam && !inGame){
-					//grid and building team
-					menuData = menu.homeMenu
-				}else{
-					//something went wrong
-					menuData = menu.about
-				}
-			}else{
-				//no user logged and/or app wasn't initialized yet
-				menuData = menu.splashMenu
-			}
-			this.setState({menu: menuData});
+			this.updateMenu();
 		}
 	}
+
+	updateMenu(){
+		const { isAppReady, isTeam, inGame } = this.props;
+		let menuData = menu.aboutMenu;
+		
+		if(isAppReady){
+			//user already logged, app is initialized
+			if(isTeam && inGame){
+				//team leader and already in play: LeaderPage
+				menuData = menu.teamLeaderMenu
+			}else if(isTeam && !inGame){
+				//team leader and adding members: buildTeamPage
+				menuData = menu.buildTeamMenu
+			}else if(!isTeam && inGame){
+				//grid and already in play: GridPage
+				menuData = menu.inGridMenu
+			}else if(!isTeam && !inGame){
+				//grid and building team
+				menuData = menu.homeMenu
+			}else{
+				//something went wrong
+				menuData = menu.aboutMenu
+			}
+		}else{
+			//no user logged and/or app wasn't initialized yet
+			menuData = menu.splashMenu
+		}
+		
+		this.setState({menuData});
+}
 
 	clickMenu(data) {
 		switch(data.id) {
@@ -96,10 +101,10 @@ class Menu extends React.Component {
 	}
 
 	renderMenuItems() {
-		const { menu } = this.state;
+		const { menuData } = this.state;
 		let html = [];
-
-		menu.forEach((d, i) => {
+		
+		menuData.forEach((d, i) => {
 			html.push(
 				<li key={i} className={`menu__item ${d.className}`}
 					onClick={() => this.clickMenu(d)}>
