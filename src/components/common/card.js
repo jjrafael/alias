@@ -30,7 +30,7 @@ class Card extends React.Component {
       case 'alias-card':
         html = <div className={`card ${cxSize} ${cxClassName} ${cxType} ${cxFlip}`}>
           <div className="card-front">{data ? data.text : ''}</div>
-          <div className="card-back">{this.renderCardBack()}</div>
+          <div className={`card-back ${data && data.jinx_msg ? '--jinx' : ''}`}>{this.renderCardBack()}</div>
         </div>
       break;
   		default:

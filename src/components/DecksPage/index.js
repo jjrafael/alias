@@ -9,6 +9,7 @@ import CardsBoard from './CardsBoard';
 
 // actions
 import { setPlayingDecks } from '../../actions/cards';
+import { addDeck, addCard } from '../../actions/cards';
 
 const mapStateToProps = state => {return {
 	decks: state.cards.decks,
@@ -20,6 +21,8 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
 		{
 		  setPlayingDecks,
+		  addDeck,
+		  addCard,
 		},
 		dispatch
 	 )
@@ -72,7 +75,9 @@ class DecksPage extends React.Component {
 	}
 
 	filterDefaultDecks(decks) {
-		return decks.filter(d => d.default);
+		if(!!decks){
+			return decks.filter(d => d.default);
+		}
 	}
 
 	loadDecks = () => {

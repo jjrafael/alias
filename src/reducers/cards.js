@@ -158,7 +158,13 @@ export default function Cards(state = initialState, action) {
             return {
                 ...state,
                 newDeckLoading: false,
-                decks: action.response.data,
+                decks: [
+                    ...state.decks,
+                    {
+                        ...action.payload,
+                        id: action.response.id
+                    }
+                ],
                 newDeckError: false,
             }
         case cards.ADD_DECK_FAILURE:

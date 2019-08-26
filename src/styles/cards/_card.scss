@@ -144,6 +144,9 @@
 		color: $white;
 		background: $peach;
 		&:after { border-color: $white; }
+		&.--jinx {
+			background: $coral;
+		}
 	}
 }
 

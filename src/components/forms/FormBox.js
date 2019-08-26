@@ -59,7 +59,7 @@ class FormBox extends React.Component {
   	let errors = null;
 
   	if(inputs && formData){
-  		errors = validateValues(inputs, formData);
+  		errors = validateValues(inputs, formData, true);
   	}
 
   	if(errors && updateHandler){

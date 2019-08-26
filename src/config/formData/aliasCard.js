@@ -15,6 +15,15 @@ export const formInfo = {
 	    extra: {
 	    	spellCheck: false,
 	    }
+		},
+		{
+			id: 'jinx_msg',
+	    component: 'text',
+	    type: 'textarea',
+	    placeholder: '',
+	    label: 'Jinx Message',
+	    showLabel: true,
+	    validations: [],
 		}
 	],
 	submit: {

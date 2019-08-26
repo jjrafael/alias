@@ -90,7 +90,7 @@ class CardsBoard extends React.Component {
   composeCards(data) {
     return data.map(d => { return {
       data: d,
-      backChildren: this.state.deckName,
+      backChildren: d && d.jinx_msg ? d.jinx_msg : this.state.deckName,
       type: 'alias-card'
     }});
   }

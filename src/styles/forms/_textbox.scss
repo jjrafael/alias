@@ -3,7 +3,7 @@
 	border-radius: 5px;
 	background: none;
 	color: $chrome;
-	margin: 10px 0px;
+	margin: 5px 0px;
 	padding: 5px 10px;
 	border: 1px solid white;
 	float: left;
@@ -31,4 +31,9 @@
 			border: 1px solid $white;
 		}
 	}
+}
+
+textarea.input__textbox {
+	height: 100px;
+	padding: 	10px;
 }
