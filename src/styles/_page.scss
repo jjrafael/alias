@@ -59,6 +59,10 @@
 	}
 }
 
+::-webkit-scrollbar {
+   display: none;
+}
+
 /*responsiveness*/
 
 @include mobile {

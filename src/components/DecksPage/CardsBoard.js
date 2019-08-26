@@ -113,7 +113,7 @@ class CardsBoard extends React.Component {
       <div className={`col-2 cards-decks ${cx.col2}`}>
       	<div className="col --center">
       		{ showEl.cards ?
-            <Board data={this.composeCards(cards)} className={`--hor-scroll ${cx.board}`} type="cards"/>
+            <Board data={this.composeCards(cards)} className={cx.board} type="cards"/>
             : 'Add Cards'
           }
       	</div>

@@ -13,4 +13,13 @@
 			margin-top: 0px;
 		}
 	}
+	.board {
+		margin: 20px;
+		padding: 16px;
+		height: 520px;
+    margin-top: -130px;
+		.card:nth-child(even) {
+			margin-right: 0px;
+		}
+	}
 }
