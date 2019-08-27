@@ -25,7 +25,7 @@
     text-align: center;
 }
 
-@mixin clearfix () {
+@mixin group () {
 	&:after {
 	  content: "";
 	  clear: both;

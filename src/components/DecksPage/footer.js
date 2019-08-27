@@ -30,7 +30,7 @@ class DecksFooter extends React.Component {
 				},
 				left: {
 					text: 'New Deck',
-					onClick: this.toggleBoards,
+					onClick: this.props.toggleBoards,
 				},
 				right: {
 					text: 'Home',
@@ -41,15 +41,25 @@ class DecksFooter extends React.Component {
 		}
 	}
 
-	toggleBoards = () => {
+	componentDidMount() {
+		this.toggleBoardData();
+	}
+
+	componentDidUpdate(prevProps) {
+		if(prevProps.board !== this.props.board){
+			this.toggleBoardData();
+		}
+	}
+
+	toggleBoardData = () => {
 		const { footOptions } = this.state;
-		const isDecksBoard = footOptions.left.text === 'New Deck';
+		const isCardsBoard = this.props.board === 'cards';
 		const text = {
-			main: isDecksBoard ? 'Upload' : 'Load',
-			left: isDecksBoard ? 'Decks' : 'New Deck',
+			main: isCardsBoard ? 'Upload' : 'Load',
+			left: isCardsBoard ? 'Decks' : 'New Deck',
 		}
 		const onClick = {
-			main: isDecksBoard ? this.props.uploadDeck : this.props.loadDecks,
+			main: isCardsBoard ? this.props.uploadDeck : this.props.loadDecks,
 		}
 		const data = {
 			...footOptions,
@@ -63,8 +73,6 @@ class DecksFooter extends React.Component {
 				text: text.left,
 			}
 		}
-
-		this.props.toggleBoards();
 		this.setState({ footOptions: data });
 	}
 

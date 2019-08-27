@@ -119,7 +119,7 @@ class Menu extends React.Component {
 
  	render() {
     return (
-      <div className="menu__wrapper clearfix">
+      <div className="menu__wrapper group">
         <ul className="menu">
         	{this.renderMenuItems()}
         </ul>

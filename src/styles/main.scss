@@ -5,15 +5,13 @@
 @import './general/reset';
 @import './general/variables';
 @import './general/mixins';
-@import './general/helpers';
 @import './general/animations';
 @import './general/responsiveness';
+@import './general/helpers';
 @import './typography';
 
 /*elements*/
 @import './page';
-@import './forms/forms';
-@import './forms/textbox';
 @import './cards/card';
 @import './common/button';
 @import './common/loading';
@@ -24,6 +22,11 @@
 @import './header/scorebar';
 @import './header/timebar';
 @import './modal';
+
+/*forms*/
+@import './forms/forms';
+@import './forms/textbox';
+@import './forms/togglebtn';
 
 /*pages*/
 @import './splashpage';
@@ -43,5 +46,5 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  monospace;
 }

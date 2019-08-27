@@ -28,14 +28,20 @@ class FormBox extends React.Component {
     }
   }
 
-  updateHandler = (e) => {
-    e.preventDefault();
-    const { formInfo, updateHandler } = this.props;
+  updateHandler = (e, extra) => {
+  	const notInput = extra && extra.notInput;
+
+  	if(!notInput){
+  		e.preventDefault();
+  	}
+
+  	const { formInfo, updateHandler } = this.props;
     const { formData } = this.state;
-    const value = e.target.value;
-    const input = formInfo.inputs.filter(d => d.id === e.target.name)[0];
+    const fieldName = notInput ? extra.name : e.target.name;
+    const input = formInfo.inputs.filter(d => d.id === fieldName)[0];
     let data = formData || {};
     let errors = this.state.errors || {};
+    let value = notInput ? e : e.target.value;
     let newValue = value;
 
     if(input && !!input.validations){
@@ -117,8 +123,8 @@ class FormBox extends React.Component {
   renderSubmit(data) {
   	return (
   		<Button
-  			className={data.className || ''} 
-  			text={data.label || 'OK'} 
+  			className={data ? data.className : ''} 
+  			text={data ? data.label : 'OK'} 
   			onClick={(e) => this.submitForm(e)}/>
   	)
   }
@@ -127,20 +133,19 @@ class FormBox extends React.Component {
   	const {
   		wrapperClassName,
   		className,
-  		noSubmitButton,
   		formInfo,
   	} = this.props;
   	const cx = {
   		wrapper: wrapperClassName || '',
-  		form: className || '',
+  		form: `${className || ''} ${formInfo ? formInfo.className : ''}`
   	}
 
   	return (
   		<div className={`form__wrapper ${cx.wrapper}`}>
   			<form className={cx.form} name={formInfo.formName}>
   				{this.renderForm(formInfo)}
-  				{ !noSubmitButton &&
-  					this.renderSubmit(formInfo.submit)
+  				{ formInfo && !formInfo.noSubmitButton ?
+  					this.renderSubmit(formInfo.submit) : ''
   				}
   			</form>
       </div>

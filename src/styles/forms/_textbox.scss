@@ -1,5 +1,5 @@
 .input__textbox {
-	@include wh(250px, 30px);
+	@include wh(250px, 40px);
 	border-radius: 5px;
 	background: none;
 	color: $chrome;
@@ -35,5 +35,6 @@
 
 textarea.input__textbox {
 	height: 100px;
-	padding: 	10px;
+	padding: 10px;
+	resize: none;
 }

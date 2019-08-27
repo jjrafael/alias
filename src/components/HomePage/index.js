@@ -216,48 +216,53 @@ class HomePage extends React.Component {
 			members: hasMembers && !isTeamAdding && haveConnectedTeam,
 			connectedNoMembers: !hasMembers && !isTeamAdding && haveConnectedTeam,
 			form: !team,
-			// addingMsg: isTeamAdding && !haveConnectedTeam,
 			addingMsg: false,
 			teamCode: haveNewTeam && !haveConnectedTeam,
 		}
 		
 		return (
-			<div className="col --center" data-team={teamNumber}>
-				{ showEl.form ?
-					<SingleForm 
-						formName={`add_team_${teamNumber}`}
-						className={`${cxTextOnly} ${cxForm}`}
-						onSubmit={this.submitForm} 
-						input={data} 
-						payloadKey="teamNumber"
-						textOnly={isTeamAdded}/> :
-					<div className="heading-wrapper">
-						<h2>{team.name}</h2>
-						{ hasMembers ?
-							members.length+' '+pluralizeString('member', members.length) : ''
-						}
-					</div>
-				}
-				{ showEl.addingMsg ?
-					<div className="msg__adding-iteam">
-						Initializing Team...
+			<div className="col" data-team={teamNumber}>
+				{ !showEl.form ?
+					<div className="col-header group">
+						<div className="heading-wrapper">
+							<h2>{team.name}</h2>
+							{ hasMembers ?
+								members.length+' '+pluralizeString('member', members.length) : ''
+							}
+						</div>
 					</div> : ''
 				}
-				{ showEl.members ?
-					<Board data={this.getMembers(members, teamNumber)} className={`--hor-scroll ${cxBoard}`} type="cards"/> : ''
-				}
-				{ showEl.connectedNoMembers ?
-					<div className="msg__connect-to-team">
-						You're connected, add members:
-						<h2>{team.game_key || '...'}</h2>
-					</div> : ''
-				}
-				{ showEl.teamCode ?
-					<div className="msg__connect-to-team">
-						Connect to Team Code:
-						<h2>{team.game_key || '...'}</h2>
-					</div> : ''
-				}
+				<div className="col-body --center">
+					{ showEl.form ?
+						<SingleForm 
+							formName={`add_team_${teamNumber}`}
+							className={`${cxTextOnly} ${cxForm}`}
+							onSubmit={this.submitForm} 
+							input={data} 
+							payloadKey="teamNumber"
+							textOnly={isTeamAdded}/> : ''
+					}
+					{ showEl.addingMsg ?
+						<div className="msg__adding-iteam">
+							Initializing Team...
+						</div> : ''
+					}
+					{ showEl.members ?
+						<Board data={this.getMembers(members, teamNumber)} className={`--hor-scroll ${cxBoard}`} type="cards"/> : ''
+					}
+					{ showEl.connectedNoMembers ?
+						<div className="msg__connect-to-team">
+							You're connected, add members:
+							<h2>{team.game_key || '...'}</h2>
+						</div> : ''
+					}
+					{ showEl.teamCode ?
+						<div className="msg__connect-to-team">
+							Connect to Team Code:
+							<h2>{team.game_key || '...'}</h2>
+						</div> : ''
+					}
+				</div>
 			</div>
 		)
 	}

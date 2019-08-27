@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 //components
 import FormBox from '../forms/FormBox';
@@ -9,19 +7,7 @@ import Board from '../common/Board';
 
 //misc
 import aliasCard from '../../config/formData/aliasCard';
-
-const mapStateToProps = state => {return {
-	
-}}
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(
-		{
-		  
-		},
-		dispatch
-	 )
-}
+import deckOptions from '../../config/formData/deckOptions';
 
 class CardsBoard extends React.Component {
   constructor(props) {
@@ -30,6 +16,10 @@ class CardsBoard extends React.Component {
       deckName: '',
       deckData: null,
       cards: [],
+      formInfo: {
+        aliasCard: aliasCard,
+        deckOptions: deckOptions
+      },
       inputData: {
         deck: {
           id: 'name',
@@ -52,6 +42,10 @@ class CardsBoard extends React.Component {
       (prevState.cards !== this.state.cards)){
       this.composeDeckData();
     }
+
+    if(prevProps.successAdded !== this.props.successAdded && this.props.successAdded){
+      this.resetBoard();
+    }
   }
 
   composeDeckData() {
@@ -64,21 +58,34 @@ class CardsBoard extends React.Component {
         name: deckName,
         desc: deckData ? deckData.desc : '',
         has_jinx_cards: !!hasJinx,
-        is_default_bundle: deckData ? deckData.isDefault : false,
+        is_default_bundle: deckData ? (deckData.is_default_bundle || false) : false,
         status: 'active',
-        tags: deckData ? deckData.tags : [],
+        tags: deckData ? (deckData.tags || []) : [],
         usage_count: 0,
         rating: 0,
         cards: cards,
       }
     }
+
     this.props.updateNewDeck(data);
+  }
+
+  resetBoard() {
+    this.setState({
+      deckName: '',
+      deckData: null,
+      cards: [],
+    })
   }
 
   initDeck = (formData) => {
     if(formData){
       this.setState({deckName: formData.name });
     }
+  }
+
+  updateDeckData = (formData) => {
+    this.setState({ deckData: formData });
   }
 
   addCard = (formData) => {
@@ -97,16 +104,15 @@ class CardsBoard extends React.Component {
 
   render() {
     const { show } = this.props;
-    const { deckName, cards, inputData } = this.state;
+    const { deckName, cards, inputData, formInfo } = this.state;
     const cx = {
       col2: show ? 'show' : '',
       board: !!cards ? 'active' : '',
     }
     const showEl = {
       deckForm: !deckName,
-      cardForm: deckName,
-      options: deckName,
-      cards: cards,
+      forms: deckName,
+      cards: !!cards,
     }
     
     return (
@@ -117,32 +123,39 @@ class CardsBoard extends React.Component {
             : 'Add Cards'
           }
       	</div>
-      	<div className="col --center">
-      		{ showEl.deckForm ?
-            <SingleForm 
-              formName={`deckName`}
-              className="--show-border"
-              onSubmit={this.initDeck}
-              input={inputData.deck}/> :
-            <div className="heading-wrapper">
-              <h2>{deckName}</h2>
-            </div>
+      	<div className="col">
+          { !showEl.deckForm ?
+            <div className="col-header">
+              <div className="heading-wrapper">
+                <h2>{deckName}</h2>
+              </div>
+            </div> : ''
           }
-          { showEl.options ?
-            '' : ''
-          }
-          { showEl.cardForm ?
-            <FormBox 
-              formName={`cardName`}
-              onSubmit={this.addCard}
-              clearOnSubmit={true}
-              formInfo={aliasCard}/>
-            : ''
-          }
+          <div className="col-body --center">
+            { showEl.deckForm ?
+              <SingleForm 
+                formName={`deckName`}
+                className="--show-border"
+                onSubmit={this.initDeck}
+                input={inputData.deck}/> : ''
+            }
+            { showEl.forms ?
+              <div className="forms-container">
+                <FormBox
+                  clearOnSubmit={true}
+                  updateHandler={this.updateDeckData}
+                  formInfo={formInfo.deckOptions}/>
+                <FormBox
+                  onSubmit={this.addCard}
+                  clearOnSubmit={true}
+                  formInfo={formInfo.aliasCard}/>
+              </div> : ''
+            }
+          </div>
       	</div>
      	</div>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardsBoard);
+export default CardsBoard;

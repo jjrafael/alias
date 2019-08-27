@@ -18,15 +18,16 @@ class TextInput extends React.Component {
     const cx = {
       input: `${className || ''} ${disabled ? 'disabled' : ''}`
     }
+    
   	return (
-      <div className="input__wrapper clearfix">
+      <div className="input__wrapper group">
         {showLabel &&
           <h4 className="input__label">{label || id}</h4>
         }
         { type === 'textarea' ?
           <textarea
             name={id}
-            className={`input__textbox ${cx.input}`}
+            className={`input input__textbox ${cx.input}`}
             type="text" 
             spellCheck={extra.spellCheck}
             placeholder={placeholder}
@@ -40,7 +41,7 @@ class TextInput extends React.Component {
           :
           <input
             name={id}
-            className={`input__textbox ${cx.input}`}
+            className={`input input__textbox ${cx.input}`}
             type={type || 'text'} 
             spellCheck={extra.spellCheck}
             placeholder={placeholder}

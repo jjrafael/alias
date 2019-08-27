@@ -58,4 +58,15 @@
 			color: $white!important;
 		}
 	}
+	&.--small {
+    background: none;
+    border: 0px;
+    height: 25px;
+    line-height: 25px;
+    text-transform: uppercase;
+    font-size: $fs-xxs;
+    &:hover {
+			border: none;
+		}
+	}
 }

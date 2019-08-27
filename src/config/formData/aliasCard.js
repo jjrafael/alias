@@ -1,6 +1,6 @@
 export const formInfo = {
 	formName: 'aliasCard',
-	className: '',
+	className: 'aliasCard',
 	groupedInputs: 0,
 	inputs: [
 		{
@@ -8,7 +8,7 @@ export const formInfo = {
 	    component: 'text',
 	    type: 'text',
 	    placeholder: '',
-	    label: 'Text',
+	    label: 'Alias Text',
 	    showLabel: true,
 	    validations: ['required','charMax-50'],
 	    className: '--card-look',
@@ -18,16 +18,20 @@ export const formInfo = {
 		},
 		{
 			id: 'jinx_msg',
-	    component: 'text',
+	    component: 'btnToText',
 	    type: 'textarea',
 	    placeholder: '',
 	    label: 'Jinx Message',
 	    showLabel: true,
 	    validations: [],
+	    extra: {
+	    	btnLabelToShow: 'Add Jinx',
+	    	btnLabelToHide: 'Cancel',
+	    }
 		}
 	],
 	submit: {
-		label: 'OK',
+		label: 'Submit',
 		className: '',
 	}
 }

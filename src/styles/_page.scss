@@ -35,6 +35,17 @@
 		&.--center {
 			@include center-flex();
 		}
+		.col-header {
+			width: 100%;
+			display: block;
+		}
+		.col-body {
+			width: 100%;
+			&.--center {
+				height: calc(100% - 250px);
+				@include center-flex();
+			}
+		}
 	}
 }
 

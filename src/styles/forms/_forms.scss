@@ -22,6 +22,28 @@
 			border: 1px solid $white;
 		}
 	}
+	.input__wrapper {
+		margin: 0px;
+	}
+}
+
+.btn-to-field {
+	position: relative;
+	.btn.--cancel {
+		position: absolute;
+		top: -3px;
+    right: 0px;
+    text-align: right;
+	}
+}
+
+.forms-container {
+	display: block;
+	position: relative;
+	.form__wrapper {
+		display: block;
+		width: 100%;
+	}
 }
 
 /*responsiveness*/

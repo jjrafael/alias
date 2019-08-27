@@ -12,8 +12,17 @@
 	display: none!important;
 }
 
-.clearfix:after {
+.group:after {
+  visibility: hidden;
+  display: block;
   content: "";
   clear: both;
-  display: table;
+  height: 0;
+}
+* html .group             { zoom: 1; } /* IE6 */
+*:first-child+html .group { zoom: 1; } /* IE7 */
+
+/*animation classes*/
+.fade-in {
+	@include fade-in();
 }

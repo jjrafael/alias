@@ -12,6 +12,9 @@
 		&.col-decks.show {
 			margin-top: 0px;
 		}
+		.col-header {
+			height: 100px;
+		}
 	}
 	.board {
 		margin: 20px;
@@ -21,5 +24,26 @@
 		.card:nth-child(even) {
 			margin-right: 0px;
 		}
+	}
+
+	.forms-container {
+		width: 80%;
+		.input {
+			width: 100%;
+	    box-sizing: border-box;
+      max-width: 500px;
+		}
+	}
+
+	form.deckOptions{
+		border-bottom: 1px solid $black-10;
+	}
+
+	form.aliasCard {
+		padding-top: 20px;
+	}
+
+	.input__textbox {
+		color: $black;
 	}
 }

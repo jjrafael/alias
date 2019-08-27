@@ -8,8 +8,11 @@ import DecksBoard from './DecksBoard';
 import CardsBoard from './CardsBoard';
 
 // actions
-import { setPlayingDecks } from '../../actions/cards';
-import { addDeck, addCard } from '../../actions/cards';
+import { toggleLoadingOverlay } from '../../actions/app';
+import { addDeck, setPlayingDecks } from '../../actions/cards';
+
+//misc
+import { isResType } from '../../utils';
 
 const mapStateToProps = state => {return {
 	decks: state.cards.decks,
@@ -22,7 +25,7 @@ const mapDispatchToProps = dispatch => {
 		{
 		  setPlayingDecks,
 		  addDeck,
-		  addCard,
+		  toggleLoadingOverlay
 		},
 		dispatch
 	 )
@@ -35,6 +38,7 @@ class DecksPage extends React.Component {
 			selectedDecks: [],
 			showBoard: 'decks',
 			newDeck: null,
+			successAdded: false,
 		}
 	}
 
@@ -55,7 +59,16 @@ class DecksPage extends React.Component {
 	uploadDeck = () => {
 		const { newDeck } = this.state;
 		if(newDeck){
-			this.props.addDeck(newDeck);
+			this.setState({ successAdded: false });
+			this.props.toggleLoadingOverlay(true, 'Adding Deck...');
+			this.props.addDeck(newDeck).then(doc => {
+				if(isResType(doc)){
+					//successfully added
+					this.props.toggleLoadingOverlay();
+					this.toggleBoards();
+					this.setState({ newDeck: null, successAdded: true });
+				}
+			})
 		}
 	}
 
@@ -65,7 +78,7 @@ class DecksPage extends React.Component {
 
 	setSelectedDecks() {
 		const { isCustom, decks } = this.props;
-		const defaultDecks = this.filterDefaultDecks(decks);
+		const defaultDecks = this.getDefaultBundle(decks);
 
 		if(isCustom){
 			this.props.setPlayingDecks(this.state.selectedDecks);
@@ -74,7 +87,7 @@ class DecksPage extends React.Component {
 		}
 	}
 
-	filterDefaultDecks(decks) {
+	getDefaultBundle(decks) {
 		if(!!decks){
 			return decks.filter(d => d.default);
 		}
@@ -85,9 +98,10 @@ class DecksPage extends React.Component {
 	}
 
   render() {
-  	const { showBoard } = this.state;
+  	const { showBoard,successAdded } = this.state;
   	const cardsProps = {
   		updateNewDeck: this.updateNewDeck,
+  		successAdded: successAdded
   	}
 
     return (
