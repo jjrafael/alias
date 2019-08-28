@@ -50,7 +50,7 @@ class CardsBoard extends React.Component {
 
   composeDeckData() {
     const { cards, deckName, deckData } = this.state;
-    const hasJinx = cards ? cards.filter(d => d.jinx_text) : [];
+    const hasJinx = cards ? cards.filter(d => d.has_jinx_cards) : [];
     let data = null;
 
     if(deckName){

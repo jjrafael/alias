@@ -310,6 +310,11 @@ export default function Game(state = initialState, action) {
                 ...state,
                 turnOf: SHIFT_TURN_val,
             }
+        case game.SET_IS_CUSTOM: 
+            return {
+                ...state,
+                isCustom: action.data,
+            }
 
         //SIGNOUT
         case game.CLEAR_STATES:

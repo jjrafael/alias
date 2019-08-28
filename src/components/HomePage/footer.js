@@ -11,7 +11,7 @@ import { startGame } from '../../actions/games';
 import { editApp } from '../../actions/app';
 
 //misc
-import { makeId, getNow } from '../../utils';
+import { makeId, getNow, bool } from '../../utils';
 
 const mapStateToProps = state => {
 	return {
@@ -72,14 +72,15 @@ class HomeFooter extends React.Component {
 			settings
 		} = this.props;
 		const teamCompleted = team1 && team2 && team1members && team2members;
+		const deckIds = bool(playingDecks) ? playingDecks.map(d => d.id) : [];
 		
 		if(teamCompleted){
 			const data = {
-				decks: playingDecks,
+				decks: deckIds,
 				game_key: 'g::'+makeId(),
 				game_loser: '',
 				game_winner: '',
-				have_mod: !!modDetails,
+				have_mod: bool(modDetails),
 				is_custom: isCustom,
 				started_time: getNow(),
 				status: 'active',

@@ -18,7 +18,7 @@ import {
 } from '../../actions/teams';
 
 //misc
-import { 
+import {
 	makeId, 
 	getNow, 
 	setLocalStorage, 
@@ -48,7 +48,7 @@ const mapDispatchToProps = dispatch => {
 	  readTeam,
 	  listenTeam,
 	  listenMembers,
-	  browseMembers
+	  browseMembers,
 	},
 	dispatch
   )

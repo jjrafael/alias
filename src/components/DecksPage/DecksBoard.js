@@ -1,6 +1,6 @@
 import React from 'react';
-//components
 import Board from '../common/Board';
+import { bool, pluralizeString } from '../../utils';
 
 class DecksBoard extends React.Component {
 	constructor(props) {
@@ -56,6 +56,12 @@ class DecksBoard extends React.Component {
     		{ showEl.decks ?
           <div className="col">
           	<div className="col-header">
+          		<div className="heading-wrapper">
+								<h2>Decks</h2>
+								{ bool(decks) ?
+									decks.length+' '+pluralizeString('deck', decks.length): ''
+								}
+							</div>
           	</div>
           	<div className="col-body --center">
           		<Board
@@ -73,6 +79,12 @@ class DecksBoard extends React.Component {
       	{ showEl.selectedDecks ?
           <div className="col">
           	<div className="col-header">
+          		<div className="heading-wrapper">
+								<h2>Your Decks</h2>
+								{ bool(selectedDecks) ?
+									selectedDecks.length+' '+pluralizeString('deck', selectedDecks.length): ''
+								}
+							</div>
           	</div>
           	<div className="col-body --center">
           		 <Board

@@ -40,19 +40,19 @@ class Card extends React.Component {
     
   	switch(type){
   		case 'splash-cards':
-  			html = <div className={`card ${cx.Size} ${cx.card} ${cx.type} ${cx.flip}`}>
+  			html = <div className={`card ${cx.size} ${cx.card} ${cx.type} ${cx.flip}`}>
           <div className="card-front">{children}</div>
           <div className="card-back">{this.renderCardBack()}</div>
   			</div>
   		break;
       case 'members-card':
-        html = <div className={`card card-flip-up ${cx.Size} ${cx.card} ${cx.type} ${cx.flip}`}>
+        html = <div className={`card card-flip-up ${cx.size} ${cx.card} ${cx.type} ${cx.flip}`}>
           <div className="card-front" style={data && {backgroundColor: data.color}}>{data ? data.name : ''}</div>
           <div className="card-back">{this.renderCardBack()}</div>
         </div>
       break;
       case 'alias-card':
-        html = <div className={`card card-flip-up ${cx.Size} ${cx.card} ${cx.type} ${cx.flip}`}>
+        html = <div className={`card card-flip-up ${cx.size} ${cx.card} ${cx.type} ${cx.flip}`}>
           <div className="card-front">{data ? data.text : ''}</div>
           <div className={`card-back ${data && data.jinx_msg ? '--jinx' : ''}`}>
             {this.renderCardBack()}
@@ -63,7 +63,7 @@ class Card extends React.Component {
         html = <DeckCard {...this.props}/>
       break;
   		default:
-  			html = <div className={`card ${cx.Size} ${cx.card} ${cx.type} ${cx.flip}`}>
+  			html = <div className={`card ${cx.size} ${cx.card} ${cx.type} ${cx.flip}`}>
           <div className="card-front">{children}</div>
           <div className="card-back">{backChildren}</div>
         </div>

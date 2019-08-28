@@ -27,11 +27,13 @@ import {
 	toggleWarningModal,
 	toggleLoadingOverlay } from '../actions/app';
 import { readGame } from '../actions/games';
+import { browseDecks, setPlayingDecks } from '../actions/cards';
 import { readTeam, resetTeams } from '../actions/teams';
 
 //misc
 import { isMobile } from '../utils/app';
 import { 
+	bool,
 	setLocalStorage, 
 	getAllLocalStorage,
 	clearLocalStorage,
@@ -40,6 +42,8 @@ import {
 import { variables } from '../config';
 
 const mapStateToProps = state => {return {
+	decks: state.cards.decks,
+	playingDecks: state.cards.playingDecks,
 	team1: state.team.team1,
 	team2: state.team.team2,
 	user: state.app.user,
@@ -67,7 +71,9 @@ const mapDispatchToProps = dispatch => {
       readApp,
       readUser,
       readTeam,
-      resetTeams
+      resetTeams,
+      browseDecks,
+      setPlayingDecks
     },
     dispatch
   )
@@ -101,6 +107,7 @@ class MainView extends React.Component {
 			browser: navigator.appCodeName,
 		}
 		this.props.setDeviceDetails(device);
+		this.props.browseDecks();
 		this.setState({ device, cachedIds: cachedIds });
 	}
 
@@ -130,6 +137,14 @@ class MainView extends React.Component {
 				setLocalStorage('alias_gameId', this.props.gameDetails.id);
 			}
 		}
+		
+		if(prevProps.decks !== this.props.decks){
+			if(!bool(this.props.playingDecks) && !bool(prevProps.playingDecks) && !bool(prevProps.decks)){
+				//load default bundle
+				const defaultDecks = this.getDefaultBundle(this.props.decks);
+				this.props.setPlayingDecks(defaultDecks);
+			}
+		}
 	}
 
 	setDefaultState() {
@@ -147,6 +162,12 @@ class MainView extends React.Component {
 			inGame: false,
 			teamNumber: null,
 		})
+	}
+
+	getDefaultBundle(decks) {
+		if(bool(decks)){
+			return decks.filter(d => d.is_default_bundle);
+		}
 	}
 
 	closeLoading() {

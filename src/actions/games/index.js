@@ -91,3 +91,9 @@ export function clearRdxGame() {
         type: constants.CLEAR_STATES,
     }
 }
+
+export function setIsCustom() {
+    return {
+        type: constants.SET_IS_CUSTOM,
+    }
+}

@@ -116,8 +116,9 @@ export function browseCards(deckId) {
 }
 
 //NON-API
-export function setPlayingDecks() {
+export function setPlayingDecks(data) {
     return {
         type: constants.SET_PLAYING_DECKS,
+        data,
     }
 }
