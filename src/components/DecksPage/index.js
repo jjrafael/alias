@@ -59,8 +59,9 @@ class DecksPage extends React.Component {
 		}
 	}
 
-	selectDeck = (data) => {
-		const { selectedDecks, decks } = this.state;
+	selectDeck = (data, _decks) => {
+		const { selectedDecks } = this.state;
+		const decks = _decks || this.state.decks || [];
 		const isArray = Array.isArray(data);
 		let newSelectedDecks = selectedDecks || [];
 		let newDecks = decks;
@@ -70,6 +71,7 @@ class DecksPage extends React.Component {
 			newDecks = decks.map(d => {
 				return ids.indexOf(d.id) !== -1 ? {...d, selected: d.selected ? d.selected : true} : d;
 			})
+			
 			data.forEach(d => {
 				const result = this.processSelectedCards(d, newDecks, newSelectedDecks);
 				newSelectedDecks = result.selectedDecks;
@@ -137,7 +139,7 @@ class DecksPage extends React.Component {
 		}else{
 			if(bool(defaultDecks)){
 				this.props.setPlayingDecks(defaultDecks);
-				this.selectDeck(defaultDecks);
+				this.selectDeck(defaultDecks, decks);
 			}
 		}
 	}

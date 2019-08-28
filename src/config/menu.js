@@ -40,7 +40,7 @@ const menu = {
 }
 
 export const homeMenu = [
-	menu.resetTeam,
+	// menu.resetTeam,
 	menu.enterCode,
 	menu.signOut,
 	menu.about
