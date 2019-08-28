@@ -8,7 +8,12 @@ import Card from './common/Card';
 import CardsCol from './common/CardsCol';
 
 //actions
-import { initializeApp, addUser, toggleEnterCodeModal } from '../actions/app';
+import {
+	initializeApp, 
+	addUser, 
+	toggleEnterCodeModal, 
+	toggleWarningModal 
+} from '../actions/app';
 
 //misc
 import { getNow, setLocalStorage } from '../utils';
@@ -21,6 +26,8 @@ const mapStateToProps = state => {
 		settings: state.app.settings,
 		appDetails: state.app.appDetails,
 		loadingOverlay: state.app.loadingOverlay,
+		userError: state.app.userError,
+		initializeError: state.app.initializeError,
 	}
 }
 
@@ -29,7 +36,8 @@ const mapDispatchToProps = dispatch => {
     {
       initializeApp,
       addUser,
-      toggleEnterCodeModal
+      toggleEnterCodeModal,
+      toggleWarningModal
     },
     dispatch
   )
@@ -50,6 +58,20 @@ class SplashPage extends React.Component {
 				this.initApp(this.props.user);
 				setLocalStorage('alias_userId', this.props.user.id);
 			}
+		}
+
+		if(prevProps.userError !== this.props.userError	&& this.props.userError){
+			this.props.toggleWarningModal(true, {
+				title: 'Network Error',
+				message: this.props.userError.message
+			});
+		}
+
+		if(prevProps.initializeError !== this.props.initializeError	&& this.props.initializeError){
+			this.props.toggleWarningModal(true, {
+				title: 'Network Error',
+				message: this.props.initializeError.message
+			});
 		}
 	}
 

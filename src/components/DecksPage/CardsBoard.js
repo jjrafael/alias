@@ -116,7 +116,7 @@ class CardsBoard extends React.Component {
     }
     
     return (
-      <div className={`col-2 cards-decks ${cx.col2}`}>
+      <div className={`col-2 col-cards ${cx.col2}`}>
       	<div className="col --center">
       		{ showEl.cards ?
             <Board data={this.composeCards(cards)} className={cx.board} type="cards"/>

@@ -16,6 +16,20 @@ export function getNow(isString) {
     return now;
 }
 
+export function bool(data, dataType) {
+	let bool = false;
+
+	if(Array.isArray(data) || dataType === 'array'){
+		bool = !!data.length;
+	}else if(dataType === 'number'){
+		bool = data === 0 ? true : !!data;
+	}else{
+		bool = !!data;
+	}
+
+	return bool;
+}
+
 export function getResponse(doc, cond) {
 	let value = null;
 	if(doc && doc.response && !doc.error){

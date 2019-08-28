@@ -114,6 +114,13 @@ export function toggleLoadingOverlay(show, title, extra) {
     }
 }
 
+export function toggleWarningModal(show, data) {
+    return {
+        type: constants.TOGGLE_WARNING_MODAL,
+        data: { show, ...data },
+    }
+}
+
 export function setDeviceDetails(data) {
     return {
         type: constants.SET_DEVICE_DETAILS,

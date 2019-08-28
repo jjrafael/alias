@@ -29,6 +29,12 @@ const initialState = {
         show: false,
         title: 'Loading...'
     },
+    warningModal: {
+        show: false,
+        message: 'Encountered an issue, please try again later.',
+        title: 'Warning!',
+        type: 'warning',
+    },
 
     //requests
     appInitializing: false,
@@ -77,7 +83,7 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 appInitializing: false,
-                initializeError: true,
+                initializeError: action.error,
             }
 
         //READ APP
@@ -172,7 +178,7 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 addingUser: false,
-                userError: true,
+                userError: action.error,
             }
         
         case app.READ_USER_REQUEST:
@@ -195,7 +201,7 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 readingApp: false,
-                initializeError: true,
+                initializeError: action.error,
             }
 
         case app.EDIT_USER_REQUEST:
@@ -264,6 +270,15 @@ export default function App(state = initialState, action) {
                 ...state,
                 loading: {
                     ...state.loading,
+                    ...action.data,
+                },
+            }
+
+        case app.TOGGLE_WARNING_MODAL:
+            return {
+                ...state,
+                warningModal: {
+                    ...state.warningModal,
                     ...action.data,
                 },
             }

@@ -11,6 +11,10 @@
 		}
 		&.col-decks.show {
 			margin-top: 0px;
+			.col:first-child .card.deck-card {
+				opacity: 0;
+				@include delay-child-sequence(120);
+			}
 		}
 		.col-header {
 			height: 100px;
@@ -20,7 +24,7 @@
 		margin: 20px;
 		padding: 16px;
 		height: 520px;
-    margin-top: -130px;
+    margin-top: -100px;
 		.card:nth-child(even) {
 			margin-right: 0px;
 		}
@@ -45,5 +49,11 @@
 
 	.input__textbox {
 		color: $black;
+	}
+
+	.card {
+		&.alias-card {
+			@include fade-in();
+		}
 	}
 }

@@ -12,7 +12,9 @@ class Board extends React.Component {
           className={d.className} 
           type={d.type} 
           backChildren={d.backChildren}
+          onClick={d.onClick}
           data={d.data}
+          {...this.props.extra}
           flipOver>
           {d.frontChildren}
         </Card>

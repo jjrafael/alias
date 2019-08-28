@@ -9,6 +9,7 @@ import Body from './Body';
 import Loading from './common/Loading';
 import ModalSignOut from './modal/ModalSignOut';
 import ModalEnterCode from './modal/ModalEnterCode';
+import ModalWarning from './modal/ModalWarning';
 
 //pages
 import SplashPage from './SplashPage';
@@ -23,6 +24,7 @@ import {
 	setDeviceDetails, 
 	readApp, 
 	readUser, 
+	toggleWarningModal,
 	toggleLoadingOverlay } from '../actions/app';
 import { readGame } from '../actions/games';
 import { readTeam, resetTeams } from '../actions/teams';
@@ -60,6 +62,7 @@ const mapDispatchToProps = dispatch => {
     {
       setDeviceDetails,
       toggleLoadingOverlay,
+      toggleWarningModal,
       readGame,
       readApp,
       readUser,
@@ -175,6 +178,13 @@ class MainView extends React.Component {
 				const response = getResponse(doc, cond);
 				if(response){
 					this.checkActiveApp();
+				}else if(doc.error){
+					this.closeLoading();
+					this.setState({ ...doneStates });
+					this.props.toggleWarningModal(true, {
+						title: 'Network Error',
+						message: doc.error.message
+					});
 				}else{
 					clearLocalStorage();
 					this.closeLoading();
@@ -341,6 +351,7 @@ class MainView extends React.Component {
 	        <Body className="app-body">
 	        	{this.renderPages(isAppReady, isTeam)}
 	        </Body>
+	        <ModalWarning />
 	        <ModalSignOut />
 	        <ModalEnterCode />
 	        <Loading />

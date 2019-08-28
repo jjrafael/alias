@@ -150,6 +150,30 @@
 	}
 }
 
+.card.deck-card {
+	float: left;
+	margin: 0px 10px 10px 0px;
+	transition: all 0.3s ease;
+	.card-front {
+		background: $cream;
+	}
+	.card-back {
+		color: $white;
+		background: $peach;
+		&:after { border-color: $white; }
+		&.--jinx {
+			background: $coral;
+		}
+	}
+	&.--selected {
+		transform: scale(0.8);
+		.card-front {
+			background: $midnight;
+			color: $white;
+		}
+	}
+}
+
 /*team specific*/
 .card.--team1 {
 	.card-back {

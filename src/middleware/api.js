@@ -104,7 +104,7 @@ export default function callAPIMiddleware({ dispatch, getState }) {
           })
         )
       }).catch((error) => {
-        dispatch(
+        return dispatch(
           Object.assign({}, payload, {
             error,
             type: failureType

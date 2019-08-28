@@ -98,7 +98,7 @@ export default function Cards(state = initialState, action) {
             return {
                 ...state,
                 cardLoading: false,
-                readCard: action.response.data,
+                readCard: action.response,
                 cardError: false,
             }
         case cards.BROWSE_CARD_FAILURE:
@@ -221,7 +221,7 @@ export default function Cards(state = initialState, action) {
             return {
                 ...state,
                 deckLoading: false,
-                decks: action.response.data,
+                decks: action.response,
                 deckError: false,
             }
         case cards.BROWSE_DECK_FAILURE:

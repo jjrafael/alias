@@ -26,3 +26,7 @@
 .fade-in {
 	@include fade-in();
 }
+
+.card-flip-up {
+	@include flip-up();
+}

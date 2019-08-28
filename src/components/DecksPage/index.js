@@ -9,10 +9,10 @@ import CardsBoard from './CardsBoard';
 
 // actions
 import { toggleLoadingOverlay } from '../../actions/app';
-import { addDeck, setPlayingDecks } from '../../actions/cards';
+import { addDeck, setPlayingDecks, browseDecks } from '../../actions/cards';
 
 //misc
-import { isResType } from '../../utils';
+import { isResType, bool } from '../../utils';
 
 const mapStateToProps = state => {return {
 	decks: state.cards.decks,
@@ -25,6 +25,7 @@ const mapDispatchToProps = dispatch => {
 		{
 		  setPlayingDecks,
 		  addDeck,
+		  browseDecks,
 		  toggleLoadingOverlay
 		},
 		dispatch
@@ -37,9 +38,14 @@ class DecksPage extends React.Component {
 		this.state = {
 			selectedDecks: [],
 			showBoard: 'decks',
+			decks: [],
 			newDeck: null,
 			successAdded: false,
 		}
+	}
+
+	componentDidMount(){
+		this.props.browseDecks();
 	}
 
 	componentDidUpdate(prevProps){
@@ -48,8 +54,53 @@ class DecksPage extends React.Component {
 		}
 
 		if(prevProps.decks !== this.props.decks){
+			this.setState({ decks: this.props.decks });
 			this.setSelectedDecks();
 		}
+	}
+
+	selectDeck = (data) => {
+		const { selectedDecks, decks } = this.state;
+		const isArray = Array.isArray(data);
+		let newSelectedDecks = selectedDecks || [];
+		let newDecks = decks;
+
+		if(isArray){
+			const ids = data.map(d => d.id);
+			newDecks = decks.map(d => {
+				return ids.indexOf(d.id) !== -1 ? {...d, selected: d.selected ? d.selected : true} : d;
+			})
+			data.forEach(d => {
+				const result = this.processSelectedCards(d, newDecks, newSelectedDecks);
+				newSelectedDecks = result.selectedDecks;
+			})
+		}else{
+			const result = this.processSelectedCards(data, newDecks, newSelectedDecks);
+			newSelectedDecks = result.selectedDecks;
+			newDecks = result.decks;
+		}
+		
+		this.setState({ selectedDecks: newSelectedDecks, decks: newDecks });
+	}
+
+	processSelectedCards(data, decks, selectedDecks){
+		const hasSelections = bool(selectedDecks);
+		const isSelected = data && data.selected ? data.selected : false;
+		const newData = { ...data, selected: !isSelected};
+		let result = { decks: [], selectedDecks: [] };
+		
+		result.decks = decks.map(d => {
+			return newData.id === d.id ? {...d, selected: !isSelected} : d;
+		})
+
+		if(isSelected){
+			const filtered = selectedDecks.filter(d => d.id !== newData.id);
+			result.selectedDecks = hasSelections ? filtered : [];
+		}else{
+			result.selectedDecks = [ ...selectedDecks, newData ];
+		}
+
+		return result;
 	}
 
 	toggleBoards = () => {
@@ -78,35 +129,45 @@ class DecksPage extends React.Component {
 
 	setSelectedDecks() {
 		const { isCustom, decks } = this.props;
+		const { selectedDecks } = this.state;
 		const defaultDecks = this.getDefaultBundle(decks);
 
-		if(isCustom){
-			this.props.setPlayingDecks(this.state.selectedDecks);
+		if(isCustom && bool(selectedDecks)){
+			this.props.setPlayingDecks(selectedDecks);
 		}else{
-			this.props.setPlayingDecks(defaultDecks);
+			if(bool(defaultDecks)){
+				this.props.setPlayingDecks(defaultDecks);
+				this.selectDeck(defaultDecks);
+			}
 		}
 	}
 
 	getDefaultBundle(decks) {
-		if(!!decks){
-			return decks.filter(d => d.default);
+		if(bool(decks)){
+			return decks.filter(d => d.is_default_bundle);
 		}
 	}
 
 	loadDecks = () => {
+		console.log('jj load: ', this.state.selectedDecks);
 		this.props.setPlayingDecks(this.state.selectedDecks);
 	}
 
   render() {
-  	const { showBoard,successAdded } = this.state;
+  	const { showBoard,successAdded, selectedDecks, decks } = this.state;
+  	const deckProps = {
+  		decks: decks,
+  		selectedDecks: selectedDecks,
+  		selectDeck: this.selectDeck,
+  	}
   	const cardsProps = {
   		updateNewDeck: this.updateNewDeck,
   		successAdded: successAdded
   	}
-
+  	
     return (
       <div className={`page-wrapper decks-page`}>
-				<DecksBoard show={showBoard === 'decks'}/>
+				<DecksBoard show={showBoard === 'decks'} {...deckProps}/>
 				<CardsBoard show={showBoard !== 'decks'} {...cardsProps}/>
 				<Footer
 					toggleBoards={this.toggleBoards} 
