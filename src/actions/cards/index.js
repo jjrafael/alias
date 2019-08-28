@@ -122,3 +122,10 @@ export function setPlayingDecks(data) {
         data,
     }
 }
+
+export function setCardsOnGrid(data) {
+    return {
+        type: constants.SET_GRID_CARDS,
+        data,
+    }
+}

@@ -276,6 +276,11 @@ export default function Cards(state = initialState, action) {
                 ...state,
                 playingDecks: action.data,
             }
+        case cards.SET_GRID_CARDS:
+            return {
+                ...state,
+                cardsOnGrid: action.data,
+            }
 
         default: 
             return state;

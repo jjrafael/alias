@@ -1,9 +1,17 @@
 .grid-page {
 	@include gradient-summer();
 	@include sq(100%);
+	@include center-flex();
 	.page-inner {
 		width: 100%;
   	padding: 0px 20px;
+	}
+	.start-round-wrapper {
+		text-align: center;
+		.btn {
+			margin: 20px auto 0px auto;
+  		display: block;
+		}
 	}
 	.btn {
 		&.--pick-leader {

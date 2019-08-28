@@ -83,6 +83,40 @@ export function makeId(length=6) {
    return result;
 }
 
+export function randomIndexArray(indexLen, length=10, sourceLen) {
+ 	let result = [];
+
+	if(!sourceLen){
+		for ( var i = 0; i < length; i++ ) {
+			const random = randomNumber(indexLen);
+			if(result.indexOf(random) === -1){
+				result.push(random);
+			}else{
+				result.push(...randomIndexArray(indexLen, 1, result));
+			}
+		}
+	}else{
+		const random = randomNumber(indexLen);
+		if(sourceLen.indexOf(random) === -1){
+			result.push(random);
+		}else{
+			result.push(...randomIndexArray(indexLen, 1, sourceLen));
+		}
+	}
+
+   return result;
+}
+
+export function makeArrayFromIndexArray(array, indexArray) {
+	let arr = [];
+
+	if(bool(array) && bool(indexArray)){
+		indexArray.forEach(d => arr.push(array[d]))
+	}
+
+	return arr;
+}
+
 export function randomNumber(length=100) {
    return Math.floor(Math.random() * length);
 }

@@ -43,6 +43,9 @@ class DecksBoard extends React.Component {
   render() {
   	const { show } = this.props;
   	const { decks, selectedDecks } = this.state;
+  	const cardsLen = selectedDecks.reduce((sum, d) => sum + d.cards.length, 0);
+  	const deckLenTxt = selectedDecks.length+' '+pluralizeString('deck', selectedDecks.length);
+  	const cardLenTxt = cardsLen ? ' | ' + cardsLen + ' ' + pluralizeString('card', cardsLen) : '';
   	const cx = {
       col2: show ? 'show' : '',
     }
@@ -82,7 +85,7 @@ class DecksBoard extends React.Component {
           		<div className="heading-wrapper">
 								<h2>Your Decks</h2>
 								{ bool(selectedDecks) ?
-									selectedDecks.length+' '+pluralizeString('deck', selectedDecks.length): ''
+									deckLenTxt + cardLenTxt  : ''
 								}
 							</div>
           	</div>

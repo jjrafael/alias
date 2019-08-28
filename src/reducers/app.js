@@ -18,6 +18,7 @@ const initialState = {
         music: false,
         winning_score: 3,
         cards_per_team: 8,
+        cards_per_round: 25,
     },
     appDetails: null,
     user: null,

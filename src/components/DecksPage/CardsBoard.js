@@ -8,6 +8,7 @@ import Board from '../common/Board';
 //misc
 import aliasCard from '../../config/formData/aliasCard';
 import deckOptions from '../../config/formData/deckOptions';
+import { makeId } from '../../utils';
 
 class CardsBoard extends React.Component {
   constructor(props) {
@@ -90,7 +91,12 @@ class CardsBoard extends React.Component {
 
   addCard = (formData) => {
     if(formData && formData.text){
-      this.setState({ cards: [...this.state.cards, formData] });
+      this.setState({ 
+        cards: [...this.state.cards, {
+          ...formData,
+          id: makeId()
+        }]
+      });
     }
   }
 

@@ -210,7 +210,7 @@ export default function Game(state = initialState, action) {
                 roundLoading: false,
                 rounds: {
                     ...state.rounds,
-                    [action.response.id]: action.response
+                    [action.response.id]: action.payload
                 },
                 roundError: false,
             }
@@ -218,7 +218,7 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 roundLoading: false,
-                roundError: true,
+                roundError: action.error,
             }
         case game.EDIT_ROUND_REQUEST:
             return {
