@@ -10,6 +10,7 @@ import { listenGame, listenRounds } from '../../actions/games';
 
 //misc
 import { bool } from '../../utils';
+import { getActiveRound } from '../../utils/game';
 
 const mapStateToProps = state => {return {
 	team: state.team.team1 || state.team.team2 || null,
@@ -35,6 +36,7 @@ class LeaderPage extends React.Component {
 		super(props);
 		this.state = {
 			cardsForTeam: [],
+			activeRound: null,
 			deathCard: null
 		}
 	}
@@ -50,7 +52,10 @@ class LeaderPage extends React.Component {
 
 	componentDidUpdate(prevProps){
 		if(prevProps.rounds !== this.props.rounds && this.props.rounds){
-			this.getCardsForTeam(this.props.rounds.playingCards);
+			let activeRound = getActiveRound(this.props.rounds);
+			activeRound = bool(activeRound) ? activeRound[0] : null;
+			this.setState({ activeRound });
+			this.getCardsForTeam(activeRound.playing_cards);
 		}
 	}
 
@@ -72,9 +77,10 @@ class LeaderPage extends React.Component {
 	}
 
   render() {
-  	const { turnOf, cardsForTeam, rounds } = this.props;
+  	const { turnOf, rounds } = this.props;
+  	const { cardsForTeam } = this.state;
   	const gridReady = bool(rounds) && bool(cardsForTeam);
-
+  	
     return (
       <div className={`page-wrapper grid-page`} data-team={turnOf}>
 				<div className="page-inner">
