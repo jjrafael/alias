@@ -10,8 +10,11 @@
   &.signOutModal {
   	z-index: 70;
   }
-  &.signOutModal {
+  &.warningModal {
   	z-index: 75;
+  }
+  &.--bgNone {
+  	background: transparent;
   }
 }
 
@@ -69,6 +72,9 @@
 		width: calc(100% - 40px);
 		height: calc(100% - 100px);
 		margin-top: 50px;
+		&.--center {
+			text-align: center;
+		}
 		&.--no-header {
 			margin-top: 0px;
 			height: calc(100% - 50px);
@@ -145,6 +151,14 @@
 		.unflip {
 			opacity: 1;
 			cursor: pointer;
+		}
+	}
+	&.--flippable.--flip-loop {
+		.modal-card.--back {
+			animation: flippable-back 6s ease infinite;
+		}
+		.modal-card.--front {
+			animation: flippable-front 6s ease infinite;
 		}
 	}
 }

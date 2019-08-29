@@ -23,7 +23,6 @@ const initialState = {
     appDetails: null,
     user: null,
     userType: 'player',
-    isCustom: false,
     selectedDecks: [],
     decks: [],
     loading: {
@@ -333,7 +332,6 @@ export default function App(state = initialState, action) {
                 appDetails: null,
                 user: null,
                 userType: 'player',
-                isCustom: false,
                 selectedDecks: [],
                 decks: [],
                 showModalSignout: false,

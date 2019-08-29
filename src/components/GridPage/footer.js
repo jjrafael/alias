@@ -24,11 +24,11 @@ class HomeFooter extends React.Component {
 		this.state = {
 			footOptions: {
 				main: {
-					text: 'Report',
+					text: 'Alias',
 					onClick: () => {},
 				},
 				left: {
-					text: 'Pause',
+					text: 'Report',
 					onClick: () => {},
 				},
 				right: {
@@ -38,6 +38,20 @@ class HomeFooter extends React.Component {
 				copyright: false,
 			},
 		}
+	}
+
+	componentDidUpdate(prevProps){
+			if(prevProps.alias !== this.props.alias){
+					this.setState({
+						footOptions: {
+							...this.state.footOptions,
+							main: {
+								...this.state.footOptions.main,
+								text: this.props.alias.text || '...'
+							}
+						}
+					})
+			}
 	}
 
   render() {

@@ -1,15 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { shuffle } from 'lodash';
+import { shuffle, difference } from 'lodash';
 
 //Components
 import Footer from './footer';
 import Button from '../common/Button';
+import Card from '../common/Card';
+import ModalAliasLoading from '../modal/ModalAliasLoading';
 
 // actions
+import { toggleLoadingOverlay } from '../../actions/app';
 import { setCardsOnGrid } from '../../actions/cards';
-import { addRound, shiftTurn } from '../../actions/games';
+import { addRound, shiftTurn, editRound, listenRounds } from '../../actions/games';
 
 //misc
 import { 
@@ -17,15 +20,18 @@ import {
 	makeArrayFromIndexArray, 
 	randomIndexArray, 
 	bool,
-	isResType
+	isResType,
+	getNow,
 } from '../../utils';
+import { getActiveRound } from '../../utils/game';
 
 const mapStateToProps = state => {return {
 	settings: state.app.settings,
 	turnOf: state.game.turnOf,
 	gameDetails: state.game.gameDetails,
 	rounds: state.game.rounds,
-	gridCards: state.game.gridCards,
+	team1: state.team.team1,
+	team2: state.team.team2,
 	team1members: state.team.team1members,
 	team2members: state.team.team2members,
 	playingDecks: state.cards.playingDecks,
@@ -37,7 +43,10 @@ const mapDispatchToProps = dispatch => {
 		{
 		  addRound,
 		  shiftTurn,
-		  setCardsOnGrid
+		  setCardsOnGrid,
+		  toggleLoadingOverlay,
+		  editRound,
+		  listenRounds
 		},
 		dispatch
 	 )
@@ -48,11 +57,40 @@ class GridPage extends React.Component {
 		super(props);
 		this.state = {
 			initProgress: 0,
+			activeRound: null,
+			history: [],
+			newAlias: null,
 		}
 	}
 
+	componentDidMount(){
+		const { gameDetails } = this.props;
+
+		if(gameDetails){
+			this.props.listenRounds(gameDetails.id);
+		}
+	}
+
+	componentDidUpdate(prevProps){
+		if(prevProps.rounds !== this.props.rounds){
+			let activeRound = getActiveRound(this.props.rounds);
+			activeRound = bool(activeRound) ? activeRound[0] : null;
+			this.setState({ activeRound: activeRound });
+
+			if(prevProps.rounds.alias !== this.props.rounds.alias){
+				const diff = difference(prevProps.rounds.alias, this.props.rounds.alias);
+				this.updateNewAlias(diff);
+			}
+		}
+	}
+
+	updateNewAlias(diff, newData){
+		const data = !bool(newData) ? null : (bool(diff) ? diff[0] : this.state.newAlias);
+		this.setState({ newAlias: data });
+	}
+
 	shufflePlayingCards() {
-		const { playingDecks, settings } = this.props;
+		const { playingDecks, settings, toggleLoadingOverlay } = this.props;
 		const cardsPerRound = settings.cards_per_round;
 		let cards = [];
 		playingDecks.forEach(d => {
@@ -62,7 +100,7 @@ class GridPage extends React.Component {
 		const indexArray = randomIndexArray(cards.length, cardsLen);
 		const shuffled = makeArrayFromIndexArray(cards, indexArray);
 		const assignedCards = this.assignedCards(shuffled);
-
+		toggleLoadingOverlay(true, 'Shuffling Cards');
 		if(bool(shuffled)){
 			this.props.setCardsOnGrid(assignedCards);
 		}
@@ -71,8 +109,9 @@ class GridPage extends React.Component {
 	assignedCards(cards){
 		const { settings } = this.props;
 		const { cards_per_team, include_death_card, cards_per_round } = settings;
+		const types = ['none', 'team1', 'team2'];
 		let maxNone = cards_per_round - ( cards_per_team * 2 );
-		let types = ['none', 'team1', 'team2'];
+		let newTypes = types;
 		let hasDeathCard = 0; //max of 1 if include_death_card
 		let team1Count = 0; //max of cards_per_team
 		let team2Count = 0; //max of cards_per_team
@@ -80,12 +119,13 @@ class GridPage extends React.Component {
 		let newCards = [];
 
 		if(include_death_card){
-			types.push('death');
+			newTypes.push('death');
 			maxNone = maxNone - 1;
 		}
 
 		cards.forEach(d => {
-			const shuffledTypes = shuffle(types);
+			const clones = types.concat(types).concat(types);
+			const shuffledTypes = shuffle(newTypes.concat(clones));
 			let assigned = false;
 			let type = 'none';
 			
@@ -122,40 +162,120 @@ class GridPage extends React.Component {
 	pickTeam(cards){
 		const team = randomNumber(2) + 1;
 		this.props.shiftTurn(team);
-		this.setState({ initProgress: 65 });
-		this.startRound(cards, team);
+		this.setState({ initProgress: 75 });
+		this.initRound(cards, team);
 	}
 
-	startRound(cards, team){
-		const { gameDetails } = this.props;
+	pickLeader(team){
+		const members = this.props[`team${team}members`];
+		let leader = null;
+		let num = 0;
+
+		if(bool(members)){
+			num = randomNumber(members.length);
+			leader = members[num];
+		}
+
+		this.setState({ [`team${team}Leader`]: leader });
+		return leader;
+	}
+
+	initRound(cards, team){
+		const { gameDetails, toggleLoadingOverlay } = this.props;
+		const team1Leader = this.pickLeader(1);
+		const team2Leader = this.pickLeader(2);
 		const data = {
+			id: 'r1',
 			playing_cards: cards,
 			turn_of: team,
-			team1_score: 0,
-			team2_score: 0,
-			team1_violations: 0,
-			team2_violations: 0,
+			team1: {
+				score: 0,
+				violations: 0,
+				leader: team1Leader ? team1Leader.id : 'anyone',
+				alias: []
+			},
+			team2: {
+				score: 0,
+				violations: 0,
+				leader: team2Leader ? team2Leader.id : 'anyone',
+				alias: []
+			},
 			status: 'active',
+			created_time: getNow(),
 		}
 
 		//Start first round
 		this.props.addRound(gameDetails.id, 'r1', data).then(doc => {
+			toggleLoadingOverlay();
 			if(isResType(doc)){
 				this.setState({ initProgress: 100 });
 			}
 		});
 	}
 
+	selectCard = (data) => {
+		const { turnOf, shiftTurn, editRound, gameDetails } = this.props;
+		const { activeRound, newAlias } = this.state;
+		const isTeam = data.type.indexOf('team') !== -1;
+		const cardOf = isTeam ? isTeam.split('team')[1] : null;
+		const oppTeam = turnOf === 1 ? 2 : 1;
+		const isCorrect = turnOf === cardOf;
+		const teamKey = isCorrect ? `team${turnOf}` :  `team${oppTeam}`;
+		const aliasToBeDone = newAlias.left === 1;
+		let score = activeRound[teamKey].score + 1;
+		let newHistory = {
+				forAlias: newAlias,
+				turnOf: turnOf,
+				cardSelected: data,
+				correct: isCorrect,
+		}
+
+		if(!isCorrect){
+			shiftTurn();
+		}
+
+		this.setState({
+			history: [
+				...this.state.history,
+				newHistory
+			],
+			newAlias: aliasToBeDone	? null : {
+				...this.state.newAlias,
+				left: this.state.newAlias.left - 1
+			}
+		})
+		// editRound(gameDetails.id, activeRound.id, {
+		// 	...activeRound,
+		// 	turn_of: isCorrect ? turnOf : oppTeam,
+		// 	[teamKey]: {
+		// 	...activeRound[teamKey], score
+		// }
+		// })
+	}
+
 	renderGrid() {
-		const { gridCards } = this.props;
+		const { team1, team2 } = this.props;
+		const { activeRound, newAlias } = this.state;
+		const cards = activeRound ? activeRound.playing_cards : [];
 		let html = [];
 
-		gridCards.forEach((d, i) => {
+		cards.forEach((d, i) => {
+			let team = null;
+
+			if(d.type === 'team1'){
+				team = team1.name;
+			}else if(d.type === 'team2'){
+				team = team2.name;
+			}
+
 			html.push(
-				<div className="card" key={i}>
-					<div className="card__back" key={i}>Back</div>
-					<div className="card__front" key={i}>Front</div>
-				</div>
+				<Card
+          key={i}
+          type="grid-card" 
+          onClick={newAlias ? this.selectCard : null}
+          data={{...d, team}}
+          flipOver>
+        </Card>
 			)
 		})
 
@@ -163,11 +283,14 @@ class GridPage extends React.Component {
 	}
 
   render() {
-  	const { turnOf, gridCards, rounds } = this.props;
-  	const gridReady = rounds && !!gridCards;
-
+  	const { turnOf } = this.props;
+  	const { activeRound, newAlias } = this.state;
+  	const gridReady = bool(activeRound) && bool(activeRound.playing_cards);
+  	const cxPage = gridReady ? '--ingame': '';
+  	const waitingForAlias = gridReady	&& !bool(newAlias);
+  	
     return (
-      <div className={`page-wrapper grid-page`} data-team={turnOf}>
+      <div className={`page-wrapper grid-page ${cxPage}`} data-team={turnOf}>
 				<div className="page-inner">
 					{ gridReady ?
 						<div className={`grid`}>
@@ -179,8 +302,9 @@ class GridPage extends React.Component {
 						</div>
 					}
 				</div>
+				<ModalAliasLoading show={waitingForAlias}/>
 				{ gridReady ?
-					<Footer/> : ''
+					<Footer newAlias={newAlias} /> : ''
 				}
 		  </div>
     );

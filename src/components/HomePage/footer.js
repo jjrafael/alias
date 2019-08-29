@@ -17,7 +17,6 @@ const mapStateToProps = state => {
 	return {
 		playingDecks: state.cards.playingDecks,
 		modDetails: state.game.modDetails,
-		isCustom: state.game.isCustom,
 		team1: state.team.team1,
 		team2: state.team.team2,
 		team1members: state.team.team1members,
@@ -62,8 +61,7 @@ class HomeFooter extends React.Component {
 	startGame = () => {
 		const { 
 			playingDecks, 
-			modDetails, 
-			isCustom, 
+			modDetails,
 			team1, 
 			team2, 
 			team1members, 
@@ -81,7 +79,6 @@ class HomeFooter extends React.Component {
 				game_loser: '',
 				game_winner: '',
 				have_mod: bool(modDetails),
-				is_custom: isCustom,
 				started_time: getNow(),
 				status: 'active',
 				teams: [team1.id, team2.id],

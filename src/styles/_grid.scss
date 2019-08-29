@@ -1,0 +1,83 @@
+.grid {
+	display: block;
+	margin: 0 auto;
+	padding: 20px;
+	 overflow: auto;
+  transition: all 0.3s ease;
+  font-family: $josefin;
+	font-size: $fs-xs;
+	padding-bottom: 200px;
+	max-width: 1180px;
+	.card {
+		@include wh(200px, 140px);
+    margin: 0px 15px 15px 0px;
+    float: left;
+    border-radius: 10px;
+		cursor: pointer;
+		color: $midnight;
+		transition: all 0.3s ease;
+		position: relative;
+		@include fade-in();
+		@include center-flex();
+		@include delay-child-sequence(120);
+		opacity: 	0;
+		&:after {
+			content: '';
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			margin: 20px;
+			border: 1px solid $coral;
+			border-radius: 10px;
+			width: calc(100% - 40px);
+			height: calc(100% - 40px);
+			display: none;
+		};
+		&:hover {
+			transform: translateY(-20px);
+			.card:after {
+				display: block;
+			};
+			.card-front {
+				@include shadow();
+			}
+		};
+		.card-back__inner {
+			@include sq(100%);
+		  position: absolute;
+		  top: 0px;
+		  left: 0px;
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+			&.--none {
+				background: $peach;
+			}
+			&.--team1 {
+				background: $chrome;
+			}
+			&.--team2 {
+				background: $aqua;
+			}
+			&.--death {
+				background: $red;
+			}
+		}
+	}
+}
+
+/*responsiveness*/
+
+@include mobile {
+	.grid {
+		width: calc(100% - 70px);
+	    height: 150px;
+	    margin-top: 50px;
+	    display: flex;
+	    flex-direction: column;
+	    flex-wrap: wrap;
+	    .card {
+	    	margin: 0px 10px!important;
+	    }
+	}
+}

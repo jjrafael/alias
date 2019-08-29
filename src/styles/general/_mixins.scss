@@ -15,14 +15,14 @@
 
 @mixin center-flex () {
 	display: flex;
-    align-items: center;
-    justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 @mixin center-auto () {
 	display: block;
-    margin: 0 auto;
-    text-align: center;
+  margin: 0 auto;
+  text-align: center;
 }
 
 @mixin group () {
@@ -33,12 +33,16 @@
 	}
 }
 
+@mixin shadow ($hor: 0px, $ver: 0px, $transparency: 0.5) {
+	box-shadow: $hor $ver 20px -3px rgba(0,0,0,$transparency);
+}
+
 /*presets animations*/
 
-@mixin delay-child-sequence ($len: 50) {
+@mixin delay-child-sequence ($len: 50, $interval: 0.2) {
 	@for $i from 1 through $len {
 	    &:nth-child(#{$i}n) {
-	        animation-delay: #{$i * 0.2}s;
+	        animation-delay: #{$i * $interval}s;
 	    }
 	}
 }

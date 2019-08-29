@@ -1,7 +1,8 @@
+import { unionBy } from 'lodash';
 import constants from '../constants';
 
 const initialState = {
-    rounds: null,
+    rounds: [],
     turnOf: '',
     hasMod: false,
     modDetails: null,
@@ -10,7 +11,6 @@ const initialState = {
     gameEnded: false,
     isPause: false,
     gameDetails: null,
-    isCustom: false,
 
     //requests
     endingGame: false,
@@ -119,18 +119,19 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 gameLoading: true,
+                isPause: true,
             }
         case game.PAUSE_GAME_SUCCESS:
             return {
                 ...state,
                 gameLoading: false,
-                isPause: true,
                 gameError: false,
             }
         case game.PAUSE_GAME_FAILURE:
             return {
                 ...state,
                 gameLoading: false,
+                isPause: false,
                 gameError: true,
             }
 
@@ -196,6 +197,30 @@ export default function Game(state = initialState, action) {
                 gameLoading: false,
                 gameError: true,
             }
+        case game.LISTEN_GAME_REQUEST:
+            return {
+                ...state,
+                gameLoading: true,
+            }
+        case game.LISTEN_GAME_SUCCESS:
+            const LISTEN_GAME_val = action.response.data();
+            const isPause = LISTEN_GAME_val ? LISTEN_GAME_val.is_pause : state.isPause;
+            return {
+                ...state,
+                gameLoading: false,
+                gameError: false,
+                isPause: isPause,
+                gameDetails: {
+                    ...action.response.data(),
+                    id: action.response.id
+                }
+            }
+        case game.LISTEN_GAME_FAILURE:
+            return {
+                ...state,
+                gameLoading: false,
+                gameError: true,
+            }
 
 
         //ROUNDS
@@ -208,10 +233,10 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 roundLoading: false,
-                rounds: {
+                rounds: [
                     ...state.rounds,
-                    [action.response.id]: action.payload
-                },
+                    action.payload
+                ],
                 roundError: false,
             }
         case game.ADD_ROUND_FAILURE:
@@ -233,6 +258,25 @@ export default function Game(state = initialState, action) {
                 roundError: false,
             }
         case game.EDIT_ROUND_FAILURE:
+            return {
+                ...state,
+                roundLoading: false,
+                roundError: true,
+            }
+        case game.LISTEN_ROUNDS_REQUEST:
+            return {
+                ...state,
+                roundLoading: true,
+            }
+        case game.LISTEN_ROUNDS_SUCCESS:
+            const LISTEN_ROUNDS_val = unionBy(state.rounds, action.response, 'id')
+            return {
+                ...state,
+                roundLoading: false,
+                roundError: false,
+                rounds: LISTEN_ROUNDS_val
+            }
+        case game.LISTEN_ROUNDS_FAILURE:
             return {
                 ...state,
                 roundLoading: false,
@@ -309,11 +353,6 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 turnOf: SHIFT_TURN_val,
-            }
-        case game.SET_IS_CUSTOM: 
-            return {
-                ...state,
-                isCustom: action.data,
             }
 
         //SIGNOUT

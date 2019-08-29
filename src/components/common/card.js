@@ -2,6 +2,7 @@ import React from 'react';
 
 //components
 import DeckCard from './cards/DeckCard';
+import GridCard from './cards/GridCard';
 
 class Card extends React.Component {
   renderSneaks(data) {
@@ -61,6 +62,9 @@ class Card extends React.Component {
       break;
       case 'deck-card':
         html = <DeckCard {...this.props}/>
+      break;
+      case 'grid-card':
+        html = <GridCard {...this.props}/>
       break;
   		default:
   			html = <div className={`card ${cx.size} ${cx.card} ${cx.type} ${cx.flip}`}>

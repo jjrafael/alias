@@ -81,7 +81,7 @@
 		@include center-flex();
 	}
 	
-	&:hover {
+	&:not(.nonflippable):hover {
 		.card-front {
 			transform: rotateY(0deg);
 			transition: transform 0.4s ease 0s, z-index 0.2s;
@@ -92,6 +92,19 @@
 			z-index: 1;
 		}
 	};
+	&.nonflippable {
+		&.nonflip-up {
+			.card-front {
+				transform: rotateY(180deg);
+				transition: transform 0.4s ease 0s, z-index 0.2s;
+				z-index: 1;
+			}
+			.card-back {
+				transform: rotateY(0deg);
+				z-index: 2;
+			}
+		}
+	}
 }
 
 /*flipover default*/
@@ -105,7 +118,7 @@
 		transform: rotateY(180deg);
 		z-index: 1;
 	}
-	&:hover {
+	&:not(.nonflippable):hover {
 		.card-front {
 			transform: rotateY(180deg);
 			transition: transform 0.4s ease 0s, z-index 0.2s;
@@ -135,6 +148,22 @@
 }
 
 .card.alias-card {
+	float: left;
+	margin: 0px 10px 10px 0px;
+	.card-front {
+		background: $cream;
+	}
+	.card-back {
+		color: $white;
+		background: $peach;
+		&:after { border-color: $white; }
+		&.--jinx {
+			background: $coral;
+		}
+	}
+}
+
+.card.grid-card {
 	float: left;
 	margin: 0px 10px 10px 0px;
 	.card-front {

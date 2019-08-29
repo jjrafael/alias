@@ -29,12 +29,57 @@ export function readGame(id) {
 }
 
 export function editGame(id, data) {
-    const ref = baseURL.users.doc(id);
+    const ref = baseURL.games.doc(id);
     return {
         types: [
             constants.EDIT_GAME_REQUEST,
             constants.EDIT_GAME_SUCCESS,
             constants.EDIT_GAME_FAILURE
+        ],
+        method: 'set',
+        data,
+        callRef: ref,
+    }
+}
+
+export function listenGame(id) {
+    const ref = baseURL.games.doc(id);
+    const listenData = {
+        returnData: true
+    }
+    return {
+        types: [
+            constants.LISTEN_GAME_REQUEST,
+            constants.LISTEN_GAME_SUCCESS,
+            constants.LISTEN_GAME_FAILURE
+        ],
+        method: 'listen',
+        callRef: ref,
+        listenData,
+    }
+}
+
+export function pauseGame(id, data) {
+    const ref = baseURL.games.doc(id);
+    return {
+        types: [
+            constants.PAUSE_GAME_REQUEST,
+            constants.PAUSE_GAME_SUCCESS,
+            constants.PAUSE_GAME_FAILURE
+        ],
+        method: 'set',
+        data,
+        callRef: ref,
+    }
+}
+
+export function resumeGame(id, data) {
+    const ref = baseURL.games.doc(id);
+    return {
+        types: [
+            constants.RESUME_GAME_REQUEST,
+            constants.RESUME_GAME_SUCCESS,
+            constants.RESUME_GAME_FAILURE
         ],
         method: 'set',
         data,
@@ -57,6 +102,20 @@ export function addRound(id, roundId, data) {
     }
 }
 
+export function editRound(id, roundId, data) {
+    const ref = baseURL.games.doc(id).collection('rounds').doc(roundId);
+    return {
+        types: [
+            constants.EDIT_ROUND_REQUEST,
+            constants.EDIT_ROUND_SUCCESS,
+            constants.EDIT_ROUND_FAILURE
+        ],
+        method: 'set',
+        data,
+        callRef: ref,
+    }
+}
+
 export function clearRounds(id) {
     const ref = baseURL.games.doc(id).collection('rounds');
     return {
@@ -68,6 +127,24 @@ export function clearRounds(id) {
         method: 'delete',
         data: [],
         callRef: ref,
+    }
+}
+
+export function listenRounds(id) {
+    const ref = baseURL.games.doc(id).collection('rounds');
+    const listenData = {
+        returnData: true,
+        isColl: true,
+    }
+    return {
+        types: [
+            constants.LISTEN_ROUNDS_REQUEST,
+            constants.LISTEN_ROUNDS_SUCCESS,
+            constants.LISTEN_ROUNDS_FAILURE
+        ],
+        method: 'listenBrowse',
+        callRef: ref,
+        listenData,
     }
 }
 
