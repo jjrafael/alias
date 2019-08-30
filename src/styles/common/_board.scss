@@ -50,10 +50,12 @@
 .board.--bar {
 	padding: 0px;
 	max-width: 500px;
+	display: block;
 	.board-child {
 		padding: 15px;
 		border-bottom: 1px solid $black-10;
 		background: $cream;
+		width: 100%;
 		&:last-child {
 			border-bottom: 0px;
 		}

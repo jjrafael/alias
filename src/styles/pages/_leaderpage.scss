@@ -31,3 +31,33 @@
 		}
 	}
 }
+
+/*responsiveness*/
+
+@include mobile {
+	.leader-page {
+		align-items: unset;
+		justify-content: unset;
+		.page-inner {
+			padding: 20px;
+			margin-top: 0px;
+		}
+		.board, .board.active {
+			width: 100%;
+			display: block;
+			margin-top: 0px;
+			margin-bottom: 50px;
+		}
+		form {
+			.input__textbox {
+				width: calc(100% - 20px);
+			}
+			.input__quantity {
+				width: 50px;
+			}
+			.inputwrap__quantity .input__label{
+				opacity: 0;
+			}
+		}
+	}
+}
