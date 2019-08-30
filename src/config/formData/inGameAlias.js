@@ -10,7 +10,7 @@ export const formInfo = {
 	    placeholder: '',
 	    label: 'Give a one-word clue',
 	    showLabel: true,
-	    validations: ['required','charMax-50'],
+	    validations: ['required','charMax-50','oneWord'],
 	    className: '--card-look --huge',
 	    extra: {
 	    	spellCheck: false,
@@ -19,9 +19,10 @@ export const formInfo = {
 		{
 			id: 'count',
 	    component: 'quantity',
+	    value: 1,
 	    label: 'Count',
 	    showLabel: true,
-	    validations: ['numberOnly'],
+	    validations: ['numberOnly', 'numMax-8'],
 	    className: '--huge',
 		}
 	],

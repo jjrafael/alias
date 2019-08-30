@@ -56,7 +56,11 @@
 		background: $cream;
 		&:last-child {
 			border-bottom: 0px;
-		};
+		}
+		&.--death {
+			background: $coral;
+			color: $white;
+		}
 	}
 }
 

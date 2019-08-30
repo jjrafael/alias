@@ -59,18 +59,6 @@ export function isResType(res, type = 'success') {
 	return res && res.type.indexOf(suffix) !== -1;
 }
 
-export function checkElExists(className) {
-	let count = 0;
-	if(Array.isArray(className)){
-		className.forEach(d => {
-			count = count + document.getElementsByClassName(className).length;
-		})
-	}else{
-		count = document.getElementsByClassName(className).length;
-	}
-	return count;
-}
-
 export function makeId(length=6) {
    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789?!@';
    const charsLen = chars.length;
@@ -123,6 +111,28 @@ export function randomNumber(length=100) {
 
 export function pluralizeString(string, len){
 	return len > 1 ? string+'s' : string;
+}
+
+// dom manipulation
+export function scrollTo(id, type){
+	const el = document.getElementById(id);
+	if(type === 'top'){
+		el.scrollTop = 0;
+	}else{
+		el.scrollTop = el.scrollHeight;
+	}
+}
+
+export function checkElExists(className) {
+	let count = 0;
+	if(Array.isArray(className)){
+		className.forEach(d => {
+			count = count + document.getElementsByClassName(className).length;
+		})
+	}else{
+		count = document.getElementsByClassName(className).length;
+	}
+	return count;
 }
 
 // local storage

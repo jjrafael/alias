@@ -10,7 +10,7 @@ class Input extends React.Component {
   render(){
   	const { component } = this.props;
   	let input = null;
-
+  	
   	switch(component){
   		case 'text':
   			input = <TextInput {...this.props}/>

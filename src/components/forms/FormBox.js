@@ -110,7 +110,8 @@ class FormBox extends React.Component {
 
   	if(data && !!data.inputs && !isCustomForm){
   		data.inputs.forEach((d, i) => {
-  			const value = formData ? formData[d.id] : (d.defaultValue || null);
+  			const value = formData ? formData[d.id] : (d.value || null);
+  			
   			html.push(
   				<Input key={i} {...d} value={value} handlers={handlers}/>
   			)

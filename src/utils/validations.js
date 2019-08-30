@@ -38,6 +38,19 @@ export function validateValues(inputs, formData, isSubmit) {
 							result.errors[key] = inputName + ' should not exceed 6 characters';
 						}
 					break;
+					case 'numMax-8':
+						if(value && value > 8){
+							result.count++;
+							result.errors[key] = inputName + ' should not be more than 8';
+						}
+					break;
+					case 'oneWord':
+						const rgx = /\s/;
+						if(value && rgx.test(value.trim())){
+							result.count++;
+							result.errors[key] = 'give should only one-word only';
+						}
+					break;
 					default:
 					break;
 				}
