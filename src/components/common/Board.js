@@ -1,24 +1,37 @@
 import React from 'react';
 import Card from './Card';
+import { bool } from '../../utils';
 
 class Board extends React.Component {
-  renderItems(data) {
+  renderItems() {
+    const { data, type } = this.props;
     const html = [];
 
     data.forEach((d, i) => {
-      html.push(
-        <Card
-          key={i}
-          className={d.className} 
-          type={d.type} 
-          backChildren={d.backChildren}
-          onClick={d.onClick}
-          data={d.data}
-          {...this.props.extra}
-          flipOver>
-          {d.frontChildren}
-        </Card>
-      );
+      if(type === 'bar'){
+        html.push(
+          <div
+            key={i}
+            className="board-child" 
+            onClick={d.onClick}>
+            {d.frontChildren}
+          </div>
+        )
+      }else{
+        html.push(
+          <Card
+            key={i}
+            className={`board-child ${d.className}`} 
+            type={d.type} 
+            backChildren={d.backChildren}
+            onClick={d.onClick}
+            data={d.data}
+            {...this.props.extra}
+            flipOver>
+            {d.frontChildren}
+          </Card>
+        );
+      }
     })
 
     return html;
@@ -31,7 +44,7 @@ class Board extends React.Component {
     
     return (
       <div className={`board ${cxType} ${cx}`}>
-        {data ? this.renderItems(data) : ''}
+        {bool(data) ? this.renderItems() : ''}
       </div>
     )
   }

@@ -4,13 +4,16 @@ import { bindActionCreators } from 'redux';
 
 //Components
 import Footer from './footer';
+import FormBox from '../forms/FormBox';
+import Board from '../common/Board';
 
 // actions
-import { listenGame, listenRounds } from '../../actions/games';
+import { listenGame, listenRounds, editRound } from '../../actions/games';
 
 //misc
-import { bool } from '../../utils';
+import { bool, getNow } from '../../utils';
 import { getActiveRound } from '../../utils/game';
+import inGameAlias from '../../config/formData/inGameAlias';
 
 const mapStateToProps = state => {return {
 	team: state.team.team1 || state.team.team2 || null,
@@ -26,6 +29,7 @@ const mapDispatchToProps = dispatch => {
 		{
 		  listenGame, 
 		  listenRounds,
+		  editRound
 		},
 		dispatch
 	 )
@@ -37,7 +41,9 @@ class LeaderPage extends React.Component {
 		this.state = {
 			cardsForTeam: [],
 			activeRound: null,
-			deathCard: null
+			deathCard: null,
+			pending: false,
+			alias: [],
 		}
 	}
 
@@ -55,12 +61,30 @@ class LeaderPage extends React.Component {
 			let activeRound = getActiveRound(this.props.rounds);
 			activeRound = bool(activeRound) ? activeRound[0] : null;
 			this.setState({ activeRound });
-			this.getCardsForTeam(activeRound.playing_cards);
+			if(activeRound){
+				this.getCardsForTeam(activeRound.playing_cards);
+			}
 		}
 	}
 
+	submitForm = (formData) => {
+		const { team } = this.props;
+		const { alias, activeRound } = this.state;
+		const teamNumber = team ? team.team_number : null;
+		const teamData = activeRound && teamNumber ? activeRound[`team${teamNumber}`] : null;
+		const data = {
+			...formData,
+			created_time: getNow(),
+			created_by_member: teamData ? teamData.leader : 'anyone',
+		}
+		this.setState({
+			alias: [...alias, data],
+		});
+	}
+
 	getCardsForTeam(data){
-		const teamNumber = this.props.team.team_number;
+		const { team } = this.props;
+		const teamNumber = team ? team.team_number : null;
 		let cards = [];
 		let deathCard = null;
 
@@ -76,15 +100,64 @@ class LeaderPage extends React.Component {
 		});
 	}
 
+	composeAliasArr(data=[]) {
+		return data.map(d => {
+			return {
+				...d,
+				frontChildren: d.alias
+			}
+		})
+	}
+
   render() {
-  	const { turnOf, rounds } = this.props;
-  	const { cardsForTeam } = this.state;
+  	const { turnOf, rounds, gameDetails, team } = this.props;
+  	const { cardsForTeam, alias, pending } = this.state;
   	const gridReady = bool(rounds) && bool(cardsForTeam);
+  	const teamNumber = team ? team.team_number : null;
+  	const aliasArr = this.composeAliasArr(alias);
+  	const notTurn = gameDetails && teamNumber ? (gameDetails.turnOf !== teamNumber) : false;
+  	const cx = {
+  		page: `${bool(aliasArr) ? '--hasBoard' : ''}`,
+  		board: bool(alias) ? 'active' : ''
+  	}
+  	const msg = {
+  		msgNoRound: 'Preparing Game...',
+  		msgPending: 'Waiting for answer puuuu...',
+  		msgNotTurn: 'Opponent team\'s turn',
+  	}
+  	const showEl = {
+  		board: gridReady,
+  		form: gridReady && !pending && !notTurn,
+  		msgNoRound: !gridReady,
+  		msgPending: gridReady && pending && !notTurn,
+  		msgNotTurn: gridReady && notTurn && !pending
+  	}
   	
     return (
-      <div className={`page-wrapper grid-page`} data-team={turnOf}>
+      <div className={`page-wrapper leader-page ${cx.page}`} data-team={turnOf}>
 				<div className="page-inner">
-					{gridReady ? 'Submit Alias' : 'Preparing Game...'}
+					{showEl.board ? 
+						<Board
+							data={aliasArr}
+							className={`--hor-scroll ${cx.board}`}
+							type="bar"/> : ''
+					}
+					{showEl.form ?
+						<FormBox
+              onSubmit={this.submitForm}
+              clearOnSubmit={true}
+              formInfo={inGameAlias}/>
+						: ''
+					}
+					{ showEl.msgPending ?
+						msg.msgPending : ''
+					}
+					{ showEl.msgNoRound ?
+						msg.msgNoRound : ''
+					}
+					{ showEl.msgNotTurn ?
+						msg.msgNotTurn : ''
+					}
 				</div>
 				<Footer/>
 		  </div>

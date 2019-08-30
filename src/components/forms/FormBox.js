@@ -142,8 +142,10 @@ class FormBox extends React.Component {
 
   	return (
   		<div className={`form__wrapper ${cx.wrapper}`}>
-  			<form className={cx.form} name={formInfo.formName}>
-  				{this.renderForm(formInfo)}
+  			<form className={`formbox ${cx.form}`} name={formInfo.formName}>
+  				<div className="input__group">
+  					{this.renderForm(formInfo)}
+  				</div>
   				{ formInfo && !formInfo.noSubmitButton ?
   					this.renderSubmit(formInfo.submit) : ''
   				}

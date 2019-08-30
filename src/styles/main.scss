@@ -28,13 +28,15 @@
 @import './forms/forms';
 @import './forms/textbox';
 @import './forms/togglebtn';
+@import './forms/quantity';
 
 /*pages*/
-@import './splashpage';
-@import './homepage';
-@import './buildteampage';
-@import './gridpage';
-@import './deckspage';
+@import './pages/splashpage';
+@import './pages/homepage';
+@import './pages/buildteampage';
+@import './pages/gridpage';
+@import './pages/deckspage';
+@import './pages/leaderpage';
 
 /*global styles*/
 body {

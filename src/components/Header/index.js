@@ -8,9 +8,9 @@ import Menu from './Menu';
 
 const mapStateToProps = state => {
   return {
+    user: state.app.user,
     settings: state.app.settings,
     gameDetails: state.game.gameDetails,
-    turnOf: state.game.turnOf,
     team1: state.team.team1,
     team2: state.team.team2,
   }
@@ -31,7 +31,9 @@ class Header extends React.Component {
   }
 
   render() {
-    const { className, gameDetails, turnOf, headerProps, team1, team2, settings } = this.props;
+    const { className, gameDetails, headerProps, team1, team2, settings, user } = this.props;
+    const isTeam = user ? user.role === 'team' : false;
+    const turnOf = gameDetails && !isTeam ? gameDetails.turnOf : '';
     const { timer } = this.state;
     const inGame = gameDetails && gameDetails.status === 'active';
 

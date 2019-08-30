@@ -352,6 +352,11 @@ export default function Game(state = initialState, action) {
                 (state.turnOf === '1' ? '2' : '1')
             return {
                 ...state,
+                gameDetails: state.gameDetails ?
+                    {  
+                        ...state.gameDetails,
+                        turnOf: SHIFT_TURN_val
+                    } : null,
                 turnOf: SHIFT_TURN_val,
             }
 

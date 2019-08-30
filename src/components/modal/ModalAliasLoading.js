@@ -16,7 +16,8 @@ class ModalAliasLoading extends React.Component {
         'Psst! Poke your team leader',
         'Still waiting',
         'Siya nga nahintay ko, ikaw pa kaya...',
-        'Koya wampipti, dali!'
+        'Koya wampipti, dali!',
+        'Beat Energy Gap oy!'
       ]
     }
   }
@@ -33,11 +34,10 @@ class ModalAliasLoading extends React.Component {
     if(show){
       setTimeout(() => {
         this.setState({ loadingMsg: msg });
-      }, 3000);
+      }, 10000);
     }else{
       this.setState({ loadingMsg: '' });
     }
-    
   }
 
   closeModal() {
@@ -45,7 +45,7 @@ class ModalAliasLoading extends React.Component {
   }
 
   render() {
-    const { show } = this.props;
+    const { show, team } = this.props;
     const { loadingMsg, messages } = this.state;
     const cxFlipover = loadingMsg ? '--flip-loop' : '';
 
@@ -53,9 +53,10 @@ class ModalAliasLoading extends React.Component {
       return (
         <Modal
           className={`--flipping --flippable ${cxFlipover}`} 
+          cxOverlay="--showHeader"
           size="xs"
           id="aliasLoading">
-          <div className={`modal-card --back`}>
+          <div className="modal-card --back" data-team={team}>
             <div className="modal__inner">
               <div className="modal__body --body-only --center">
                 {loadingMsg}

@@ -1,0 +1,30 @@
+.leader-page {
+	@include wh(100%, 100%);
+	@include gradient-summer();
+	@include center-flex();
+	&.--hasBoard .page-inner {
+		margin-top: -20%;
+	}
+	.board.active {
+    height: 200px;
+    margin-bottom: 30px;
+	}
+	form .input__group {
+		display: flex;
+		position: relative;
+		margin-left: 20px;
+		.input__textbox {
+			border-color: $white;
+		}
+		.input__label {
+			width: auto;
+		}
+		.input__quantity {
+			border-color: $white;
+		}
+		button {
+			margin-top: -20px;
+    	margin-left: 20px;
+		}
+	}
+}

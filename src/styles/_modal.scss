@@ -16,6 +16,10 @@
   &.--bgNone {
   	background: transparent;
   }
+  &.--showHeader {
+  	top: 50px;
+    height: calc(100% - 50px);
+  }
 }
 
 .modal {

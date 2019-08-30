@@ -70,6 +70,12 @@
 				border-radius: 10px;
 			};
 		}
+		&[data-team="1"] {
+			color: $chrome;
+			&:after {
+				border-color: $chrome;
+			};
+		}
 	}
 	.modal__body {
 		margin-top: 0px;

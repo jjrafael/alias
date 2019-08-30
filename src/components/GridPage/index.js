@@ -12,7 +12,13 @@ import ModalAliasLoading from '../modal/ModalAliasLoading';
 // actions
 import { toggleLoadingOverlay } from '../../actions/app';
 import { setCardsOnGrid } from '../../actions/cards';
-import { addRound, shiftTurn, editRound, listenRounds } from '../../actions/games';
+import { 
+	addRound, 
+	shiftTurn, 
+	editRound, 
+	listenRounds, 
+	editGame 
+} from '../../actions/games';
 
 //misc
 import { 
@@ -46,7 +52,8 @@ const mapDispatchToProps = dispatch => {
 		  setCardsOnGrid,
 		  toggleLoadingOverlay,
 		  editRound,
-		  listenRounds
+		  listenRounds,
+		  editGame
 		},
 		dispatch
 	 )
@@ -77,9 +84,9 @@ class GridPage extends React.Component {
 			activeRound = bool(activeRound) ? activeRound[0] : null;
 			this.setState({ activeRound: activeRound });
 
-			if(prevProps.rounds.alias !== this.props.rounds.alias){
+			if(this.props.rounds || (prevProps.rounds.alias !== this.props.rounds.alias)){
 				const diff = difference(prevProps.rounds.alias, this.props.rounds.alias);
-				this.updateNewAlias(diff);
+				this.updateNewAlias(diff, this.props.rounds.alias);
 			}
 		}
 	}
@@ -160,10 +167,18 @@ class GridPage extends React.Component {
 	}
 
 	pickTeam(cards){
+		const { gameDetails } = this.props;
 		const team = randomNumber(2) + 1;
 		this.props.shiftTurn(team);
-		this.setState({ initProgress: 75 });
-		this.initRound(cards, team);
+		this.props.editGame(gameDetails.id, {
+			...gameDetails,
+			turnOf: team
+		}).then(doc => {
+			if(isResType(doc)){
+				this.setState({ initProgress: 75 });
+				this.initRound(cards, team);
+			}
+		});
 	}
 
 	pickLeader(team){
@@ -214,8 +229,9 @@ class GridPage extends React.Component {
 	}
 
 	selectCard = (data) => {
-		const { turnOf, shiftTurn, editRound, gameDetails } = this.props;
+		const { shiftTurn, editRound, gameDetails } = this.props;
 		const { activeRound, newAlias } = this.state;
+		const turnOf = gameDetails ? gameDetails.turnOf : null;
 		const isTeam = data.type.indexOf('team') !== -1;
 		const cardOf = isTeam ? isTeam.split('team')[1] : null;
 		const oppTeam = turnOf === 1 ? 2 : 1;
@@ -283,8 +299,9 @@ class GridPage extends React.Component {
 	}
 
   render() {
-  	const { turnOf } = this.props;
+  	const { gameDetails } = this.props;
   	const { activeRound, newAlias } = this.state;
+  	const turnOf = gameDetails ? gameDetails.turnOf : null;
   	const gridReady = bool(activeRound) && bool(activeRound.playing_cards);
   	const cxPage = gridReady ? '--ingame': '';
   	const waitingForAlias = gridReady	&& !bool(newAlias);
@@ -302,7 +319,7 @@ class GridPage extends React.Component {
 						</div>
 					}
 				</div>
-				<ModalAliasLoading show={waitingForAlias}/>
+				<ModalAliasLoading show={waitingForAlias} team={turnOf}/>
 				{ gridReady ?
 					<Footer newAlias={newAlias} /> : ''
 				}

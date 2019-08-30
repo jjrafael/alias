@@ -20,7 +20,7 @@ class TextInput extends React.Component {
     }
     
   	return (
-      <div className="input__wrapper group">
+      <div className="input__wrapper inputwrap__textbox group">
         {showLabel &&
           <h4 className="input__label">{label || id}</h4>
         }

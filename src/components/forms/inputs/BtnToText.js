@@ -44,9 +44,9 @@ class BtnToText extends React.Component {
       input: `${className || ''} ${disabled ? 'disabled' : ''}`
     }
   	return (
-      <div className="btn-to-field">
+      <div className="btn-to-field inputwrap__btntofield">
         { showField ?
-          <div className="input__wrapper group fade-in">
+          <div className="input__wrapper inputwrap__textbox group fade-in">
             {showLabel &&
               <h4 className="input__label">{label || id}</h4>
             }

@@ -4,6 +4,7 @@ import React from 'react';
 import TextInput from './text';
 import BtnToText from './BtnToText';
 import ToggleBtn from './ToggleBtn';
+import Quantity from './Quantity';
 
 class Input extends React.Component {
   render(){
@@ -19,6 +20,9 @@ class Input extends React.Component {
   		break;
   		case 'togglebtn':
   			input = <ToggleBtn {...this.props}/>
+  		break;
+  		case 'quantity':
+  			input = <Quantity {...this.props}/>
   		break;
   		default:
   			input = <TextInput {...this.props}/>

@@ -44,7 +44,7 @@ class ToggleBtn extends React.Component {
     }
 
   	return (
-      <div className="input__wrapper group">
+      <div className="input__wrapper inputwrap__togglebtn group">
         <div className={`input input__togglebtn ${cx.input} ${cx.active}`} onClick={this.toggle.bind(this)}>
           <div className="toggle__btn-wrapper">
             <div className="toggle__btn">{btnLabel || ''}</div>
