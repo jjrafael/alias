@@ -40,18 +40,34 @@ class HomeFooter extends React.Component {
 		}
 	}
 
+	componentDidMount(){
+		const { newAlias } = this.props;
+		this.updateAlias(newAlias);
+	}
+
 	componentDidUpdate(prevProps){
-			if(prevProps.alias !== this.props.alias){
-					this.setState({
-						footOptions: {
-							...this.state.footOptions,
-							main: {
-								...this.state.footOptions.main,
-								text: this.props.alias.text || '...'
-							}
-						}
-					})
+		if(prevProps.newAlias !== this.props.newAlias){
+			this.updateAlias(this.props.newAlias);
+		}
+	}
+
+	updateAlias(alias) {
+		const text = alias ? alias.alias : (
+			<div className="loading-dots">
+				<i>.</i>
+				<i>.</i>
+				<i>.</i>
+			</div>
+		);
+		const footOptions = {
+			...this.state.footOptions,
+			main: {
+				...this.state.footOptions.main,
+				text
 			}
+		}
+		console.log('jj alias: ', alias, text, footOptions);
+		this.setState({ footOptions });
 	}
 
   render() {

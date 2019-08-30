@@ -11,8 +11,8 @@ import Board from '../common/Board';
 import { listenGame, listenRounds, editRound } from '../../actions/games';
 
 //misc
-import { bool, getNow } from '../../utils';
-import { getActiveRound } from '../../utils/game';
+import { bool, getNow, isResType, makeId } from '../../utils';
+import { getActiveRound, getTeamNumber } from '../../utils/game';
 import inGameAlias from '../../config/formData/inGameAlias';
 
 const mapStateToProps = state => {return {
@@ -74,25 +74,33 @@ class LeaderPage extends React.Component {
 	}
 
 	submitForm = (formData) => {
-		const { team, gameDetails, editRound } = this.props;
+		const { team, gameDetails, editRound, rounds } = this.props;
 		const { alias, activeRound } = this.state;
-		const teamNumber = team ? team.team_number : null;
+		const teamNumber = getTeamNumber(team, true);
 		const teamData = activeRound && teamNumber ? activeRound[`team${teamNumber}`] : null;
+		const oldAlias = alias.map(d => {return {...d, new: false}});
 		const data = {
 			...formData,
 			created_time: getNow(),
 			created_by_member: teamData ? teamData.leader : 'anyone',
+			new: true,
+			team_number: teamNumber,
+			id: makeId(10, true)
 		}
-
+		const roundData = {
+			...activeRound,
+			alias: [ ...activeRound.alias, data ]
+		}
+		const roundsData = rounds.map(d => {
+			return d.id === activeRound.id ? roundData : d;
+		});
+		
 		this.setState({
-			alias: [...alias, data],
+			alias: [...oldAlias, data],
 		});
 
 		if(bool(data)){
-			editRound(gameDetails.id, activeRound.id, {
-				...activeRound,
-				alias: [ ...activeRound.alias, data ]
-			});
+			editRound(gameDetails.id, activeRound.id, roundData, roundsData);
 		}
 	}
 

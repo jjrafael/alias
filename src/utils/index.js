@@ -59,16 +59,18 @@ export function isResType(res, type = 'success') {
 	return res && res.type.indexOf(suffix) !== -1;
 }
 
-export function makeId(length=6) {
-   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789?!@';
-   const charsLen = chars.length;
-   let result = '';
+export function makeId(length=6, noSpecial) {
+	const special = '?!@';
+	const alphaNum = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	const chars = noSpecial ? alphaNum : alphaNum+special;
+	const charsLen = chars.length;
+	let result = '';
 
-   for ( var i = 0; i < length; i++ ) {
-      result += chars.charAt(Math.floor(Math.random() * charsLen));
-   }
+	for ( var i = 0; i < length; i++ ) {
+	  result += chars.charAt(Math.floor(Math.random() * charsLen));
+	}
 
-   return result;
+	return result;
 }
 
 export function randomIndexArray(indexLen, length=10, sourceLen) {

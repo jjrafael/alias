@@ -9,7 +9,8 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       data,
       shouldCallAPI = () => true,
       listenData = {},
-      payload = {}
+      payload = {},
+      overPayload,
     } = action;
     const { disableAPI, readOnlyAPI } = config;
     const writeMethods = ['set', 'add', 'delete', 'update'];
@@ -69,7 +70,7 @@ export default function callAPIMiddleware({ dispatch, getState }) {
           Object.assign({}, payload, {
             response: snapshotVal,
             type: successType,
-            payload: data
+            payload: overPayload || data
           })
         )
 
@@ -80,7 +81,7 @@ export default function callAPIMiddleware({ dispatch, getState }) {
           Object.assign({}, payload, {
             response: snapshot,
             type: successType,
-            payload: data
+            payload: overPayload || data
           })
         )
       })
@@ -100,7 +101,7 @@ export default function callAPIMiddleware({ dispatch, getState }) {
           Object.assign({}, payload, {
             response: res,
             type: successType,
-            payload: data
+            payload: overPayload || data
           })
         )
       }).catch((error) => {

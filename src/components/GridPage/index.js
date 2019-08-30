@@ -29,7 +29,7 @@ import {
 	isResType,
 	getNow,
 } from '../../utils';
-import { getActiveRound } from '../../utils/game';
+import { getActiveRound, getTeamNumber } from '../../utils/game';
 
 const mapStateToProps = state => {return {
 	settings: state.app.settings,
@@ -78,22 +78,22 @@ class GridPage extends React.Component {
 		}
 	}
 
-	componentDidUpdate(prevProps){
+	componentDidUpdate(prevProps, prevState){
 		if(prevProps.rounds !== this.props.rounds){
 			let activeRound = getActiveRound(this.props.rounds);
 			activeRound = bool(activeRound) ? activeRound[0] : null;
 			this.setState({ activeRound: activeRound });
+		}
 
-			if(this.props.rounds || (prevProps.rounds.alias !== this.props.rounds.alias)){
-				const diff = difference(prevProps.rounds.alias, this.props.rounds.alias);
-				this.updateNewAlias(diff, this.props.rounds.alias);
-			}
+		if(prevState.activeRound !== this.state.activeRound){
+			this.updateNewAlias(this.state.activeRound ? this.state.activeRound.alias : []);
 		}
 	}
 
-	updateNewAlias(diff, newData){
-		const data = !bool(newData) ? null : (bool(diff) ? diff[0] : this.state.newAlias);
-		this.setState({ newAlias: data });
+	updateNewAlias(data){
+		const arr = bool(data) ? data.filter(d => d.new) : [];
+		const alias = bool(arr) ? arr[0] : null;
+		this.setState({ newAlias: alias });
 	}
 
 	shufflePlayingCards() {
@@ -207,15 +207,14 @@ class GridPage extends React.Component {
 				score: 0,
 				violations: 0,
 				leader: team1Leader ? team1Leader.id : 'anyone',
-				alias: []
 			},
 			team2: {
 				score: 0,
 				violations: 0,
 				leader: team2Leader ? team2Leader.id : 'anyone',
-				alias: []
 			},
 			status: 'active',
+			alias: [],
 			created_time: getNow(),
 		}
 
@@ -233,7 +232,7 @@ class GridPage extends React.Component {
 		const { activeRound, newAlias } = this.state;
 		const turnOf = gameDetails ? gameDetails.turnOf : null;
 		const isTeam = data.type.indexOf('team') !== -1;
-		const cardOf = isTeam ? isTeam.split('team')[1] : null;
+		const cardOf = isTeam ? data.type.split('team')[1] : null;
 		const oppTeam = turnOf === 1 ? 2 : 1;
 		const isCorrect = turnOf === cardOf;
 		const teamKey = isCorrect ? `team${turnOf}` :  `team${oppTeam}`;

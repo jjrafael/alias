@@ -94,7 +94,7 @@ class CardsBoard extends React.Component {
       this.setState({ 
         cards: [...this.state.cards, {
           ...formData,
-          id: makeId()
+          id: makeId(10, true)
         }]
       });
     }

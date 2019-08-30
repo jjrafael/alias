@@ -254,7 +254,7 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 roundLoading: false,
-                rounds: action.response.data,
+                rounds: action.payload,
                 roundError: false,
             }
         case game.EDIT_ROUND_FAILURE:

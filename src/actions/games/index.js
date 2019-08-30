@@ -102,7 +102,7 @@ export function addRound(id, roundId, data) {
     }
 }
 
-export function editRound(id, roundId, data) {
+export function editRound(id, roundId, data, rounds) {
     const ref = baseURL.games.doc(id).collection('rounds').doc(roundId);
     return {
         types: [
@@ -112,6 +112,7 @@ export function editRound(id, roundId, data) {
         ],
         method: 'set',
         data,
+        overPayload: rounds,
         callRef: ref,
     }
 }
