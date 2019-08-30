@@ -12,7 +12,7 @@ class ModalAliasLoading extends React.Component {
         'Tagal mo uy!',
         'Ano na?',
         'Petsa na boi',
-        'Still there team leader?',
+        'Still there, team leader?',
         'Psst! Poke your team leader',
         'Still waiting',
         'Siya nga nahintay ko, ikaw pa kaya...',

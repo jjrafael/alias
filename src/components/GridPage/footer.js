@@ -66,7 +66,7 @@ class HomeFooter extends React.Component {
 				text
 			}
 		}
-		console.log('jj alias: ', alias, text, footOptions);
+		
 		this.setState({ footOptions });
 	}
 

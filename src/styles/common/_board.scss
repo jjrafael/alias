@@ -50,6 +50,7 @@
 .board.--bar {
 	padding: 0px;
 	max-width: 500px;
+	min-width: 400px;
 	display: block;
 	.board-child {
 		padding: 15px;
@@ -78,6 +79,10 @@
     flex-wrap: wrap;
     &__card {
     	margin: 0px 10px!important;
+    }
+    &.--bar {
+    	max-width: 100%;
+		  min-width: 50px;
     }
 	}
 }

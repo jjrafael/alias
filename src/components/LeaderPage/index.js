@@ -11,7 +11,7 @@ import Board from '../common/Board';
 import { listenGame, listenRounds, editRound } from '../../actions/games';
 
 //misc
-import { bool, getNow, isResType, makeId } from '../../utils';
+import { bool, getNow, makeId } from '../../utils';
 import { getActiveRound, getTeamNumber } from '../../utils/game';
 import inGameAlias from '../../config/formData/inGameAlias';
 
@@ -45,6 +45,7 @@ class LeaderPage extends React.Component {
 			pending: false,
 			alias: [],
 			showDeathCard: true,
+			isWaiting: false,
 		}
 	}
 
@@ -70,6 +71,12 @@ class LeaderPage extends React.Component {
 		if(prevState.activeRound !== this.state.activeRound){
 			const alias = this.state.activeRound ? this.state.activeRound.alias : [];
 			this.setState({ alias });
+		}
+
+		if(prevState.alias !== this.state.alias){
+			const hadNew = bool(prevState.alias.filter(d => d.new));
+			const noNew = !bool(this.state.alias.filter(d => d.new));
+			this.setState({ pending: !(hadNew && noNew) });
 		}
 	}
 
@@ -101,6 +108,7 @@ class LeaderPage extends React.Component {
 
 		if(bool(data)){
 			editRound(gameDetails.id, activeRound.id, roundData, roundsData);
+			this.setState({ pending: true });
 		}
 	}
 
@@ -158,7 +166,7 @@ class LeaderPage extends React.Component {
   	}
   	const msg = {
   		msgNoRound: 'Preparing Game...',
-  		msgPending: 'Waiting for answer puuuu...',
+  		msgPending: 'Waiting for answer...',
   		msgNotTurn: 'Opponent team\'s turn',
   	}
   	const showEl = {

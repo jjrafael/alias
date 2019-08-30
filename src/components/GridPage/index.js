@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { shuffle, difference } from 'lodash';
+import { shuffle } from 'lodash';
 
 //Components
 import Footer from './footer';
@@ -29,7 +29,7 @@ import {
 	isResType,
 	getNow,
 } from '../../utils';
-import { getActiveRound, getTeamNumber } from '../../utils/game';
+import { getActiveRound } from '../../utils/game';
 
 const mapStateToProps = state => {return {
 	settings: state.app.settings,
@@ -87,6 +87,13 @@ class GridPage extends React.Component {
 
 		if(prevState.activeRound !== this.state.activeRound){
 			this.updateNewAlias(this.state.activeRound ? this.state.activeRound.alias : []);
+		}
+
+		if(prevProps.turnOf !== this.props.turnOf && this.props.gameDetails){
+			this.editGame(this.props.gameDetails.id, {
+				...this.props.gameDetails,
+				turnOf: this.props.turnOf
+			})
 		}
 	}
 
@@ -228,15 +235,18 @@ class GridPage extends React.Component {
 	}
 
 	selectCard = (data) => {
-		const { shiftTurn, editRound, gameDetails } = this.props;
+		const { shiftTurn, editRound, gameDetails, rounds } = this.props;
 		const { activeRound, newAlias } = this.state;
 		const turnOf = gameDetails ? gameDetails.turnOf : null;
 		const isTeam = data.type.indexOf('team') !== -1;
 		const cardOf = isTeam ? data.type.split('team')[1] : null;
 		const oppTeam = turnOf === 1 ? 2 : 1;
-		const isCorrect = turnOf === cardOf;
-		const teamKey = isCorrect ? `team${turnOf}` :  `team${oppTeam}`;
-		const aliasToBeDone = newAlias.left === 1;
+		const isCorrect = turnOf === Number(cardOf);
+		const teamKey = isCorrect ? `team${turnOf}` : `team${oppTeam}`;
+		const aliasToBeDone = !newAlias.left || newAlias.left === 1;
+		const updAlias = aliasToBeDone ?
+			activeRound.alias.map(d => {return {...d, new: false }})
+			: activeRound.alias;
 		let score = activeRound[teamKey].score + 1;
 		let newHistory = {
 				forAlias: newAlias,
@@ -245,8 +255,20 @@ class GridPage extends React.Component {
 				correct: isCorrect,
 		}
 
+		const roundData = {
+			...activeRound,
+			alias: updAlias,
+			[teamKey]: {
+				...activeRound[teamKey], score
+			}
+		}
+
+		const roundsData = rounds.map(d => {
+			return d.id === activeRound.id ? roundData : d;
+		});
+
 		if(!isCorrect){
-			shiftTurn();
+			shiftTurn(oppTeam);
 		}
 
 		this.setState({
@@ -256,16 +278,11 @@ class GridPage extends React.Component {
 			],
 			newAlias: aliasToBeDone	? null : {
 				...this.state.newAlias,
-				left: this.state.newAlias.left - 1
+				left: this.state.newAlias.left ? this.state.newAlias.left - 1 : 0
 			}
 		})
-		// editRound(gameDetails.id, activeRound.id, {
-		// 	...activeRound,
-		// 	turn_of: isCorrect ? turnOf : oppTeam,
-		// 	[teamKey]: {
-		// 	...activeRound[teamKey], score
-		// }
-		// })
+
+		editRound(gameDetails.id, activeRound.id, roundData , roundsData);
 	}
 
 	renderGrid() {

@@ -35,12 +35,13 @@
 /*responsiveness*/
 
 @include mobile {
-	.leader-page {
+	.leader-page, .leader-page.--hasBoard {
 		align-items: unset;
 		justify-content: unset;
 		.page-inner {
 			padding: 20px;
 			margin-top: 0px;
+			width: 100%;
 		}
 		.board, .board.active {
 			width: 100%;

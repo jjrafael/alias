@@ -1,4 +1,3 @@
-import { unionBy } from 'lodash';
 import constants from '../constants';
 
 const initialState = {
@@ -269,12 +268,11 @@ export default function Game(state = initialState, action) {
                 roundLoading: true,
             }
         case game.LISTEN_ROUNDS_SUCCESS:
-            const LISTEN_ROUNDS_val = unionBy(state.rounds, action.response, 'id')
             return {
                 ...state,
                 roundLoading: false,
                 roundError: false,
-                rounds: LISTEN_ROUNDS_val
+                rounds: action.response
             }
         case game.LISTEN_ROUNDS_FAILURE:
             return {
