@@ -72,34 +72,6 @@ export function listenGame(id) {
     }
 }
 
-export function pauseGame(id, data) {
-    const ref = baseURL.games.doc(id);
-    return {
-        types: [
-            constants.PAUSE_GAME_REQUEST,
-            constants.PAUSE_GAME_SUCCESS,
-            constants.PAUSE_GAME_FAILURE
-        ],
-        method: 'set',
-        data,
-        callRef: ref,
-    }
-}
-
-export function resumeGame(id, data) {
-    const ref = baseURL.games.doc(id);
-    return {
-        types: [
-            constants.RESUME_GAME_REQUEST,
-            constants.RESUME_GAME_SUCCESS,
-            constants.RESUME_GAME_FAILURE
-        ],
-        method: 'set',
-        data,
-        callRef: ref,
-    }
-}
-
 // ROUNDS
 export function addRound(id, roundId, data) {
     const ref = baseURL.games.doc(id).collection('rounds').doc(roundId);
@@ -185,6 +157,18 @@ export function clearRdxGame() {
 export function setIsCustom() {
     return {
         type: constants.SET_IS_CUSTOM,
+    }
+}
+
+export function pauseGame() {
+    return {
+        type: constants.PAUSE_GAME,
+    }
+}
+
+export function resumeGame() {
+    return {
+        type: constants.RESUME_GAME,
     }
 }
 

@@ -165,6 +165,7 @@ class HomePage extends React.Component {
 			name: formData.name,
 			total_score: 0,
 			total_violations: 0,
+			trophies: 0,
 			game_key: makeId(),
 			created_by: user.id,
 			created_time: getNow(),
@@ -227,7 +228,7 @@ class HomePage extends React.Component {
 		}
 		
 		return (
-			<div className="col" data-team={teamNumber}>
+			<div className="col">
 				{ !showEl.form ?
 					<div className="col-header group">
 						<div className="heading-wrapper">

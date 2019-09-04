@@ -11,6 +11,7 @@ import Button from '../common/Button';
 import { toggleLoadingOverlay, toggleRoundWinnerModal } from '../../actions/app';
 import { addRound, editGame, shiftTurn } from '../../actions/games';
 import { setCardsOnGrid } from '../../actions/cards';
+import { editTeam } from '../../actions/teams';
 
 //misc
 import { 
@@ -20,6 +21,7 @@ import {
   makeArrayFromIndexArray,
   randomIndexArray,
   isResType,
+  deleteLocalStorage
 } from '../../utils';
 import { getLastRound } from '../../utils/game';
 
@@ -47,7 +49,8 @@ const mapDispatchToProps = dispatch => {
       editGame,
       toggleRoundWinnerModal,
       toggleLoadingOverlay,
-      setCardsOnGrid
+      setCardsOnGrid,
+      editTeam
     },
     dispatch
   )
@@ -59,7 +62,8 @@ class ModalRoundWinner extends React.Component {
     this.state = {
       progress: 0,
       messages: [
-        'Good Job!',
+        'Good job!',
+        'Pa-milktea ka naman!',
         'Amazing!',
         'Fantastic',
         'Ikaw na!',
@@ -212,6 +216,46 @@ class ModalRoundWinner extends React.Component {
     });
   }
 
+  finishGame() {
+    const { gameDetails, show } = this.props;
+    const gameId = gameDetails.id;
+    const winTeam = this.props[`team${show.winner.team.team_number}`];
+    const loseTeam = this.props[`team${show.loser.team.team_number}`];
+    
+    this.props.shiftTurn(0);
+    this.props.toggleLoadingOverlay(true, 'Exiting Game...');
+    this.props.editGame(gameId, {
+      ...gameDetails,
+      game_winner: show.winner.team.id,
+      game_loser: show.loser.team.id,
+      game_winner_team: show.winner.team.team_number,
+      game_loser_team: show.loser.team.team_number,
+      status: 'end',
+    }).then(doc => {
+      if(isResType(doc)){
+        deleteLocalStorage('alias_gameId');
+      }
+    });
+
+    //winner
+    this.props.editTeam(winTeam.id, {
+      ...winTeam,
+      total_violations: 0,
+      total_score: 0,
+      trophies: (winTeam.trophies || 0) + 1
+    });
+
+    //loser
+    this.props.editTeam(loseTeam.id, {
+      ...loseTeam,
+      total_violations: 0,
+      total_score: 0,
+      trophies: loseTeam.trophies
+    });
+    
+    this.closeModal();
+  }
+
   render() {
     const { show } = this.props;
     const { messages } = this.state;
@@ -226,14 +270,24 @@ class ModalRoundWinner extends React.Component {
           size="l"
           id="roundWinner">
           <div className="modal__inner">
-            <div className="modal__body --body-only --center">
-              <h2>{winner.team.name || winner.team.team_number || ''}</h2>
-              <div className="msg__round-result">
-                Congratulations! {msg}
+            { show.isWinningScore ? 
+              <div className="modal__body --body-only --center">
+                <h2>{winner.team.name || winner.team.team_number || ''}</h2>
+                <div className="msg__round-result">
+                  Our Winner!
+                </div>
+                <div className="trophy-wrapper"></div>
+                <Button text="Exit Game" className="--primary" onClick={() => this.finishGame()}/>
+              </div> :
+              <div className="modal__body --body-only --center">
+                <h2>{winner.team.name || winner.team.team_number || ''}</h2>
+                <div className="msg__round-result">
+                  Congratulations! {msg}
+                </div>
+                <div className="trophy-wrapper"></div>
+                <Button text="Next Round!" className="--primary" onClick={() => this.shufflePlayingCards()}/>
               </div>
-              <div className="trophy-wrapper"></div>
-              <Button text="Next Round!" className="--primary" onClick={() => this.shufflePlayingCards()}/>
-            </div>
+            }
           </div>
         </Modal>
       );

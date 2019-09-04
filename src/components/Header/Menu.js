@@ -11,6 +11,7 @@ import {
 	toggleEnterCodeModal,
 	toggleQuitGameModal
 } from '../../actions/app';
+import { pauseGame } from '../../actions/games';
 
 //misc
 import menu from '../../config/menu';
@@ -28,7 +29,8 @@ const mapDispatchToProps = dispatch => {
 			toggleResetTeamModal,
 			toggleRestartGameModal,
 			toggleEnterCodeModal,
-			toggleQuitGameModal
+			toggleQuitGameModal,
+			pauseGame
     },
     dispatch
   )
@@ -82,6 +84,7 @@ class Menu extends React.Component {
 
 	clickMenu(data) {
 		switch(data.id) {
+			//mdoal
 			case 'sign_out':
 				this.props.toggleSignOutModal(true);
 			break;
@@ -99,6 +102,11 @@ class Menu extends React.Component {
 			break;
 			case 'quit_game':
 				this.props.toggleQuitGameModal(true);
+			break;
+
+			//func
+			case 'pause_game':
+				this.props.pauseGame();
 			break;
 			default:
 			break;

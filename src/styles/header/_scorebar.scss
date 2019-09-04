@@ -57,18 +57,31 @@
     margin: 0px 10px;
 	}
 	&__trophies {
-		float: 	left;
-		width: auto;
+		display: flex;
+		flex-direction: row;
 		height: 25px;
 		$color: $midnight;
-
+		.icon {
+	    width: 20px;
+	    height: 25px;
+	    float: left;
+	    background: #00000036;
+	    margin: 2px 2px 0px 2px;
+	    background: $black-10;
+		}
 	}
 	&__violations {
-		float: 	left;
-		width: auto;
+		display: flex;
+		flex-direction: row;
 		height: 25px;
 		color: $coral;
-		font-size: $fs-xxs;
-		text-transform: uppercase;
+		.icon {
+	    width: 20px;
+	    height: 25px;
+	    float: left;
+	    background: #00000036;
+	    margin: 2px 2px 0px 2px;
+	    background: $red-10;
+		}
 	}
 }

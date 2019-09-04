@@ -167,3 +167,40 @@
 		margin-top: 0px;
 	}
 }
+
+.pauseGame-wrap {
+	@include gradient-summer(45deg, 0.5);
+}
+
+#pauseGame {
+	font-size: $fs-s;
+	.modal-card {
+		@include center-flex();
+		&.--back {
+			background: $midnight;
+			position: relative;
+			color: $aqua;
+			&:after {
+				content: '';
+				position: absolute;
+				top: 15px;
+				left: 15px;
+				@include sq(calc(100% - 30px));
+				border: 1px solid $aqua;
+				border-radius: 10px;
+			};
+		}
+		&.--front .modal__body {
+			padding-top: 0px;
+		}
+		&[data-team="1"] {
+			color: $chrome;
+			&:after {
+				border-color: $chrome;
+			};
+		}
+	}
+	.modal__body {
+		margin-top: 0px;
+	}
+}

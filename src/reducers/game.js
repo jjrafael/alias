@@ -114,47 +114,6 @@ export default function Game(state = initialState, action) {
                 restartError: true,
             }
 
-        //PAUSE GAME
-        case game.PAUSE_GAME_REQUEST:
-            return {
-                ...state,
-                gameLoading: true,
-                isPause: true,
-            }
-        case game.PAUSE_GAME_SUCCESS:
-            return {
-                ...state,
-                gameLoading: false,
-                gameError: false,
-            }
-        case game.PAUSE_GAME_FAILURE:
-            return {
-                ...state,
-                gameLoading: false,
-                isPause: false,
-                gameError: true,
-            }
-
-        //RESUME GAME
-        case game.RESUME_GAME_REQUEST:
-            return {
-                ...state,
-                gameLoading: true,
-            }
-        case game.RESUME_GAME_SUCCESS:
-            return {
-                ...state,
-                gameLoading: false,
-                isPause: false,
-                gameError: false,
-            }
-        case game.RESUME_GAME_FAILURE:
-            return {
-                ...state,
-                gameLoading: false,
-                gameError: true,
-            }
-
         //READ GAME
         case game.READ_GAME_REQUEST:
             return {
@@ -400,6 +359,16 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 rounds: [],
+            }
+        case game.PAUSE_GAME:
+            return {
+                ...state,
+                isPause: true
+            }
+        case game.RESUME_GAME:
+            return {
+                ...state,
+                isPause: false
             }
 
         //SIGNOUT

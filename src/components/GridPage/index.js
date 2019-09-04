@@ -11,6 +11,7 @@ import ModalAliasLoading from '../modal/ModalAliasLoading';
 import ModalRoundWinner from '../modal/ModalRoundWinner';
 import ModalQuitGame from '../modal/ModalQuitGame';
 import ModalRestartGame from '../modal/ModalRestartGame';
+import ModalPause from '../modal/ModalPause';
 
 // actions
 import { toggleLoadingOverlay, toggleRoundWinnerModal } from '../../actions/app';
@@ -21,7 +22,9 @@ import {
 	shiftTurn, 
 	editRound, 
 	listenRounds, 
-	editGame 
+	editGame,
+	pauseGame,
+	resumeGame
 } from '../../actions/games';
 
 //misc
@@ -46,6 +49,7 @@ const mapStateToProps = state => {return {
 	turnOf: state.game.turnOf,
 	gameDetails: state.game.gameDetails,
 	rounds: state.game.rounds,
+	isPause: state.game.isPause,
 	team1: state.team.team1,
 	team2: state.team.team2,
 	team1members: state.team.team1members,
@@ -67,7 +71,9 @@ const mapDispatchToProps = dispatch => {
 		  editRound,
 		  listenRounds,
 		  editGame,
-		  editTeam
+		  editTeam,
+		  pauseGame,
+		  resumeGame
 		},
 		dispatch
 	 )
@@ -102,6 +108,14 @@ class GridPage extends React.Component {
 				this.props.setPlayingDecks(arr);
 			}
 		}
+
+		if(gameDetails){
+			if(gameDetails.is_pause){
+				this.props.pauseGame();
+			}else{
+				this.props.resumeGame();
+			}
+		}
 	}
 
 	componentDidUpdate(prevProps, prevState){
@@ -124,6 +138,13 @@ class GridPage extends React.Component {
 				...this.props.gameDetails,
 				turnOf: this.props.turnOf
 			})
+		}
+
+		if(prevProps.isPause !== this.props.isPause && this.props.gameDetails){
+			this.props.editGame(this.props.gameDetails.id, {
+				...this.props.gameDetails,
+				is_pause: this.props.isPause
+			});
 		}
 	}
 
@@ -418,18 +439,22 @@ class GridPage extends React.Component {
 		const winKey = `team${winTeam}`;
 		const loseKey = `team${loseTeam}`;
 		const opponent = activeRound[loseKey];
+		const winTotalScore = this.props[winKey].total_score + 1;
+		const loseTotalScore = this.props[loseKey].total_score;
+		const isWinningScore = winTotalScore >= settings.winning_score;
 		let roundData = {};
 		let roundsData = [];
 		let result = {
 			winner: {
 				score: settings.cards_per_team,
-				team: this.props[`team${winTeam}`]
+				team: this.props[winKey]
 			},
 			loser: {
 				score: opponent.score,
-				team: this.props[`team${loseTeam}`]
+				team: this.props[loseKey]
 			},
-			isDeath: isDeath
+			isWinningScore,
+			isDeath
 		}
 
 		roundData = {
@@ -454,6 +479,7 @@ class GridPage extends React.Component {
 			isDeath: isDeath,
 			endRound: true,
 		});
+
 		this.props.shiftTurn(0);
 		setTimeout(() => {
 			this.setState({
@@ -462,20 +488,24 @@ class GridPage extends React.Component {
 				endRound: false,
 			});
 			this.props.toggleRoundWinnerModal(result);
-			this.props.shiftTurn(loseTeam);
+			
 			//winner
 			this.props.editTeam(this.props[winKey].id, {
 				...this.props[winKey],
-				total_score: this.props[winKey].total_score + 1,
+				total_score: winTotalScore,
 				total_violations: getTotalViolations(winTeam, rounds),
 			});
 
 			//loser
 			this.props.editTeam(this.props[loseKey].id, {
 				...this.props[loseKey],
-				total_score: this.props[loseKey].total_score,
+				total_score: loseTotalScore,
 				total_violations: getTotalViolations(loseTeam, rounds),
 			});
+
+			if(!isWinningScore){
+				this.props.shiftTurn(loseTeam);
+			}
 		}, isDeath ? 7000 : 0);
 	}
 
@@ -510,7 +540,7 @@ class GridPage extends React.Component {
 	}
 
   render() {
-  	const { gameDetails } = this.props;
+  	const { gameDetails, isPause } = this.props;
   	const { 
   		activeRound, 
   		newAlias, 
@@ -530,7 +560,8 @@ class GridPage extends React.Component {
   		roundEnded: !gridReady && endRound && !isDeath,
   		roundDied: !gridReady && endRound && isDeath,
   		footer: gridReady,
-  		aliasLoading: showWaitingModal
+  		modalAlias: showWaitingModal,
+  		modalPause: isPause,
   	}
   	
     return (
@@ -564,7 +595,10 @@ class GridPage extends React.Component {
 				<ModalRoundWinner result={roundEndResult}/>
 				<ModalQuitGame />
 				<ModalRestartGame />
-				{ showEl.aliasLoading ?
+				{ showEl.modalPause ?
+					<ModalPause resumeGame={this.props.resumeGame}/> : ''
+				}
+				{ showEl.modalAlias ?
 					<ModalAliasLoading show={waitingForAlias} team={turnOf}/> : ''
 				}
 		  </div>

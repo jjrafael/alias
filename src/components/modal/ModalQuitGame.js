@@ -65,24 +65,24 @@ class ModalQuitGame extends React.Component {
   }
 
   quitGame() {
-      const { gameDetails, team1, team2 } = this.props;
-      const gameId = gameDetails.id;
-      
-      this.props.toggleLoadingOverlay(true, 'Exiting Game...');
-      deleteLocalStorage('alias_gameId');
-      this.closeModal();
-      this.props.clearRounds();
-      this.props.deleteGame(gameId);
-      this.props.editTeam(team1.id, {
-        ...team1,
-        total_score: 0,
-        total_violations: 0
-      });
-      this.props.editTeam(team2.id, {
-        ...team2,
-        total_score: 0,
-        total_violations: 0
-      });   
+    const { gameDetails, team1, team2 } = this.props;
+    const gameId = gameDetails.id;
+    
+    this.props.toggleLoadingOverlay(true, 'Exiting Game...');
+    deleteLocalStorage('alias_gameId');
+    this.closeModal();
+    this.props.clearRounds();
+    this.props.deleteGame(gameId);
+    this.props.editTeam(team1.id, {
+      ...team1,
+      total_score: 0,
+      total_violations: 0
+    });
+    this.props.editTeam(team2.id, {
+      ...team2,
+      total_score: 0,
+      total_violations: 0
+    });   
   }
 
   render() {

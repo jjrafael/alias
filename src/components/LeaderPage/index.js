@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 //Components
-import Footer from './footer';
 import FormBox from '../forms/FormBox';
 import Board from '../common/Board';
 
@@ -162,6 +161,7 @@ class LeaderPage extends React.Component {
   	const gridReady = bool(rounds) && bool(cardsForTeam) && activeRound;
   	const teamNumber = team ? team.team_number : null;
   	const boardArr = this.composeBoardArr(cardsForTeam);
+  	const isPause = gameDetails && gameDetails.is_pause;
   	const notTurn = gameDetails && teamNumber ? (Number(turnOf) !== teamNumber) : false;
   	const cx = {
   		page: `${bool(boardArr) ? '--hasBoard' : ''}`,
@@ -171,13 +171,15 @@ class LeaderPage extends React.Component {
   		msgNoRound: 'Preparing Game...',
   		msgPending: 'Waiting for answer...',
   		msgNotTurn: 'Opponent team\'s turn',
+  		msgPause: 'Game Paused',
   	}
   	const showEl = {
   		board: gridReady,
-  		form: gridReady && !pendingAnswer && !notTurn,
+  		form: gridReady && !pendingAnswer && !notTurn && !isPause,
   		msgNoRound: !gridReady,
-  		msgPending: gridReady && pendingAnswer && !notTurn,
-  		msgNotTurn: gridReady && notTurn
+  		msgPending: gridReady && pendingAnswer && !notTurn && !isPause,
+  		msgNotTurn: gridReady && notTurn && !isPause,
+  		msgPause: gridReady && isPause
   	}
   	
     return (
@@ -197,6 +199,9 @@ class LeaderPage extends React.Component {
               formInfo={inGameAlias}/>
 						: ''
 					}
+					{ showEl.msgPause ?
+						msg.msgPause : ''
+					}
 					{ showEl.msgPending ?
 						msg.msgPending : ''
 					}
@@ -207,7 +212,6 @@ class LeaderPage extends React.Component {
 						msg.msgNotTurn : ''
 					}
 				</div>
-				<Footer/>
 		  </div>
     );
   }
