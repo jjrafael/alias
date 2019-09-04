@@ -6,13 +6,14 @@ import { bindActionCreators } from 'redux';
 import Footer from '../Footer';
 
 // actions
+import { toggleReportAliasModal } from '../../actions/app';
 
 const mapStateToProps = state => {return {}}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
 		{
-		  
+		  toggleReportAliasModal
 		},
 		dispatch
 	 )
@@ -29,7 +30,7 @@ class HomeFooter extends React.Component {
 				},
 				left: {
 					text: 'Report',
-					onClick: () => {},
+					onClick: this.reportAlias,
 				},
 				right: {
 					text: 'History',
@@ -81,6 +82,14 @@ class HomeFooter extends React.Component {
 		}
 		
 		this.setState({ footOptions });
+	}
+
+	reportAlias = () => {
+		const { newAlias } = this.props;
+
+		if(newAlias){
+			this.props.toggleReportAliasModal(true);
+		}
 	}
 
   render() {

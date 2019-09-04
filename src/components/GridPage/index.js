@@ -12,6 +12,7 @@ import ModalRoundWinner from '../modal/ModalRoundWinner';
 import ModalQuitGame from '../modal/ModalQuitGame';
 import ModalRestartGame from '../modal/ModalRestartGame';
 import ModalPause from '../modal/ModalPause';
+import ModalReportAlias from '../modal/ModalReportAlias';
 
 // actions
 import { toggleLoadingOverlay, toggleRoundWinnerModal } from '../../actions/app';
@@ -45,6 +46,7 @@ import {
 } from '../../utils/game';
 
 const mapStateToProps = state => {return {
+	showModalReportAlias: state.app.showModalReportAlias,
 	settings: state.app.settings,
 	turnOf: state.game.turnOf,
 	gameDetails: state.game.gameDetails,
@@ -434,11 +436,14 @@ class GridPage extends React.Component {
 	}
 
 	endRound(winTeam, loseTeam, isDeath){
-		const { settings, gameDetails, rounds } = this.props;
+		const { settings, gameDetails, rounds, cardsOnGrid } = this.props;
 		const { activeRound } = this.state;
 		const winKey = `team${winTeam}`;
 		const loseKey = `team${loseTeam}`;
 		const opponent = activeRound[loseKey];
+		const turnOf = gameDetails ? gameDetails.turnOf : null;
+		const teamCards = getCardsPerType(cardsOnGrid, `team${turnOf}`);
+		const cardsPerTeam = teamCards.length || settings.cards_per_team;
 		const winTotalScore = this.props[winKey].total_score + 1;
 		const loseTotalScore = this.props[loseKey].total_score;
 		const isWinningScore = winTotalScore >= settings.winning_score;
@@ -446,14 +451,14 @@ class GridPage extends React.Component {
 		let roundsData = [];
 		let result = {
 			winner: {
-				score: settings.cards_per_team,
+				score: cardsPerTeam,
 				team: this.props[winKey]
 			},
 			loser: {
 				score: opponent.score,
 				team: this.props[loseKey]
 			},
-			isWinningScore,
+			finish: isWinningScore,
 			isDeath
 		}
 
@@ -540,7 +545,7 @@ class GridPage extends React.Component {
 	}
 
   render() {
-  	const { gameDetails, isPause } = this.props;
+  	const { gameDetails, isPause, showModalReportAlias } = this.props;
   	const { 
   		activeRound, 
   		newAlias, 
@@ -561,7 +566,6 @@ class GridPage extends React.Component {
   		roundDied: !gridReady && endRound && isDeath,
   		footer: gridReady,
   		modalAlias: showWaitingModal,
-  		modalPause: isPause,
   	}
   	
     return (
@@ -579,12 +583,12 @@ class GridPage extends React.Component {
 					</div> : ''
 				}
 				{ showEl.roundEnded ?
-					<div className="start-round-wrapper">
+					<div className="end-round-wrapper">
 						<h4>Round just ended</h4>
 					</div> : ''
 				}
 				{ showEl.roundDied ?
-					<div className="start-round-wrapper">
+					<div className="death-wrapper">
 						<h4>You clicked Death!</h4>
 					</div> : ''
 				}
@@ -595,9 +599,10 @@ class GridPage extends React.Component {
 				<ModalRoundWinner result={roundEndResult}/>
 				<ModalQuitGame />
 				<ModalRestartGame />
-				{ showEl.modalPause ?
-					<ModalPause resumeGame={this.props.resumeGame}/> : ''
-				}
+				<ModalReportAlias turnOf={turnOf} newAlias={newAlias}/>
+				<ModalPause
+					resumeGame={this.props.resumeGame} 
+					show={isPause && !showModalReportAlias}/>
 				{ showEl.modalAlias ?
 					<ModalAliasLoading show={waitingForAlias} team={turnOf}/> : ''
 				}

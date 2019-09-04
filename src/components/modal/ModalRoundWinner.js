@@ -250,7 +250,7 @@ class ModalRoundWinner extends React.Component {
       ...loseTeam,
       total_violations: 0,
       total_score: 0,
-      trophies: loseTeam.trophies
+      trophies: loseTeam.trophies || 0
     });
     
     this.closeModal();
@@ -260,6 +260,7 @@ class ModalRoundWinner extends React.Component {
     const { show } = this.props;
     const { messages } = this.state;
     const winner = show ? show.winner : {};
+    const loser = show ? show.loser : {};
     const msg = messages[randomNumber(messages.length)];
     
     if(show){
@@ -270,11 +271,11 @@ class ModalRoundWinner extends React.Component {
           size="l"
           id="roundWinner">
           <div className="modal__inner">
-            { show.isWinningScore ? 
+            { show.finish ? 
               <div className="modal__body --body-only --center">
                 <h2>{winner.team.name || winner.team.team_number || ''}</h2>
                 <div className="msg__round-result">
-                  Our Winner!
+                  {show.isViolated ? loser.team.name+' reached violation limit' : 'Our Winner!'}
                 </div>
                 <div className="trophy-wrapper"></div>
                 <Button text="Exit Game" className="--primary" onClick={() => this.finishGame()}/>

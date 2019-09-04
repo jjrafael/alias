@@ -59,6 +59,7 @@ const initialState = {
     showModalEnterCode: false,
     showModalRoundWinner: false,
     showModalQuitGame: false,
+    showModalReportAlias: false,
 };
 
 export default function App(state = initialState, action) {
@@ -334,6 +335,11 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 showModalQuitGame: action.data,
+            }
+        case app.MODAL_TOGGLE_REPORT_ALIAS:
+            return {
+                ...state,
+                showModalReportAlias: action.data,
             }
 
         //SIGNOUT

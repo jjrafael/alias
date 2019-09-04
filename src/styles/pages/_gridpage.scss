@@ -15,6 +15,8 @@
 		width: 100%;
   	padding: 0px 20px;
 	}
+	.death-wrapper,
+	.end-round-wrapper,
 	.start-round-wrapper {
 		text-align: center;
 		.btn {
@@ -26,6 +28,12 @@
 		&.--pick-leader {
 	    float: unset;
     	margin-top: 20px;
+		}
+	}
+	&.--death {
+		@include gradient-soltice();
+		.death-wrapper {
+			color: $white;
 		}
 	}
 	&.--ingame {
@@ -203,4 +211,11 @@
 	.modal__body {
 		margin-top: 0px;
 	}
+}
+
+#boardReportReason {
+	min-width: 300px;
+  height: 220px;
+  margin-top: 20px;
+  text-align: left;
 }

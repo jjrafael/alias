@@ -14,7 +14,8 @@ class Board extends React.Component {
           <div
             key={i}
             className={cx} 
-            onClick={d.onClick}>
+            onClick={d.onClick
+              ? () => d.onClick(d.data) : () => {}}>
             {d.frontChildren}
           </div>
         )

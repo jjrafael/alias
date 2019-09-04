@@ -39,35 +39,39 @@ class ModalPause extends React.Component {
   }
 
   render() {
-    const { team } = this.props;
+    const { team, show } = this.props;
     const { displayMsg } = this.state;
     const cxFlipover = displayMsg ? '--flip-loop' : '';
 
-    return (
-      <Modal
-        className={`--flipping --flippable ${cxFlipover}`} 
-        cxOverlay="pauseGame-wrap"
-        size="s"
-        id="pauseGame">
-        <div className="modal-card --back" data-team={team}>
-          <div className="modal__inner">
-            <div className="modal__body --body-only --center">
-              {displayMsg}
+    if(show){
+      return (
+        <Modal
+          className={`--flipping --flippable ${cxFlipover}`} 
+          cxOverlay={`pauseGame-wrap`}
+          size="s"
+          id="pauseGame">
+          <div className="modal-card --back" data-team={team}>
+            <div className="modal__inner">
+              <div className="modal__body --body-only --center">
+                {displayMsg}
+              </div>
             </div>
           </div>
-        </div>
-        <div className={`modal-card --front`}>
-          <div className="modal__inner">
-            <div className="modal__body --no-header --text-only --center">
-              Game Paused
-            </div>
-            <div className="modal__footer --single-button">
-              <Button text="Resume" className="--plain" onClick={() => this.closeModal()}/>
+          <div className={`modal-card --front`}>
+            <div className="modal__inner">
+              <div className="modal__body --no-header --text-only --center">
+                Game Paused
+              </div>
+              <div className="modal__footer --single-button">
+                <Button text="Resume" className="--plain" onClick={() => this.closeModal()}/>
+              </div>
             </div>
           </div>
-        </div>
-      </Modal>
-    );
+        </Modal>
+      ); 
+    }else{
+      return <div className="modal--blank"></div>;
+    }
   }
 }
 

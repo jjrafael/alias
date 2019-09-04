@@ -184,6 +184,13 @@ export function toggleQuitGameModal(show) {
   }
 }
 
+export function toggleReportAliasModal(show) {
+  return {
+  	type: constants.MODAL_TOGGLE_REPORT_ALIAS,
+    data: show,
+  }
+}
+
 export function clearRdxApp() {
   return {
   	type: constants.CLEAR_STATES,
