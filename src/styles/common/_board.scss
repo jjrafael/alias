@@ -60,6 +60,14 @@
 		&:last-child {
 			border-bottom: 0px;
 		}
+		&.--team1.--revealed {
+			background: $chrome;
+			color: $black;
+		}
+		&.--team2.--revealed {
+			background: $aqua;
+			color: $black;
+		}
 		&.--death {
 			background: $coral;
 			color: $white;

@@ -10,7 +10,7 @@ import CardsBoard from './CardsBoard';
 
 // actions
 import { toggleLoadingOverlay } from '../../actions/app';
-import { addDeck, setPlayingDecks } from '../../actions/cards';
+import { addDeck, setPlayingDecks, browseDecks } from '../../actions/cards';
 
 //misc
 import { isResType, bool } from '../../utils';
@@ -25,6 +25,7 @@ const mapDispatchToProps = dispatch => {
 		{
 		  setPlayingDecks,
 		  addDeck,
+		  browseDecks,
 		  toggleLoadingOverlay
 		},
 		dispatch
@@ -47,6 +48,8 @@ class DecksPage extends React.Component {
 		if(bool(this.props.decks)){
 			this.setState({ decks: this.props.decks });
 			this.setSelectedDecks();
+		}else{
+			this.props.browseDecks();
 		}
 	}
 

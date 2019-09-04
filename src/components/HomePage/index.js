@@ -25,7 +25,9 @@ import {
 	getAllLocalStorage,
 	getResponse,
 	deleteLocalStorage,
-	pluralizeString
+	pluralizeString,
+	randomNumber, 
+	generateColor
 } from '../../utils';
 import avatars from '../../config/avatars';
 
@@ -155,6 +157,8 @@ class HomePage extends React.Component {
 		const { addTeam, user, appDetails } = this.props;
 		const { teamStatus } = this.state;
 		const appId = appDetails ? appDetails.id : null;
+		const r = randomNumber(50);
+		const i = randomNumber(r);
 		const data = {
 			status: 'inactive',
 			team_number: teamNumber,
@@ -164,7 +168,9 @@ class HomePage extends React.Component {
 			game_key: makeId(),
 			created_by: user.id,
 			created_time: getNow(),
-			app_id: appId
+			app_id: appId,
+			avatar: avatars[randomNumber(avatars.length)].id,
+			color: generateColor(r, i),
 		}
 		this.setState({ 
 			teamStatus: { ...teamStatus, [teamNumber]: 'adding'}
@@ -258,7 +264,7 @@ class HomePage extends React.Component {
 					}
 					{ showEl.teamCode ?
 						<div className="msg__connect-to-team">
-							Connect to Team Code:
+							Connect thru Team Code:
 							<h2>{team.game_key || '...'}</h2>
 						</div> : ''
 					}

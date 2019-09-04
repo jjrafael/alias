@@ -14,6 +14,7 @@ export const formInfo = {
 	    className: '--card-look --huge',
 	    extra: {
 	    	spellCheck: false,
+	    	autoComplete: 'false',
 	    }
 		},
 		{

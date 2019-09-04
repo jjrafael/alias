@@ -1,38 +1,18 @@
 import React from 'react';
-import { randomNumber } from '../../../utils';
 
 class DeckCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       reveal: false,
-      nuetralMessages: [
-        'Oh Sh!t',
-        'You sucks!',
-        'Bobo',
-        'Ampota!',
-        'That sucks',
-        'Next team!',
-        'Haynako',
-        'Gurl staph!',
-        'Pabebe amp',
-        'Kaya pa?',
-        'F na F, mali naman',
-        'Wrong!',
-        'Mali Gags',
-        'Huhubels',
-        'Magteamwork din minsan!',
-        'Kemengina'
-      ]
     }
   }
 
-  componentDidUpdate(prevProps){
-    if(prevProps.reveal !== this.props.reveal){
-      this.setState({ reveal: this.props.reveal });
+  componentDidMount(){
+    if(this.props.data.revealed){
+      this.setState({ reveal: true });
     }
   }
-
 
   revealCard(data){ 
     const { onClick } = this.props;
@@ -44,14 +24,12 @@ class DeckCard extends React.Component {
   }
 
   renderLayer(type, team){
-    const { nuetralMessages } = this.state;
-    const num = randomNumber(nuetralMessages.length);
     let html = null;
 
     if(type === 'none'){
       html = (
         <div className={`card-back__inner --${type}`}>
-          {nuetralMessages[num]}
+          Wrong!
         </div>
       )
     }else if(type === 'team1' || type === 'team2'){

@@ -1,6 +1,7 @@
 //Utility for common functionalities throughtout the project
 import moment from 'moment';
 import * as firebase from 'firebase';
+import { isNumber, isEmpty } from 'lodash';
 import { variables } from '../config';
 import colors from '../config/colorPalette';
 
@@ -16,18 +17,20 @@ export function getNow(isString) {
     return now;
 }
 
-export function bool(data, dataType) {
-	let bool = false;
+export function bool(data) {
+	return isNumber(data) && data === 0 ? true: !isEmpty(data);
+}
 
-	if(Array.isArray(data) || dataType === 'array'){
-		bool = !!data.length;
-	}else if(dataType === 'number'){
-		bool = data === 0 ? true : !!data;
-	}else{
-		bool = !!data;
-	}
+export function filter(arr, cond, onlyOne) {
+	let data = bool(arr) ? arr : [];
+	data = Array.isArray(data) ? data : [data];
+	data = data.filter(cond);
+	data = data.length > 1 ? data
+		: (bool(data) ? data[0]
+			: (onlyOne ? null : []));
+	data = onlyOne && data.length > 1 ? data[0] : data;
 
-	return bool;
+	return data;
 }
 
 export function getResponse(doc, cond) {
@@ -113,6 +116,84 @@ export function randomNumber(length=100) {
 
 export function pluralizeString(string, len){
 	return len > 1 ? string+'s' : string;
+}
+
+export function reduce(data, type, prop) {
+	let arr = [];
+	if(bool(data) && type){
+		if(type === 'accum'){
+			arr = data.reduce((accum, d) => {
+				const item = prop	? d[prop] : d;
+				return Array.isArray(accum) ? [...accum, item] : [item]
+			})
+		}else if(type === 'sum'){
+			arr = data.reduce((sum, d) => {
+				const item = prop ? d[prop] : 1;
+				return sum + item;
+			}, 0)
+		}else if(type === 'diff'){
+			arr = data.reduce((sum, d) => {
+				const item = prop ? d[prop] : 1;
+				return sum - item;
+			}, 0)
+		}
+	}
+
+	return arr;
+}
+
+// react method helpers
+export function compareUpdate(prev, next, operator, haveValue, extra){
+	const child = extra && extra.checkChild ? extra.checkChild : null;
+	const condition = extra && extra.condition ? extra.condition : null;
+	let result = false;
+
+	switch(operator){
+		case '!==':
+			result = prev !== next;
+		break;
+		case '===':
+			result = prev === next;
+		break;
+		default:
+			result = prev !== next;
+		break;
+	}
+
+	if(haveValue === 'both'){
+		result = result && bool(prev) && bool(next);
+	}else if(haveValue === 'prev'){
+		result = result && bool(prev);
+	}else if(haveValue === 'next'){
+		result = result && bool(next);
+	}else if(haveValue === 'either'){
+		result = result && (bool(prev) || bool(next));
+	}else if(haveValue === 'prev-only'){
+		result = result && (bool(prev) && !bool(next));
+	}else if(haveValue === 'next-only'){
+		result = result && (!bool(prev) && bool(next));
+	}else if(haveValue === 'none'){
+		result = result && (!bool(prev) && !bool(next));
+	}else{
+		result = result && (bool(prev) || bool(next));
+	}
+
+	if(condition){
+		result = result && ([condition.state][condition.prop] === condition.value);
+	}
+
+	if(child){
+		const isArray = Array.isArray(child.const);
+		const aprev = isArray && child.const.length === 3 ? prev[child.const[0]][child.const[1]][child.const[2]] :
+			(isArray && child.const.length === 2 ? prev[child.const[0]][child.const[1]] :
+			(isArray && child.const.length === 1 ? prev[child.const[0]] : prev[child.const]));
+		const anext = isArray && child.const.length === 3 ? next[child.const[0]][child.const[1]][child.const[2]] :
+			(isArray && child.const.length === 2 ? next[child.const[0]][child.const[1]] :
+			(isArray && child.const.length === 1 ? next[child.const[0]] : next[child.const]));
+		compareUpdate(aprev, anext, child.operator, child.haveValue, child.extra);
+	}
+
+	return result;
 }
 
 // dom manipulation

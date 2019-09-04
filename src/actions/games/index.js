@@ -42,6 +42,19 @@ export function editGame(id, data) {
     }
 }
 
+export function deleteGame(id) {
+    const ref = baseURL.games.doc(id);
+    return {
+        types: [
+            constants.DELETE_GAME_REQUEST,
+            constants.DELETE_GAME_SUCCESS,
+            constants.DELETE_GAME_FAILURE
+        ],
+        method: 'delete',
+        callRef: ref,
+    }
+}
+
 export function listenGame(id) {
     const ref = baseURL.games.doc(id);
     const listenData = {
@@ -117,16 +130,15 @@ export function editRound(id, roundId, data, rounds) {
     }
 }
 
-export function clearRounds(id) {
-    const ref = baseURL.games.doc(id).collection('rounds');
+export function deleteRounds(id) {
+    const ref = `/games/${id}/rounds`;
     return {
         types: [
-            constants.ADD_ROUND_REQUEST,
-            constants.ADD_ROUND_SUCCESS,
-            constants.ADD_ROUND_FAILURE
+            constants.DELETE_ROUNDS_REQUEST,
+            constants.DELETE_ROUNDS_SUCCESS,
+            constants.DELETE_ROUNDS_FAILURE
         ],
-        method: 'delete',
-        data: [],
+        method: 'deleteAll',
         callRef: ref,
     }
 }
@@ -173,5 +185,11 @@ export function clearRdxGame() {
 export function setIsCustom() {
     return {
         type: constants.SET_IS_CUSTOM,
+    }
+}
+
+export function clearRounds() {
+    return {
+        type: constants.CLEAR_ROUNDS,
     }
 }

@@ -42,7 +42,7 @@ class LeaderPage extends React.Component {
 			cardsForTeam: [],
 			activeRound: null,
 			deathCard: null,
-			pending: false,
+			pendingAnswer: false,
 			alias: [],
 			showDeathCard: true,
 			isWaiting: false,
@@ -60,8 +60,7 @@ class LeaderPage extends React.Component {
 
 	componentDidUpdate(prevProps, prevState){
 		if(prevProps.rounds !== this.props.rounds && this.props.rounds){
-			let activeRound = getActiveRound(this.props.rounds);
-			activeRound = bool(activeRound) ? activeRound[0] : null;
+			const activeRound = getActiveRound(this.props.rounds);
 			this.setState({ activeRound });
 			if(activeRound){
 				this.getCardsForTeam(activeRound.playing_cards);
@@ -74,9 +73,9 @@ class LeaderPage extends React.Component {
 		}
 
 		if(prevState.alias !== this.state.alias){
-			const hadNew = bool(prevState.alias.filter(d => d.new));
-			const noNew = !bool(this.state.alias.filter(d => d.new));
-			this.setState({ pending: !(hadNew && noNew) });
+			// const hadNew = bool(prevState.alias.filter(d => d.new));
+			const haveNew = bool(this.state.alias.filter(d => d.new));
+			this.setState({ pendingAnswer: haveNew && bool(this.state.alias) });
 		}
 	}
 
@@ -88,6 +87,8 @@ class LeaderPage extends React.Component {
 		const oldAlias = alias.map(d => {return {...d, new: false}});
 		const data = {
 			...formData,
+			count: formData.count ? Number(formData.count) : 1,
+			left: formData.count || 0,
 			created_time: getNow(),
 			created_by_member: teamData ? teamData.leader : 'anyone',
 			new: true,
@@ -108,7 +109,7 @@ class LeaderPage extends React.Component {
 
 		if(bool(data)){
 			editRound(gameDetails.id, activeRound.id, roundData, roundsData);
-			this.setState({ pending: true });
+			this.setState({ pendingAnswer: true });
 		}
 	}
 
@@ -123,7 +124,7 @@ class LeaderPage extends React.Component {
 			deathCard = data.filter(d => d.type === 'death');
 			deathCard = bool(deathCard) ? deathCard[0] : null; 
 		}
-
+			
 		this.setState({
 			cardsForTeam: cards,
 			deathCard,
@@ -143,9 +144,10 @@ class LeaderPage extends React.Component {
 		}
 
 		data.forEach(d => {
+			const cxRevealed = d.revealed ? '--revealed' : '';
 			arr.push({
 				...d,
-				className: '--'+d.type,
+				className: `--${d.type} ${cxRevealed}`,
 				frontChildren: d.text
 			})
 		})
@@ -154,12 +156,13 @@ class LeaderPage extends React.Component {
 	}
 
   render() {
-  	const { turnOf, rounds, gameDetails, team } = this.props;
-  	const { cardsForTeam, pending } = this.state;
-  	const gridReady = bool(rounds) && bool(cardsForTeam);
+  	const { rounds, gameDetails, team } = this.props;
+  	const { cardsForTeam, pendingAnswer, activeRound } = this.state;
+  	const turnOf = gameDetails ? gameDetails.turnOf : 0;
+  	const gridReady = bool(rounds) && bool(cardsForTeam) && activeRound;
   	const teamNumber = team ? team.team_number : null;
   	const boardArr = this.composeBoardArr(cardsForTeam);
-  	const notTurn = gameDetails && teamNumber ? (gameDetails.turnOf !== teamNumber) : false;
+  	const notTurn = gameDetails && teamNumber ? (Number(turnOf) !== teamNumber) : false;
   	const cx = {
   		page: `${bool(boardArr) ? '--hasBoard' : ''}`,
   		board: bool(boardArr) ? 'active' : ''
@@ -171,14 +174,14 @@ class LeaderPage extends React.Component {
   	}
   	const showEl = {
   		board: gridReady,
-  		form: gridReady && !pending && !notTurn,
+  		form: gridReady && !pendingAnswer && !notTurn,
   		msgNoRound: !gridReady,
-  		msgPending: gridReady && pending && !notTurn,
-  		msgNotTurn: gridReady && notTurn && !pending
+  		msgPending: gridReady && pendingAnswer && !notTurn,
+  		msgNotTurn: gridReady && notTurn
   	}
   	
     return (
-      <div className={`page-wrapper leader-page ${cx.page}`} data-team={turnOf}>
+      <div className={`page-wrapper leader-page ${cx.page}`} data-team={teamNumber}>
 				<div className="page-inner">
 					{showEl.board ? 
 						<Board

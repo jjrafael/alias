@@ -30,3 +30,7 @@
 .card-flip-up {
 	@include flip-up();
 }
+
+.shadow {
+	@include shadow();
+}

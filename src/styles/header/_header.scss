@@ -21,12 +21,12 @@ header {
 	&[data-team='1'] {
 		.scorebar[data-team='2'] {
 			width: 150px;
+			.scorebar__info {
+				display: none;
+			}
 		}
 		.scorebar[data-team='1'] {
 			width: calc(50% + calc(50% - 150px));
-		}
-		.scorebar__info {
-			display: none;
 		}
 		.header-center {
 			margin-left: calc(50% - 250px);
@@ -38,13 +38,14 @@ header {
 	&[data-team='2'] {
 		.scorebar[data-team='1'] {
 			width: 150px;
+			.scorebar__info {
+				display: none;
+			}
 		}
 		.scorebar[data-team='2'] {
 			width: calc(50% + calc(50% - 150px));
 		}
-		.scorebar__info {
-			display: none;
-		}
+		
 		.header-center {
 			margin-left: calc(-50% + 250px);
 			&:hover {

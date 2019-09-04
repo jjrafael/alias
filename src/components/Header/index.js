@@ -7,6 +7,7 @@ import ScoreBar from './ScoreBar';
 import Menu from './Menu';
 
 //misc
+import { getActiveRound, getCardsPerType } from '../../utils/game';
 import { bool } from '../../utils';
 
 const mapStateToProps = state => {
@@ -17,6 +18,7 @@ const mapStateToProps = state => {
     rounds: state.game.rounds,
     team1: state.team.team1,
     team2: state.team.team2,
+    cardsOnGrid: state.cards.cardsOnGrid,
   }
 }
 
@@ -35,28 +37,45 @@ class Header extends React.Component {
   }
 
   render() {
-    const { className, gameDetails, headerProps, team1, team2, settings, user, rounds } = this.props;
+    const { 
+      className, 
+      gameDetails, 
+      headerProps, 
+      team1, 
+      team2, 
+      settings, 
+      user, 
+      cardsOnGrid,
+      rounds 
+    } = this.props;
     const isTeam = user ? user.role === 'team' : false;
     const turnOf = gameDetails && !isTeam ? gameDetails.turnOf : '';
     const { timer } = this.state;
     const inGame = gameDetails && gameDetails.status === 'active';
+    const activeRound = getActiveRound(rounds);
     const team = {
       team1: {
         ...team1,
-        rounds: bool(rounds) ? rounds.map((acc, d) => d.rounds) : []
+        round: bool(activeRound) ? activeRound.team1 : {},
+        total_score: team1 ? team1.total_score : 0,
+        total_violations: team1 ? team1.total_violations : 0,
+        score_goal: getCardsPerType(cardsOnGrid, 'team1').length || settings.cards_per_team
       },
       team2: {
         ...team2,
-        rounds: bool(rounds) ? rounds.map((acc, d) => d.rounds) : []
+        round: bool(activeRound) ? activeRound.team2 : {},
+        total_score: team2 ? team2.total_score : 0,
+        total_violations: team2 ? team2.total_violations : 0,
+        score_goal: getCardsPerType(cardsOnGrid, 'team2').length || settings.cards_per_team
       }
     }
-
+    
     return (
       <header className={`app-header ${className || ''}`} data-team={turnOf}>
         { inGame && team1 && team2 &&
             <div>
-              <ScoreBar team={team.team1} settings={settings}/>
-              <ScoreBar team={team.team2} settings={settings}/>
+              <ScoreBar team={team.team1}/>
+              <ScoreBar team={team.team2}/>
               <div className="timerbar"></div>
             </div>
         }

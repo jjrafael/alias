@@ -36,6 +36,11 @@ const menu = {
 		id: 'pause_game',
 		label: 'Pause',
 		type: 'func'
+	},
+	quitGame: {
+		id: 'quit_game',
+		label: 'Exit Game',
+		type: 'modal'
 	}
 }
 
@@ -55,7 +60,7 @@ export const splashMenu = [
 export const inGridMenu = [
 	menu.restartGame,
 	menu.pauseGame,
-	menu.signOut,
+	menu.quitGame,
 	menu.about
 ]
 

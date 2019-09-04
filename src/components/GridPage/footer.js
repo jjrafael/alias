@@ -52,18 +52,31 @@ class HomeFooter extends React.Component {
 	}
 
 	updateAlias(alias) {
-		const text = alias ? alias.alias : (
-			<div className="loading-dots">
-				<i>.</i>
-				<i>.</i>
-				<i>.</i>
+		let html = null;
+
+		if(alias){
+			html = <div className="new-alias">
+				{alias.alias}
+				{alias.count && Number(alias.left) > 1 ?
+					<div className="count-tip">
+						{alias.left}
+					</div> : ''
+				}
 			</div>
-		);
+		}else{
+			html = <div className="loading-dots">
+				<div>.</div>
+				<div>.</div>
+				<div>.</div>
+				<div>.</div>
+			</div>
+		}
 		const footOptions = {
 			...this.state.footOptions,
 			main: {
 				...this.state.footOptions.main,
-				text
+				cx: alias ? '--new' : '',
+				text: html
 			}
 		}
 		

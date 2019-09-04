@@ -17,6 +17,17 @@
     overflow: hidden;
 }
 
+.loading-dots {
+	@include center-flex();
+	div {
+		transition: all 0.3s ease;
+		float: left;
+		padding: 0px 2px;
+		animation: sway-up 1.2s ease infinite;
+		@include delay-child-sequence(4);
+	}
+}
+
 /*responsiveness*/
 
 @include mobile {

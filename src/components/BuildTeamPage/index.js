@@ -7,7 +7,7 @@ import SingleForm from '../forms/SingleForm';
 import Board from '../common/Board';
 
 //actions
-import { addMember, editTeam, listenMembers } from '../../actions/teams';
+import { addMember, listenMembers } from '../../actions/teams';
 import { startGame, readGame } from '../../actions/games';
 import { listenApp, toggleLoadingOverlay } from '../../actions/app';
 
@@ -27,7 +27,6 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
 	{
 	  addMember,
-	  editTeam,
 	  startGame,
 	  listenMembers,
 	  listenApp,
@@ -136,7 +135,7 @@ class BuildTeamPage extends React.Component {
 
 	submitForm = (formData) => {
 		const { members, teamNumber } = this.state;
-		const { team, addMember } = this.props;
+		const { team, addMember, user } = this.props;
 		const { name } = formData;
 		const r = randomNumber(50);
 		const i = randomNumber(r);
@@ -144,9 +143,10 @@ class BuildTeamPage extends React.Component {
 		if(name && team){
 			const data = {
 				name,
-				avatar: avatars[randomNumber(10)].id,
+				avatar: avatars[randomNumber(avatars.length)].id,
 				color: generateColor(r, i),
 				created_time: getNow(true),
+				created_by: user.id
 			}
 			
 			this.setState({ members: [...members, data] });

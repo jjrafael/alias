@@ -30,6 +30,7 @@ class TextInput extends React.Component {
             className={`input input__textbox ${cx.input}`}
             type="text" 
             spellCheck={extra.spellCheck}
+            autoComplete={extra.autoComplete}
             placeholder={placeholder}
             value={value || ''} 
             readOnly={readOnly}
@@ -44,6 +45,7 @@ class TextInput extends React.Component {
             className={`input input__textbox ${cx.input}`}
             type={type || 'text'} 
             spellCheck={extra.spellCheck}
+            autoComplete={extra.autoComplete}
             placeholder={placeholder}
             value={value || ''} 
             readOnly={readOnly}

@@ -58,6 +58,10 @@ class HomeFooter extends React.Component {
 		}
 	}
 
+	getUserKey(members) {
+			return bool(members) ? members[0].created_by : '';
+	}
+
 	startGame = () => {
 		const { 
 			playingDecks, 
@@ -73,8 +77,14 @@ class HomeFooter extends React.Component {
 		const deckIds = bool(playingDecks) ? playingDecks.map(d => d.id) : [];
 		
 		if(teamCompleted){
+			const updApp = {
+				...appDetails,
+				team1_user_key: this.getUserKey(team1members),
+				team2_user_key: this.getUserKey(team2members)
+			}
 			const data = {
 				decks: deckIds,
+				game_name: 'alias',
 				game_key: 'g::'+makeId(),
 				game_loser: '',
 				game_winner: '',
@@ -91,7 +101,7 @@ class HomeFooter extends React.Component {
 			
 			this.props.startGame(data).then(doc => {
 				const id = doc.response.id;
-				this.props.editApp(appDetails.id, {...appDetails, current_game_id: id});
+				this.props.editApp(appDetails.id, {...updApp, current_game_id: id});
 			});
 		}
 	}

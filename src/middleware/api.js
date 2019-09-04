@@ -1,3 +1,4 @@
+import * as firebase from 'firebase';
 import config from '../config';
 
 export default function callAPIMiddleware({ dispatch, getState }) {
@@ -13,9 +14,10 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       overPayload,
     } = action;
     const { disableAPI, readOnlyAPI } = config;
-    const writeMethods = ['set', 'add', 'delete', 'update'];
+    const writeMethods = ['set', 'add', 'delete', 'update', 'deleteAll'];
     const changeTypes = ['added', 'modified', 'removed'];
     const listenMethods = ['listen','listenBrowse'];
+    const isWrite = writeMethods.indexOf(method) !== -1;
     const isListen = listenMethods.indexOf(method) !== -1;
     const { isColl, changeType, returnData } = listenData;
 
@@ -32,7 +34,7 @@ export default function callAPIMiddleware({ dispatch, getState }) {
       throw new Error('Expected an array of three string types.')
     }
 
-    if (!shouldCallAPI(getState()) || disableAPI || (readOnlyAPI && writeMethods.indexOf(method) !== -1)) {
+    if (!shouldCallAPI(getState()) || disableAPI || (readOnlyAPI && isWrite)) {
       return
     }
 
@@ -85,7 +87,59 @@ export default function callAPIMiddleware({ dispatch, getState }) {
           })
         )
       })
-      
+    }else if(method === 'deleteAll'){
+      const deleteFn = firebase.functions().httpsCallable('recursiveDelete');
+      deleteFn({path: callRef}).then((response) => {
+        const isArray = response && !!response.docs;
+        let res = response;
+
+        if(isArray){
+          res = response.docs.map(d => {
+            return { ...d.data(), id: d.id };
+          })
+        }
+        
+        return dispatch(
+          Object.assign({}, payload, {
+            response: res,
+            type: successType,
+            payload: overPayload || data
+          })
+        )
+      }).catch((error) => {
+        return dispatch(
+          Object.assign({}, payload, {
+            error,
+            type: failureType
+          })
+        )
+      })
+    }else if(method === 'delete'){
+      return callRef[method]().then((response) => {
+        const isArray = response && !!response.docs;
+        let res = response;
+
+        if(isArray){
+          res = response.docs.map(d => {
+            return { ...d.data(), id: d.id };
+          })
+        }
+        
+        return dispatch(
+          Object.assign({}, payload, {
+            response: res,
+            type: successType,
+            payload: overPayload || data
+          })
+        )
+      }).catch((error) => {
+        return dispatch(
+          Object.assign({}, payload, {
+            error,
+            type: failureType
+          })
+        )
+      })
     }else{
       return callRef[method](data).then((response) => {
         const isArray = response && !!response.docs;

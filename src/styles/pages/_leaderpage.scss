@@ -2,6 +2,12 @@
 	@include wh(100%, 100%);
 	@include gradient-summer();
 	@include center-flex();
+	&[data-team="1"] {
+		@include gradient-sunglaze();
+	}
+	&[data-team="2"] {
+		@include gradient-sunbreeze();
+	}
 	&.--hasBoard .page-inner {
 		margin-top: -20%;
 	}
@@ -15,6 +21,7 @@
 			position: relative;
 			.input__textbox {
 				border-color: $white;
+				color: $white;
 			}
 			.input__label {
 				width: auto;
@@ -22,6 +29,7 @@
 			.input__quantity {
 				border-color: $white;
 				text-align: center;
+				color: $white;
 			}
 		}
 

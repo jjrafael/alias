@@ -11,6 +11,7 @@ import ModalSignOut from './modal/ModalSignOut';
 import ModalEnterCode from './modal/ModalEnterCode';
 import ModalWarning from './modal/ModalWarning';
 
+
 //pages
 import SplashPage from './SplashPage';
 import HomePage from './HomePage';
@@ -107,7 +108,6 @@ class MainView extends React.Component {
 			browser: navigator.appCodeName,
 		}
 		this.props.setDeviceDetails(device);
-		this.props.browseDecks();
 		this.setState({ device, cachedIds: cachedIds });
 	}
 
@@ -122,7 +122,7 @@ class MainView extends React.Component {
 
 		if(prevProps.appDetails !== this.props.appDetails && !!this.props.appDetails){
 			//save to local app details
-			if(this.props.appDetails.id){
+			if(this.props.appDetails.id && this.props.appDetails.status === 'active'){
 				setLocalStorage('alias_appId', this.props.appDetails.id);
 			}
 		}
@@ -199,6 +199,9 @@ class MainView extends React.Component {
 				const response = getResponse(doc, cond);
 				if(response){
 					this.checkActiveApp();
+					if(response.role === 'grid'){
+						this.props.browseDecks();
+					}
 				}else if(doc.error){
 					this.closeLoading();
 					this.setState({ ...doneStates });
@@ -235,17 +238,16 @@ class MainView extends React.Component {
 				//if exists and active
 				const cond = {key: 'status', value: 'active'};
 				const response = getResponse(doc, cond);
+
 				if(response){
-					this.setState({cachedAppChecked: true, cacheLoaded: true});
+					this.setState({
+						cachedAppChecked: true, 
+						cacheLoaded: true
+					});
 					this.checkActiveGame();
 					this.checkActiveTeam();
 				}else{
-					deleteLocalStorage([
-						'alias_appId', 
-						'alias_gameId', 
-						'alias_team1Id', 
-						'alias_team2Id'
-					]);
+					clearLocalStorage();
 					this.closeLoading();
 					this.setState({ ...doneStates });
 				}
@@ -274,7 +276,7 @@ class MainView extends React.Component {
 				this.setState({ ...doneStates });
 			})
 		}else{
-			deleteLocalStorage(['alias_game', 'alias_gameId']);
+			deleteLocalStorage('alias_gameId');
 			this.closeLoading();
 			this.setState({ ...doneStates });
 		}
@@ -284,11 +286,12 @@ class MainView extends React.Component {
 		const { user, appDetails, readTeam, resetTeams } = this.props;
 		const { cachedIds } = this.state;
 		const isLogged = user && user.is_logged;
-		const isAppReady = (isLogged && appDetails && appDetails.status === 'active');
+		const isAppActive = appDetails && appDetails.status === 'active';
+		const isAppReady = isLogged && isAppActive;
 		const isTeam = isAppReady && user.role === 'team';
 		const teamNumber = isTeam && user.id === appDetails.team1_user_key ? 1 : 2;
 		const teamId = cachedIds['team'+teamNumber+'Id'];
-		const oppositeTeam = teamNumber === 1 ? 2 : 1;
+		const oppositeTeam = Number(teamNumber) === 1 ? 2 : 1;
 		
 		if(isAppReady && isTeam){
 			//for build team page
@@ -340,8 +343,12 @@ class MainView extends React.Component {
 				//grid and building team
 				html = (
 					<Switch>
-						<Route exact path="/" render={() => <HomePage {...props.home} />}/>
-						<Route exact path="/decks" render={() => <DecksPage {...props.general} />}/>
+						<Route
+							exact path="/" 
+							render={() => <HomePage {...props.home} />}/>
+						<Route 
+							exact path="/decks" 
+							render={() => <DecksPage {...props.general} />}/>
 					</Switch>
 				);
 			}else{

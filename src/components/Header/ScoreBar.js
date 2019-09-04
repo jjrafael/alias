@@ -1,6 +1,32 @@
 import React from 'react';
+import { compareUpdate, bool } from '../../utils';
 
 class ScoreBar extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			newScore: false
+		}
+	}
+
+	componentDidUpdate(prevProps) {
+		if(compareUpdate(prevProps.team, this.props.team, '!==', 'both')){
+			const prevScore = prevProps.team.round.score;
+			const nextScore = this.props.team.round.score;
+			if(prevScore !== nextScore){
+				const direction = nextScore && nextScore > prevScore ? 'up' : ''
+				this.promptScore(direction);
+			}
+		}
+	}
+
+	promptScore(direction){
+		this.setState({ newScore: direction });
+		setTimeout(() => {
+			this.setState({ newScore: '' });
+		}, 2000);
+	}
+
 	renderIcons(count, icon){
 		let html = [];
 
@@ -14,22 +40,34 @@ class ScoreBar extends React.Component {
 	}
 
 	render (){
-		const { team, round, settings } = this.props;
+		const { team } = this.props;
+		const { newScore } = this.props;
+		const teamNumber = team ? team.team_number : 0;
+		const score = team && bool(team.round) ? team.round.score : 0;
+		const trophies = team ? team.total_score : 0;
+		const violations = team ? team.total_violations : 0;
+		const cx = {
+			score: newScore ? `--${newScore}` : ''
+		};
+		const icons = {
+			trophies: this.renderIcons(trophies, 'trophy'),
+			violations: this.renderIcons(violations, 'stop')
+		}
 		
 		return (
-			<div className="scorebar scorebar-team" data-team={team.team_number}>
+			<div className={`scorebar scorebar-team ${cx.score}`} data-team={teamNumber}>
 				<div className="scorebar__avatar"></div>
 				<div className="scorebar__round-score">
-						{round ? round.team1_score : 0}
-						<span className="over-score">/{settings.cards_per_team}</span>
+						{score}
+						<span className="over-score">/{team.score_goal}</span>
 				</div>
 				<div className="scorebar__info">
 					<div className="scorebar__name">{team.name}</div>
 					<div className="scorebar__trophies">
-						{this.renderIcons(team.total_score, 'trophy')}
+						{icons.trophies}
 					</div>
 					<div className="scorebar__violations">
-					  {this.renderIcons(team.total_violations, 'stop')}
+					  {icons.violations}
 					</div>
 				</div>
 	    </div>

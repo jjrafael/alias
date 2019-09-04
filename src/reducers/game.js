@@ -1,4 +1,5 @@
 import constants from '../constants';
+import { mergeArray } from '../utils/data';
 
 const initialState = {
     rounds: [],
@@ -196,6 +197,26 @@ export default function Game(state = initialState, action) {
                 gameLoading: false,
                 gameError: true,
             }
+        case game.DELETE_GAME_REQUEST:
+            return {
+                ...state,
+                gameLoading: true,
+            }
+        case game.DELETE_GAME_SUCCESS:
+            return {
+                ...state,
+                gameLoading: false,
+                gameDetails: null,
+                gameError: false,
+            }
+        case game.DELETE_GAME_FAILURE:
+            return {
+                ...state,
+                gameLoading: false,
+                gameError: true,
+            }
+
+        //LISTEN
         case game.LISTEN_GAME_REQUEST:
             return {
                 ...state,
@@ -229,13 +250,11 @@ export default function Game(state = initialState, action) {
                 roundLoading: true,
             }
         case game.ADD_ROUND_SUCCESS:
+            let ADD_ROUND_val = mergeArray(state.rounds, action.payload, true);
             return {
                 ...state,
                 roundLoading: false,
-                rounds: [
-                    ...state.rounds,
-                    action.payload
-                ],
+                rounds: ADD_ROUND_val,
                 roundError: false,
             }
         case game.ADD_ROUND_FAILURE:
@@ -262,6 +281,26 @@ export default function Game(state = initialState, action) {
                 roundLoading: false,
                 roundError: true,
             }
+
+        case game.DELETE_ROUNDS_REQUEST:
+            return {
+                ...state,
+                roundLoading: true,
+            }
+        case game.DELETE_ROUNDS_SUCCESS:
+            return {
+                ...state,
+                roundLoading: false,
+                roundError: false,
+                rounds: []
+            }
+        case game.DELETE_ROUNDS_FAILURE:
+            return {
+                ...state,
+                roundLoading: false,
+                roundError: true,
+            }
+
         case game.LISTEN_ROUNDS_REQUEST:
             return {
                 ...state,
@@ -356,6 +395,11 @@ export default function Game(state = initialState, action) {
                         turnOf: SHIFT_TURN_val
                     } : null,
                 turnOf: SHIFT_TURN_val,
+            }
+        case game.CLEAR_ROUNDS:
+            return {
+                ...state,
+                rounds: [],
             }
 
         //SIGNOUT

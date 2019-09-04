@@ -31,7 +31,7 @@ import {
   deleteLocalStorage,
   setLocalStorage
 } from '../../utils';
-import { checkQuerySize } from '../../utils/database';
+import { checkQuerySize } from '../../utils/data';
 
 const mapStateToProps = state => {
   return {
@@ -135,7 +135,11 @@ class ModalEnterCode extends React.Component {
       if(response){
         const isTeamUnAvail = response['team'+team_number+'_user_key'];
         if(!isTeamUnAvail){
-          const teamData = {...data, status: 'active'};
+          const teamData = {
+            ...data, 
+            status: 'active',
+          };
+
           this.setState({ 
             teamNumber: team_number,
             progressBar: 40,
@@ -180,6 +184,7 @@ class ModalEnterCode extends React.Component {
       created_time: now,
       last_logged_time: now,
     }
+
     this.props.addUser(data).then(doc => {
       if(isResType(doc)){
         const teamKey = 'team'+teamNumber+'_user_key';

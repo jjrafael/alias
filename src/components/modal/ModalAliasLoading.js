@@ -53,7 +53,7 @@ class ModalAliasLoading extends React.Component {
       return (
         <Modal
           className={`--flipping --flippable ${cxFlipover}`} 
-          cxOverlay="--showHeader"
+          cxOverlay="--showHeader --bgNone"
           size="xs"
           id="aliasLoading">
           <div className="modal-card --back" data-team={team}>

@@ -121,17 +121,17 @@ class ModalSignOut extends React.Component {
           size="xs"
           id="signOutModal">
           <div className="modal__inner">
-              <div className="modal__header hide"></div>
-              <div className="modal__body --no-header">{msg}</div>
-              <div className="modal__footer --dual-buttons">
-                <Button text="OK" className="--red --plain" onClick={() => this.signOut()}/>
-                <Button text="Cancel" className="--plain" onClick={() => this.closeModal()}/>
-              </div>
+            <div className="modal__header hide"></div>
+            <div className="modal__body --no-header">{msg}</div>
+            <div className="modal__footer --dual-buttons">
+              <Button text="OK" className="--red --plain" onClick={() => this.signOut()}/>
+              <Button text="Cancel" className="--plain" onClick={() => this.closeModal()}/>
+            </div>
           </div>
         </Modal>
       );
     }else{
-        return <div className="modal--blank"></div>;
+      return <div className="modal--blank"></div>;
     }
   }
 }
