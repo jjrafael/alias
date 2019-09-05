@@ -8,13 +8,14 @@ import Menu from './Menu';
 
 //misc
 import { getActiveRound, getCardsPerType } from '../../utils/game';
-import { bool } from '../../utils';
+import { bool, minToMsec, getPercentage } from '../../utils';
 
 const mapStateToProps = state => {
   return {
     user: state.app.user,
     settings: state.app.settings,
     gameDetails: state.game.gameDetails,
+    isPause: state.game.isPause,
     rounds: state.game.rounds,
     team1: state.team.team1,
     team2: state.team.team2,
@@ -26,13 +27,49 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      timer: this.props.settings.timer,
+      timer: minToMsec(this.props.settings.timer),
+      activeRound: null,
+    }
+    this.timeFunc = null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.settings.timer !== this.props.settings.timer){
+      this.setState({ timer: minToMsec(this.props.settings.timer) });
+    }
+
+    if(prevProps.rounds !== this.props.rounds){
+      const activeRound = getActiveRound(this.props.rounds);
+      this.setState({ activeRound: activeRound });
+      if(bool(activeRound)){
+        this.timeFunc = setInterval(this.setTimeFunc, 1000);
+      }else{
+        clearInterval(this.timeFunc);
+      }
+    }
+
+    if(prevProps.isPause !== this.props.isPause){
+      this.toggleTimer(this.props.isPause);
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if(prevProps.settings.timer !== this.props.settings.timer){
-      this.setState({ timer: this.props.settings.timer });
+  setTimeFunc = () => {
+    const { settings } = this.props;
+    const { timer } = this.state;
+    const baseTimer = minToMsec(settings.timer);
+    const interval = 1000;
+    this.setState({ timer: timer - interval });
+    if (timer < interval) {
+      clearInterval(this.timeFunc);
+      this.setState({ timer: baseTimer });
+    }
+  }
+
+  toggleTimer(isPause) {
+    if(isPause){
+      clearInterval(this.timeFunc);
+    }else{
+      this.timeFunc = setInterval(this.setTimeFunc, 1000);
     }
   }
 
@@ -46,13 +83,16 @@ class Header extends React.Component {
       settings, 
       user, 
       cardsOnGrid,
-      rounds 
     } = this.props;
+    const { timer, activeRound } = this.state;
     const isTeam = user ? user.role === 'team' : false;
     const turnOf = gameDetails && !isTeam ? gameDetails.turnOf : '';
-    const { timer } = this.state;
     const inGame = gameDetails && gameDetails.status === 'active';
-    const activeRound = getActiveRound(rounds);
+    const baseTimer = minToMsec(settings.timer);
+    const timePerc = getPercentage(baseTimer, timer, 'diffPerc');
+    const isTimeQuarter = timePerc > 75;
+    const cxQuarter = isTimeQuarter ? '--quarter' : '';
+    const cxHide = !activeRound ? 'hide' : '';
     const team = {
       team1: {
         ...team1,
@@ -73,10 +113,13 @@ class Header extends React.Component {
     return (
       <header className={`app-header ${className || ''}`} data-team={turnOf}>
         { inGame && team1 && team2 &&
-            <div>
+            <div className="header-inner">
               <ScoreBar team={team.team1}/>
               <ScoreBar team={team.team2}/>
-              <div className="timerbar"></div>
+              <div
+                className={`timerbar ${cxQuarter} ${cxHide}`} 
+                style={{width: timePerc+'%'}}>
+              </div>
             </div>
         }
         <HeaderCenter timer={timer}>

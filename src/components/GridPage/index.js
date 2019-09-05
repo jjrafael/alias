@@ -16,7 +16,11 @@ import ModalReportAlias from '../modal/ModalReportAlias';
 import ModalAliasHistory from '../modal/ModalAliasHistory';
 
 // actions
-import { toggleLoadingOverlay, toggleRoundWinnerModal } from '../../actions/app';
+import { 
+	toggleLoadingOverlay, 
+	toggleRoundWinnerModal,
+	setSettings
+} from '../../actions/app';
 import { setCardsOnGrid, setPlayingDecks } from '../../actions/cards';
 import { editTeam } from '../../actions/teams';
 import { 
@@ -76,7 +80,8 @@ const mapDispatchToProps = dispatch => {
 		  editGame,
 		  editTeam,
 		  pauseGame,
-		  resumeGame
+		  resumeGame,
+		  setSettings
 		},
 		dispatch
 	 )
@@ -99,6 +104,7 @@ class GridPage extends React.Component {
 
 		if(gameDetails){
 			this.props.listenRounds(gameDetails.id);
+			this.props.setSettings(gameDetails.settings);
 		}
 		
 		if(gameDetails && bool(gameDetails.decks)

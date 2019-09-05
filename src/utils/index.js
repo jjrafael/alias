@@ -146,6 +146,17 @@ export function minToMsec(value, isReverse) {
 	return value ? (!isReverse ? (value * 60000) : (value / 60000 )) : 0;
 }
 
+export function getPercentage(baseValue, value, method) {
+	let perc = 0;
+	if(method === 'diffPerc'){
+		perc = ((baseValue - value) / baseValue) * 100;
+	}else{
+		perc = (value / baseValue) * 100;
+	}
+
+	return perc;
+}
+
 // react method helpers
 export function compareUpdate(prev, next, operator, haveValue, extra){
 	const child = extra && extra.checkChild ? extra.checkChild : null;
