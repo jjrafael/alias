@@ -71,7 +71,7 @@ class DecksBoard extends React.Component {
           	</div>
           	<div className="col-body --center">
           		<Board
-          			id="boardYourDeck"
+          			id="boardAllDeck"
           		 	data={decks}
           		 	className='active'
           		 	type="cards"
@@ -95,6 +95,7 @@ class DecksBoard extends React.Component {
           	</div>
           	<div className="col-body --center">
           		 <Board
+          		 	id="boardYourDeck"
           		 	data={selectedDecks}
           		 	className='active'
           		 	type="cards"
