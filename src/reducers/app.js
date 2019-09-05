@@ -8,7 +8,7 @@ const initialState = {
     },
     gameKey: null,
     settings: {
-        timer: 180000, //3mins default timer for team members
+        timer: 3, //3mins default timer for team members
         leader_timer: 0, //0 means no timer for leaders
         violation_limit: 5, //min of 5 violations to lose the game
         include_jinx_cards: false,
@@ -62,6 +62,7 @@ const initialState = {
     showModalQuitGame: false,
     showModalReportAlias: false,
     showModalAliasHistory: false,
+    showModalSettings: false,
 };
 
 export default function App(state = initialState, action) {
@@ -299,7 +300,7 @@ export default function App(state = initialState, action) {
                 ...state,
                 appDetails: action.data,
             }
-            
+
         case app.SET_SETTINGS:
             return {
                 ...state,
@@ -356,6 +357,11 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 showModalAliasHistory: action.data,
+            }
+        case app.MODAL_TOGGLE_SETTINGS:
+            return {
+                ...state,
+                showModalSettings: action.data,
             }
 
         //SIGNOUT

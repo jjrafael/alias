@@ -205,6 +205,13 @@ export function toggleAliasHistoryModal(show) {
   }
 }
 
+export function toggleSettingsModal(show) {
+  return {
+  	type: constants.MODAL_TOGGLE_SETTINGS,
+    data: show,
+  }
+}
+
 export function clearRdxApp() {
   return {
   	type: constants.CLEAR_STATES,

@@ -8,6 +8,7 @@ import Board from '../common/Board';
 
 // actions
 import { listenGame, listenRounds, editRound } from '../../actions/games';
+import { setSettings } from '../../actions/app';
 
 //misc
 import { bool, getNow, makeId } from '../../utils';
@@ -29,7 +30,8 @@ const mapDispatchToProps = dispatch => {
 		{
 		  listenGame, 
 		  listenRounds,
-		  editRound
+		  editRound,
+		  setSettings
 		},
 		dispatch
 	 )
@@ -54,6 +56,7 @@ class LeaderPage extends React.Component {
 		if(gameDetails){
 			this.props.listenGame(gameDetails.id);
 			this.props.listenRounds(gameDetails.id);
+			this.props.setSettings(gameDetails.settings);
 		}
 	}
 

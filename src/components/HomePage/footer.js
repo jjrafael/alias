@@ -8,7 +8,7 @@ import Footer from '../Footer';
 
 // actions
 import { startGame } from '../../actions/games';
-import { editApp } from '../../actions/app';
+import { editApp, toggleSettingsModal } from '../../actions/app';
 
 //misc
 import { makeId, getNow, bool } from '../../utils';
@@ -29,6 +29,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
 		{
+			toggleSettingsModal,
 		  startGame,
 		  editApp,
 		},
@@ -47,7 +48,7 @@ class HomeFooter extends React.Component {
 				},
 				left: {
 					text: 'Settings',
-					onClick: () => {},
+					onClick: this.openSettings,
 				},
 				right: {
 					text: 'Decks',
@@ -56,6 +57,10 @@ class HomeFooter extends React.Component {
 				copyright: false,
 			},
 		}
+	}
+
+	openSettings = () => {
+		this.props.toggleSettingsModal(true);
 	}
 
 	getUserKey(members) {

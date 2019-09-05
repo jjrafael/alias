@@ -66,3 +66,32 @@
 		}
 	}
 }
+
+.gameSettings {
+	&.--col2 {
+		.input__group {
+			@include group();
+			margin-top: 20px;
+		}
+		.input__wrapper {
+			float: left;
+			width: 50%;
+			margin-bottom: 10px;
+			.input__quantity {
+				font-size: $fs-xs;
+		    padding: 0px 10px;
+    		margin-bottom: 0px;
+			}
+			.input__label {
+				padding-left: 0px;
+			}
+		}
+		.inputwrap__togglebtn {
+			margin-bottom: 0px;
+			.input__label {
+				margin-left: 10px;
+				width: 57%;
+			}
+		}
+	}
+}

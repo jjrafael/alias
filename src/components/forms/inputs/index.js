@@ -6,26 +6,34 @@ import BtnToText from './BtnToText';
 import ToggleBtn from './ToggleBtn';
 import Quantity from './Quantity';
 
+//misc
+import { bool } from '../../../utils';
+
 class Input extends React.Component {
   render(){
-  	const { component } = this.props;
+  	const { component, required, validations } = this.props;
+  	const props = {
+  		...this.props,
+  		required: required || (bool(validations) &&
+  			validations.indexOf('required') !== -1)
+  	}
   	let input = null;
   	
   	switch(component){
   		case 'text':
-  			input = <TextInput {...this.props}/>
+  			input = <TextInput {...props}/>
   		break;
   		case 'btnToText':
-  			input = <BtnToText {...this.props}/>
+  			input = <BtnToText {...props}/>
   		break;
   		case 'togglebtn':
-  			input = <ToggleBtn {...this.props}/>
+  			input = <ToggleBtn {...props}/>
   		break;
   		case 'quantity':
-  			input = <Quantity {...this.props}/>
+  			input = <Quantity {...props}/>
   		break;
   		default:
-  			input = <TextInput {...this.props}/>
+  			input = <TextInput {...props}/>
   		break;
   	}
 

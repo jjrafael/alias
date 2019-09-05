@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import Footer from './footer';
 import SingleForm from '../forms/SingleForm';
 import Board from '../common/Board';
+import ModalSettings from '../modal/ModalSettings';
 
 // actions
 import { shiftTurn } from '../../actions/games';
@@ -177,7 +178,7 @@ class HomePage extends React.Component {
 			teamStatus: { ...teamStatus, [teamNumber]: 'adding'}
 		});
 		
-		addTeam(data).then(doc => {
+		addTeam(data).then(doc =>{
 			setLocalStorage('alias_team'+teamNumber+'Id', doc.response.id);
 			this.setState({ teamStatus: { ...teamStatus, [teamNumber]: 'added'} });		
 			this.listenData('Team'+teamNumber, doc.response.id);
@@ -270,6 +271,7 @@ class HomePage extends React.Component {
 						</div> : ''
 					}
 				</div>
+				<ModalSettings />
 			</div>
 		)
 	}

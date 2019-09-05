@@ -142,6 +142,10 @@ export function reduce(data, type, prop) {
 	return arr;
 }
 
+export function minToMsec(value, isReverse) {
+	return value ? (!isReverse ? (value * 60000) : (value / 60000 )) : 0;
+}
+
 // react method helpers
 export function compareUpdate(prev, next, operator, haveValue, extra){
 	const child = extra && extra.checkChild ? extra.checkChild : null;

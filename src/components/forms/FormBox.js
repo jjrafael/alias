@@ -5,6 +5,7 @@ import Button from '../common/Button';
 import Input from './inputs';
 
 //misc
+import { bool } from '../../utils';
 import { validateValues, validateSingleValue } from '../../utils/validations';
 
 class FormBox extends React.Component {
@@ -14,6 +15,19 @@ class FormBox extends React.Component {
     	formData: null,
     	errors: null,
     }
+  }
+
+  componentDidMount(){
+  	const { formInfo } = this.props;
+  	let formData = {};
+
+  	if(formInfo && bool(formInfo.inputs)){
+  		formInfo.inputs.forEach(d =>{
+  			formData[d.id] = d.value;
+  		})
+  	}
+
+  	this.setState({ formData });
   }
 
   focusHandler = (e) => {
@@ -140,7 +154,7 @@ class FormBox extends React.Component {
   		wrapper: wrapperClassName || '',
   		form: `${className || ''} ${formInfo ? formInfo.className : ''}`
   	}
-
+  	
   	return (
   		<div className={`form__wrapper ${cx.wrapper}`}>
   			<form

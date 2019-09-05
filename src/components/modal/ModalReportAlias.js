@@ -88,7 +88,8 @@ class ModalReportAlias extends React.Component {
     const canReport = selectedReason && gameDetails && activeRound && newAlias;
     const violations = canReport ? activeRound[violatorKey].violations + 1 : activeRound[violatorKey].violations;
     const totalViolations = getTotalViolations(violator, rounds);
-    const reachedLimit = canReport && totalViolations >= settings.violation_limit;
+    const hasLimit = settings.violation_limit;
+    const reachedLimit = canReport && !hasLimit && totalViolations >= settings.violation_limit;
     let updAlias = [];
     let violatorData = {};
     let roundData = {};
@@ -126,7 +127,7 @@ class ModalReportAlias extends React.Component {
         ...this.props[violatorKey],
         total_violations: this.props[violatorKey].total_violations + 1
       });
-      
+
       this.props.editRound(gameDetails.id, activeRound.id, roundData, roundsData).then(doc => {
         this.props.toggleLoadingOverlay();
         if(isResType(doc)){
