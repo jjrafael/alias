@@ -1,10 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 //components
 import HeaderCenter from './HeaderCenter';
 import ScoreBar from './ScoreBar';
 import Menu from './Menu';
+
+//action
+import { setTimesUp } from '../../actions/games';
 
 //misc
 import { getActiveRound, getCardsPerType } from '../../utils/game';
@@ -23,12 +27,22 @@ const mapStateToProps = state => {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+  {
+    setTimesUp
+  },
+  dispatch
+  )
+}
+
 class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       timer: minToMsec(this.props.settings.timer),
       activeRound: null,
+      newAlias: null,
     }
     this.timeFunc = null;
   }
@@ -40,15 +54,20 @@ class Header extends React.Component {
 
     if(prevProps.rounds !== this.props.rounds){
       const activeRound = getActiveRound(this.props.rounds);
+      this.setNewAlias(activeRound ? activeRound.alias : []);
       this.setState({ activeRound: activeRound });
-      if(bool(activeRound)){
+    }
+
+    if(prevState.newAlias !== this.state.newAlias && this.props.settings.timer){
+      if(this.state.newAlias){
+        this.props.setTimesUp(false);
         this.timeFunc = setInterval(this.setTimeFunc, 1000);
       }else{
         clearInterval(this.timeFunc);
       }
     }
 
-    if(prevProps.isPause !== this.props.isPause){
+    if(prevProps.isPause !== this.props.isPause && this.props.settings.timer){
       this.toggleTimer(this.props.isPause);
     }
   }
@@ -61,6 +80,7 @@ class Header extends React.Component {
     this.setState({ timer: timer - interval });
     if (timer < interval) {
       clearInterval(this.timeFunc);
+      this.props.setTimesUp(true);
       this.setState({ timer: baseTimer });
     }
   }
@@ -71,6 +91,12 @@ class Header extends React.Component {
     }else{
       this.timeFunc = setInterval(this.setTimeFunc, 1000);
     }
+  }
+
+  setNewAlias(data){
+    const arr = bool(data) ? data.filter(d => d.new) : [];
+    const alias = bool(arr) ? arr[0] : null;
+    this.setState({ newAlias: alias });
   }
 
   render() {
@@ -130,4 +156,4 @@ class Header extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

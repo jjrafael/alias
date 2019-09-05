@@ -172,6 +172,14 @@ export function resumeGame() {
     }
 }
 
+export function setTimesUp(data) {
+    return {
+        type: constants.SET_TIMES_UP,
+        data
+    }
+}
+
+
 export function clearRounds() {
     return {
         type: constants.CLEAR_ROUNDS,

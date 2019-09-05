@@ -10,6 +10,7 @@ const initialState = {
     gameLoser: null,
     gameEnded: false,
     isPause: false,
+    timesUp: false,
     gameDetails: null,
 
     //requests
@@ -369,6 +370,11 @@ export default function Game(state = initialState, action) {
             return {
                 ...state,
                 isPause: false
+            }
+        case game.SET_TIMES_UP:
+            return {
+                ...state,
+                timesUp: action.data
             }
 
         //SIGNOUT

@@ -57,6 +57,7 @@ const mapStateToProps = state => {return {
 	gameDetails: state.game.gameDetails,
 	rounds: state.game.rounds,
 	isPause: state.game.isPause,
+	timesUp: state.game.timesUp,
 	team1: state.team.team1,
 	team2: state.team.team2,
 	team1members: state.team.team1members,
@@ -153,6 +154,11 @@ class GridPage extends React.Component {
 				...this.props.gameDetails,
 				is_pause: this.props.isPause
 			});
+		}
+
+		if(prevProps.timesUp !== this.props.timesUp &&
+			this.props.timesUp && this.state.newAlias){
+			this.timesUp();
 		}
 	}
 
@@ -413,6 +419,33 @@ class GridPage extends React.Component {
 		}else if(!isCorrect){
 			shiftTurn(oppTeam);
 		}
+	}
+
+	timesUp() {
+		const { gameDetails, rounds } = this.props;
+		const { activeRound } = this.state;
+		const turnOf = gameDetails ? gameDetails.turnOf : null;
+		const oppTeam = Number(turnOf) === 1 ? 2 : 1;
+		let updAlias = [];
+		let roundData = {};
+		let roundsData = [];
+
+		updAlias = activeRound.alias.map(d => {
+			return {...d, new: false, left: 0};
+		});
+
+		roundData = {
+			...activeRound,
+			alias: updAlias,
+		}
+
+		roundsData = rounds.map(d => {
+			return d.id === activeRound.id ? roundData : d;
+		});
+
+		this.updateNewAlias(true);
+		this.props.editRound(gameDetails.id, activeRound.id, roundData , roundsData);
+		this.props.shiftTurn(oppTeam);
 	}
 
 	setNewAlias(data){
