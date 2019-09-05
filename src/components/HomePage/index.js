@@ -228,7 +228,7 @@ class HomePage extends React.Component {
 		}
 		
 		return (
-			<div className="col">
+			<div className="col" data-team={teamNumber}>
 				{ !showEl.form ?
 					<div className="col-header group">
 						<div className="heading-wrapper">

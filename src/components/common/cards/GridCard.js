@@ -67,7 +67,7 @@ class DeckCard extends React.Component {
   	const { flipOver, data } = this.props;
     const { reveal } = this.state;
     const cx = {
-      flipUp: reveal ? 'nonflip-up' : 'nonflippable',
+      flipUp: 'nonflippable',
       flip: flipOver && !reveal ? '--flipover' : '',
     }
 

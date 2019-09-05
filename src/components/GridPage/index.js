@@ -13,6 +13,7 @@ import ModalQuitGame from '../modal/ModalQuitGame';
 import ModalRestartGame from '../modal/ModalRestartGame';
 import ModalPause from '../modal/ModalPause';
 import ModalReportAlias from '../modal/ModalReportAlias';
+import ModalAliasHistory from '../modal/ModalAliasHistory';
 
 // actions
 import { toggleLoadingOverlay, toggleRoundWinnerModal } from '../../actions/app';
@@ -87,7 +88,6 @@ class GridPage extends React.Component {
 		this.state = {
 			initProgress: 0,
 			activeRound: null,
-			history: [],
 			newAlias: null,
 			showWaitingModal: false,
 			roundEndResult: null,
@@ -342,7 +342,8 @@ class GridPage extends React.Component {
 		const oppTeam = Number(turnOf) === 1 ? 2 : 1;
 		const isCorrect = turnOf === Number(cardOf);
 		const teamKey = isCorrect ? `team${turnOf}` : `team${oppTeam}`;
-		const aliasToBeDone = newAlias.count === 1 || newAlias.left === 1;
+		const hasLeftOver = !isCorrect	&& newAlias.left > 1;
+		const aliasToBeDone = (newAlias.count === 1 || newAlias.left === 1) || hasLeftOver;
 		const score = isTeam ? activeRound[teamKey].score + 1 : activeRound[teamKey].score;
 		const reachedGoal = score === cardsPerTeam;
 		const isWin = reachedGoal && isCorrect;
@@ -350,24 +351,31 @@ class GridPage extends React.Component {
 		const isLose = isDeath  || (reachedGoal && !isCorrect);
 		let updAlias = [];
 		let updCards = [];
-		let newHistory = {};
 		let roundData = {};
 		let roundsData = [];
-		
-		updAlias = aliasToBeDone ?
-			activeRound.alias.map(d => {
+
+		updAlias = activeRound.alias.map(d => {
+			const hasId = newAlias.id && d.id;
+			const forCards = d.for_cards && bool(d.for_cards);
+			const isSame = hasId ? newAlias.id === d.id : (newAlias.alias === d.text);
+
+			if(aliasToBeDone){
 				return {
 					...d,
+					for_cards: isSame ? (forCards ? [...d.for_cards, data] : [data])
+						: (d.for_cards || []),
 					new: false,
 					left: 0
 				}
-			})
-		: activeRound.alias.map(d => {
+			}else{
 				return {
 					...d,
-					left: d.left ? d.left - 1 : 0
+					for_cards: isSame ? (forCards ? [...d.for_cards, data] : [data])
+						: (d.for_cards || []),
+					left: isSame ? (d.left ? d.left - 1 : 0) : d.left
 				}
-			});
+			}
+		})
 
 		updCards = activeRound.playing_cards.map(d => {
 			return d.id === data.id && d.text === data.text ? {
@@ -376,13 +384,6 @@ class GridPage extends React.Component {
 				revealed_by_team: turnOf
 			} : d;
 		})
-
-		newHistory = {
-			forAlias: newAlias,
-			turnOf: turnOf,
-			cardSelected: data,
-			correct: isCorrect,
-		}
 
 		roundData = {
 			...activeRound,
@@ -398,7 +399,6 @@ class GridPage extends React.Component {
 		});
 
 		this.updateNewAlias(aliasToBeDone);
-		this.updateHistory(newHistory);
 		editRound(gameDetails.id, activeRound.id, roundData , roundsData);
 
 		if(isWin || isLose){
@@ -407,14 +407,6 @@ class GridPage extends React.Component {
 		}else if(!isCorrect){
 			shiftTurn(oppTeam);
 		}
-	}
-
-	updateHistory(data){
-		this.setState({
-			history: [
-				...this.state.history, data
-			]
-		})
 	}
 
 	setNewAlias(data){
@@ -600,6 +592,7 @@ class GridPage extends React.Component {
 				<ModalQuitGame />
 				<ModalRestartGame />
 				<ModalReportAlias turnOf={turnOf} newAlias={newAlias}/>
+				<ModalAliasHistory />
 				<ModalPause
 					resumeGame={this.props.resumeGame} 
 					show={isPause && !showModalReportAlias}/>

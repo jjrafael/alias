@@ -8,7 +8,7 @@ import Board from '../common/Board';
 //misc
 import aliasCard from '../../config/formData/aliasCard';
 import deckOptions from '../../config/formData/deckOptions';
-import { makeId } from '../../utils';
+import { makeId, scrollTo } from '../../utils';
 
 class CardsBoard extends React.Component {
   constructor(props) {
@@ -97,6 +97,7 @@ class CardsBoard extends React.Component {
           id: makeId(10, true)
         }]
       });
+      scrollTo('boardCards');
     }
   }
 
@@ -125,7 +126,7 @@ class CardsBoard extends React.Component {
       <div className={`col-2 col-cards ${cx.col2}`}>
       	<div className="col --center">
       		{ showEl.cards ?
-            <Board data={this.composeCards(cards)} className={cx.board} type="cards"/>
+            <Board id="boardCards" data={this.composeCards(cards)} className={cx.board} type="cards"/>
             : 'Add Cards'
           }
       	</div>

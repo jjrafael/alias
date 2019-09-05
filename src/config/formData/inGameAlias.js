@@ -1,6 +1,7 @@
 export const formInfo = {
 	formName: 'inGameAlias',
 	className: 'inGameAlias --inline',
+	autoComplete: 'off',
 	groupedInputs: 0,
 	inputs: [
 		{
@@ -14,7 +15,7 @@ export const formInfo = {
 	    className: '--card-look --huge',
 	    extra: {
 	    	spellCheck: false,
-	    	autoComplete: 'false',
+	    	autoComplete: 'off',
 	    }
 		},
 		{

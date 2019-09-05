@@ -13,6 +13,7 @@ const initialState = {
         violation_limit: 5, //min of 5 violations to lose the game
         include_jinx_cards: false,
         include_death_card: true,
+        show_death_on_leader: false,
         add_mod: false,
         soundFx: false,
         music: false,
@@ -60,6 +61,7 @@ const initialState = {
     showModalRoundWinner: false,
     showModalQuitGame: false,
     showModalReportAlias: false,
+    showModalAliasHistory: false,
 };
 
 export default function App(state = initialState, action) {
@@ -297,6 +299,15 @@ export default function App(state = initialState, action) {
                 ...state,
                 appDetails: action.data,
             }
+            
+        case app.SET_SETTINGS:
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    ...action.data
+                },
+            }
 
         case app.MODAL_TOGGLE_SIGNOUT:
             return {
@@ -340,6 +351,11 @@ export default function App(state = initialState, action) {
             return {
                 ...state,
                 showModalReportAlias: action.data,
+            }
+        case app.MODAL_TOGGLE_ALIAS_HISTORY:
+            return {
+                ...state,
+                showModalAliasHistory: action.data,
             }
 
         //SIGNOUT

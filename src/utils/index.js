@@ -201,6 +201,8 @@ export function scrollTo(id, type){
 	const el = document.getElementById(id);
 	if(type === 'top'){
 		el.scrollTop = 0;
+	}else if(type === 'bottom'){
+		el.scrollTop = el.scrollHeight;
 	}else{
 		el.scrollTop = el.scrollHeight;
 	}

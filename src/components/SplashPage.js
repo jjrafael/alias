@@ -123,47 +123,48 @@ class SplashPage extends React.Component {
 		const isMobile = deviceDetails.device === 'mobile';
 		const rouletteConds = !isMobile && !hasModals && !loadingOverlay && !disableRouletteFx;
 		const showLogo = !loadingOverlay;
+		const cardCount = 20;
 
 	    return (
 	      <div className="page-wrapper splash-page">
 	      	<div className="splash-tilt">
-	      		<CardsCol count={20} animDelay={'15s'} className={`${rouletteConds ? '--roulette' : ''}`}>
+	      		<CardsCol count={cardCount} animDelay={'15s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'20s'} className={`${rouletteConds ? '--roulette' : ''}`}>
+	      		<CardsCol count={cardCount} animDelay={'20s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'1s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
+	      		<CardsCol count={cardCount} animDelay={'1s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards" className="--pointer">
 	      				<div className="card-inner">
-	      					<h3>Add Cards</h3>
+	      					<h3>How To Play</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'9s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
+	      		<CardsCol count={cardCount} animDelay={'9s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards" className="--pointer">
 	      				<div className="card-inner" onClick={this.enterCodeModal}>
 	      					<h3>Enter Code</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'17s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
+	      		<CardsCol count={cardCount} animDelay={'17s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards" className="--pointer">
 	      				<div className="card-inner" onClick={this.initUser}>
 	      					<h3>Start Game</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'5s'} className={`${rouletteConds ? '--roulette' : ''}`}>
+	      		<CardsCol count={cardCount} animDelay={'5s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'25s'} className={`${rouletteConds ? '--roulette' : ''}`}>
+	      		<CardsCol count={cardCount} animDelay={'25s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'7s'} className={`${rouletteConds ? '--roulette' : ''}`}>
+	      		<CardsCol count={cardCount} animDelay={'7s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
-	      		<CardsCol count={20} animDelay={'20s'} className={`${rouletteConds ? '--roulette' : ''}`}>
+	      		<CardsCol count={cardCount} animDelay={'20s'} className={`${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards"/>
 	      		</CardsCol>
 	      	</div>

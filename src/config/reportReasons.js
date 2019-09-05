@@ -53,6 +53,10 @@ export default [
 	},
 	{
 		id: '14',
+		text: 'Inventing illogical/non-existing word to make hints',
+	},
+	{
+		id: '15',
 		text: 'Other reason as agreed by both teams',
 	},
 ]

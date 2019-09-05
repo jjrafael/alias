@@ -19,7 +19,7 @@ import { editTeam } from '../../actions/teams';
 
 //misc
 import { bool, isResType } from '../../utils';
-import { getActiveRound } from '../../utils/game';
+import { getActiveRound, getTotalViolations } from '../../utils/game';
 import reportReasons from '../../config/reportReasons';
 
 const mapStateToProps = state => {
@@ -87,12 +87,13 @@ class ModalReportAlias extends React.Component {
     const violatorKey = `team${violator}`;
     const canReport = selectedReason && gameDetails && activeRound && newAlias;
     const violations = canReport ? activeRound[violatorKey].violations + 1 : activeRound[violatorKey].violations;
-    const reachedLimit = canReport && violations >= settings.violation_limit;
+    const totalViolations = getTotalViolations(violator, rounds);
+    const reachedLimit = canReport && totalViolations >= settings.violation_limit;
     let updAlias = [];
     let violatorData = {};
     let roundData = {};
     let roundsData = [];
-
+    
     if(canReport){
       this.props.toggleLoadingOverlay(true, 'Submitting Report...');
       updAlias = activeRound.alias.map(d => {
@@ -101,6 +102,7 @@ class ModalReportAlias extends React.Component {
           new: false, 
           violated: true,
           violation_reason: selectedReason.id,
+          violator_team: violator,
           left: 0
         } : d;
       })
@@ -118,6 +120,11 @@ class ModalReportAlias extends React.Component {
 
       roundsData = rounds.map(d => {
         return d.id === activeRound.id ? roundData : d;
+      });
+      
+      this.props.editTeam(this.props[violatorKey].id, {
+        ...this.props[violatorKey],
+        total_violations: this.props[violatorKey].total_violations + 1
       });
       
       this.props.editRound(gameDetails.id, activeRound.id, roundData, roundsData).then(doc => {
@@ -211,7 +218,7 @@ class ModalReportAlias extends React.Component {
               <Board
                 id="boardReportReason"
                 data={boardArr}
-                className="--hor-scroll active"
+              className="--hor-scroll active --board-on-modal"
                 type="bar"/>
             </div>
             <div className="modal__footer --dual-buttons">

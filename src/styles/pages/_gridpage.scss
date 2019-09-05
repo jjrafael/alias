@@ -177,7 +177,7 @@
 }
 
 .pauseGame-wrap {
-	@include gradient-summer(45deg, 0.5);
+	@include gradient-summer(45deg, 1);
 }
 
 #pauseGame {
@@ -213,9 +213,58 @@
 	}
 }
 
-#boardReportReason {
-	min-width: 300px;
-  height: 220px;
-  margin-top: 20px;
-  text-align: left;
+#boardAliasHistory {
+	.history__item {
+		position: relative;
+		width: 100%;
+		.bordered {
+			padding: 5px 5px 2px 5px;
+			border: 1px solid $midnight;
+			color: $midnight;
+			border-radius: 3px;
+			display: inline-block;
+			&.--team1 {
+				border-color: $chrome;
+				color: $chrome;
+			}
+			&.--team2 {
+				border-color: $aqua;
+				color: $aqua;
+			}
+			&.--none {
+				border-color: $peach;
+				color: $peach;
+			}
+			&.--death {
+				border-color: $red;
+				color: $red;
+			}
+		}
+		.history__info {
+			position: absolute;
+			top: 6px;
+			right: 10px;
+			.count {
+				border-radius: 20px;
+				background: $black-10;
+				color: $black-50;
+				float: right;
+				width: 30px;
+		    height: 30px;
+		    text-align: center;
+		    line-height: 30px;
+			}
+		}
+		.history__cardinfo {
+			display: block;
+			width: 100%;
+			font-size: $fs-xxs;
+			color: $black-50;
+			text-transform: uppercase;
+			padding: 5px 0px;
+			&.--red {
+				color: $red-50;
+			}
+		}
+	}
 }

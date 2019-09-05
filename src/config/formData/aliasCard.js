@@ -8,7 +8,7 @@ export const formInfo = {
 	    component: 'text',
 	    type: 'text',
 	    placeholder: '',
-	    label: 'Alias Text',
+	    label: 'New Card Text',
 	    showLabel: true,
 	    validations: ['required','charMax-50'],
 	    className: '--card-look',

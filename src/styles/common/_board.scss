@@ -52,6 +52,12 @@
 	max-width: 500px;
 	min-width: 400px;
 	display: block;
+	&.--board-on-modal {
+		min-width: 300px;
+	  height: 220px;
+	  margin-top: 20px;
+	  text-align: left;
+	}
 	.board-child {
 		padding: 15px;
 		border-bottom: 1px solid $black-10;

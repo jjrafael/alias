@@ -143,7 +143,10 @@ class FormBox extends React.Component {
 
   	return (
   		<div className={`form__wrapper ${cx.wrapper}`}>
-  			<form className={`formbox ${cx.form}`} name={formInfo.formName}>
+  			<form
+  				autoComplete={formInfo.autoComplete}
+  				className={`formbox ${cx.form}`}
+  				name={formInfo.formName}>
   				<div className="input__group">
   					{this.renderForm(formInfo)}
   				</div>

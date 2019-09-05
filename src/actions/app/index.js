@@ -135,6 +135,13 @@ export function setApp(data) {
   }
 }
 
+export function setSettings(data) {
+  return {
+  	type: constants.SET_SETTINGS,
+    data,
+  }
+}
+
 export function toggleSignOutModal(show) {
   return {
   	type: constants.MODAL_TOGGLE_SIGNOUT,
@@ -187,6 +194,13 @@ export function toggleQuitGameModal(show) {
 export function toggleReportAliasModal(show) {
   return {
   	type: constants.MODAL_TOGGLE_REPORT_ALIAS,
+    data: show,
+  }
+}
+
+export function toggleAliasHistoryModal(show) {
+  return {
+  	type: constants.MODAL_TOGGLE_ALIAS_HISTORY,
     data: show,
   }
 }

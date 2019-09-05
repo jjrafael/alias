@@ -18,6 +18,7 @@ const mapStateToProps = state => {return {
 	team: state.team.team1 || state.team.team2 || null,
 	turnOf: state.game.turnOf,
 	gameDetails: state.game.gameDetails,
+	settings: state.app.settings,
 	rounds: state.game.rounds,
 	team1members: state.team.team1members,
 	team2members: state.team.team2members,
@@ -43,7 +44,6 @@ class LeaderPage extends React.Component {
 			deathCard: null,
 			pendingAnswer: false,
 			alias: [],
-			showDeathCard: true,
 			isWaiting: false,
 		}
 	}
@@ -131,10 +131,12 @@ class LeaderPage extends React.Component {
 	}
 
 	composeBoardArr(data=[]) {
-		const { deathCard, showDeathCard } = this.state;
+		const { settings } = this.props;
+		const { deathCard } = this.state;
+		const showDeath = settings.show_death_on_leader;
 		let arr = [];
 
-		if(deathCard && showDeathCard){
+		if(deathCard && showDeath){
 			arr.push({
 				...deathCard,
 				className: '--death',

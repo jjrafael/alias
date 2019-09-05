@@ -71,6 +71,7 @@ class DecksBoard extends React.Component {
           	</div>
           	<div className="col-body --center">
           		<Board
+          			id="boardYourDeck"
           		 	data={decks}
           		 	className='active'
           		 	type="cards"

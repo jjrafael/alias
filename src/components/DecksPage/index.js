@@ -13,7 +13,7 @@ import { toggleLoadingOverlay } from '../../actions/app';
 import { addDeck, setPlayingDecks, browseDecks } from '../../actions/cards';
 
 //misc
-import { isResType, bool } from '../../utils';
+import { isResType, bool, scrollTo } from '../../utils';
 
 const mapStateToProps = state => {return {
 	decks: state.cards.decks,
@@ -87,6 +87,7 @@ class DecksPage extends React.Component {
 			newDecks = result.decks;
 		}
 		
+		scrollTo('boardYourDeck');
 		this.setState({ selectedDecks: newSelectedDecks, decks: newDecks });
 	}
 

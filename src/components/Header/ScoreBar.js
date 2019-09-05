@@ -31,7 +31,7 @@ class ScoreBar extends React.Component {
 		let html = [];
 
 		if(count){
-			for(var i = 1; i < count; i++){
+			for(var i = 1; i <= count; i++){
 				html.push(<div key={i} className={`icon icon-${icon}`}></div>)
 			}
 		}
