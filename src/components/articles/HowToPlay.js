@@ -10,6 +10,8 @@ class HowToPlayPart1 extends React.Component {
           <p>
             A web app/game inspired by Codename Boardgame,
             made more customizable and more fun!
+            Can be played by pairs, from 4 to more players!
+            Each game usually have 3-5 rounds.
           </p>
         </div>
         <div className="paragraph__block">
@@ -20,7 +22,7 @@ class HowToPlayPart1 extends React.Component {
             <li>On other device, enter team code</li>
             <li>Each team should have seperate device</li>
             <li>Add members</li>
-            <li>Play!</li>
+            <li><b>Play!</b></li>
           </ul>
         </div>
       </article>
@@ -39,15 +41,16 @@ class HowToPlayPart2 extends React.Component {
             <li>App will randomly pick team</li>
             <li>Team leader will submit one-word clue or 'alias'</li>
             <li>The rest of the team will choose the card(s)
-              that corresponds the given 'alias'</li>
+              that corresponds to the given 'alias'</li>
             <li>Decide quickly as time ticks away*</li>
             <li>If correct, you got points.
               If not, its end of your team's turn.
               Opponent will take turn</li>
             <li>First to get three trophies* WIN!</li>
-            <li>Or first to get 5 violations*,
+            <li>But if your team got 5 violations*,
               opponent team will win instead!</li>
-            <li>Avoid picking 'Death Card'*! It will end the round and opponent will get a trophy.</li>
+            <li>Avoid picking 'Death Card'*!
+              It will end the round and opponent will get a trophy.</li>
           </ul>
         </div>
         <div className="paragraph__footer --notes">

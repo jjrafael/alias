@@ -8,7 +8,7 @@
 			top: 8px;
 			left: 10px;
 			width: 1px;
-			height: calc(100% - 15px);
+			height: calc(100% - 17px);
 			background: $black;
 		};
 		li {
@@ -41,15 +41,21 @@ article {
 	.paragraph__block {
 		margin-bottom: 20px;
 		&.--line-below {
-			border-bottom: 1px solid $black-50;
+			border-bottom: 1px solid $white-50;
 			padding-bottom: 10px;
 		}
 		.list {
 			&.--number {
 				list-style: decimal;
-				> li {
-					margin-left: 15px;
-					padding: 5px 0px;
+			}
+			&.--dot {
+				list-style: unset;
+			}
+			li {
+				margin-left: 15px;
+				padding: 5px 0px;
+				b {
+					font-weight: $fw-bold;
 				}
 			}
 		}

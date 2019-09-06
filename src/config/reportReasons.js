@@ -25,7 +25,7 @@ export default [
 	},
 	{
 		id: '7',
-		text: 'Direct Acronym equivalent of any card',
+		text: 'Direct Acronym equivalent to any card',
 	},
 	{
 		id: '8',
@@ -53,7 +53,7 @@ export default [
 	},
 	{
 		id: '14',
-		text: 'Inventing illogical/non-existing word to make hints',
+		text: 'Made up illogical/non-existing word to make hints',
 	},
 	{
 		id: '15',

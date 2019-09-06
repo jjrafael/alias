@@ -8,6 +8,10 @@ import Button from '../common/Button';
 
 //articles
 import HowToPlay from '../articles/HowToPlay';
+import GridAnatomy from '../articles/GridAnatomy';
+import AliasRules from '../articles/AliasRules';
+import MakingDeck from '../articles/MakingDeck';
+import HowToWin from '../articles/HowToWin';
 
 //actions
 import { toggleHowToPlayModal } from '../../actions/app';
@@ -31,7 +35,7 @@ class ModalHowToPlay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pageCount: 3,
+      pageCount: 9,
       page: 1,
     }
   }
@@ -62,6 +66,24 @@ class ModalHowToPlay extends React.Component {
       case 3:
         html = HowToPlay.part2.header
       break;
+      case 4:
+        html = GridAnatomy.part1.header
+      break;
+      case 5:
+        html = GridAnatomy.part2.header
+      break;
+      case 6:
+        html = AliasRules.part1.header
+      break;
+      case 7:
+        html = AliasRules.part2.header
+      break;
+      case 8:
+        html = MakingDeck.header
+      break;
+      case 9:
+        html = HowToWin.header
+      break;
       default:
       break;
     }
@@ -78,12 +100,36 @@ class ModalHowToPlay extends React.Component {
         html = this.renderOverview();
       break;
       case 2: 
-        const Part1 = HowToPlay.part1.content;
-        html = <Part1 />
+        const HowToPlayPart1 = HowToPlay.part1.content;
+        html = <HowToPlayPart1 />
       break;
       case 3: 
-        const Part2 = HowToPlay.part2.content;
-        html = <Part2 />
+        const HowToPlayPart2 = HowToPlay.part2.content;
+        html = <HowToPlayPart2 />
+      break;
+      case 4: 
+        const GridAnatomyPart1 = GridAnatomy.part1.content;
+        html = <GridAnatomyPart1 />
+      break;
+      case 5: 
+        const GridAnatomyPart2 = GridAnatomy.part2.content;
+        html = <GridAnatomyPart2 />
+      break;
+      case 6: 
+        const AliasRulesPart1 = AliasRules.part1.content;
+        html = <AliasRulesPart1 />
+      break;
+      case 7: 
+        const AliasRulesPart2 = AliasRules.part2.content;
+        html = <AliasRulesPart2 />
+      break;
+      case 8: 
+        const MakingDeckArticle = MakingDeck.content;
+        html = <MakingDeckArticle />
+      break;
+      case 9: 
+        const HowToWinArticle = HowToWin.content;
+        html = <HowToWinArticle />
       break;
       default:
       break;
@@ -98,9 +144,9 @@ class ModalHowToPlay extends React.Component {
         <ul>
           <li onClick={() => this.goToPage(2)}>How To Play</li>
           <li onClick={() => this.goToPage(4)}>Grid Anatomy</li>
-          <li onClick={() => this.goToPage(5)}>Alias Rules</li>
-          <li onClick={() => this.goToPage(6)}>Jinx</li>
-          <li onClick={() => this.goToPage(7)}>How To Win</li>
+          <li onClick={() => this.goToPage(6)}>Alias Rules</li>
+          <li onClick={() => this.goToPage(8)}>Making A Deck</li>
+          <li onClick={() => this.goToPage(9)}>How To Win</li>
         </ul>
       </div>
     )

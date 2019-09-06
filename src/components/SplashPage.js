@@ -12,7 +12,8 @@ import {
 	initializeApp, 
 	addUser, 
 	toggleEnterCodeModal, 
-	toggleWarningModal 
+	toggleWarningModal ,
+	toggleHowToPlayModal
 } from '../actions/app';
 
 //misc
@@ -37,7 +38,8 @@ const mapDispatchToProps = dispatch => {
       initializeApp,
       addUser,
       toggleEnterCodeModal,
-      toggleWarningModal
+      toggleWarningModal,
+      toggleHowToPlayModal
     },
     dispatch
   )
@@ -77,6 +79,10 @@ class SplashPage extends React.Component {
 
 	enterCodeModal = () => {
 		this.props.toggleEnterCodeModal(true);
+	}
+
+	openGuide = () => {
+		this.props.toggleHowToPlayModal(true);
 	}
 
 	initApp(user) {
@@ -136,7 +142,7 @@ class SplashPage extends React.Component {
 	      		</CardsCol>
 	      		<CardsCol count={cardCount} animDelay={'1s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards" className="--pointer">
-	      				<div className="card-inner">
+	      				<div className="card-inner" onClick={this.openGuide}>
 	      					<h3>How To Play</h3>
 	      				</div>
 	      			</Card>
