@@ -212,6 +212,13 @@ export function toggleSettingsModal(show) {
   }
 }
 
+export function toggleHowToPlayModal(show) {
+  return {
+  	type: constants.MODAL_TOGGLE_HOW_PLAY,
+    data: show,
+  }
+}
+
 export function clearRdxApp() {
   return {
   	type: constants.CLEAR_STATES,

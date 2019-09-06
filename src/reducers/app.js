@@ -363,6 +363,11 @@ export default function App(state = initialState, action) {
                 ...state,
                 showModalSettings: action.data,
             }
+        case app.MODAL_TOGGLE_HOW_PLAY:
+            return {
+                ...state,
+                showModalHowToPlay: action.data,
+            }
 
         //SIGNOUT
         case app.CLEAR_STATES:

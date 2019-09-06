@@ -25,7 +25,7 @@
 .modal {
 	width: 400px;
 	height: 180px;
-	max-height: 420px;
+	max-height: 550px;
 	border-radius: 10px;
 	background: $white;
 	position: relative;
@@ -53,6 +53,9 @@
 	}
 	&[data-size="l"] {
 		height: 400px;
+	}
+	&[data-size="xl"] {
+		height: 550px;
 	}
 	&__header {
 		width: calc(100% - 30px);
@@ -138,6 +141,23 @@
 		    line-height: 50px;
 		    border-radius: 0px 0px 10px 10px;
 		    margin: 0px;
+			}
+		}
+		&.--three-buttons {
+			> .btn {
+				width: calc(100% / 3);
+				text-align: center;
+				float: left;
+				margin: 0px;
+		    height: 50px;
+		    line-height: 50px;
+		    border-radius: 0px;
+		    &:first-child {
+		    	border-radius: 0px 0px 0px 10px;
+		    };
+		    &:last-child {
+		    	border-radius: 0px 0px 10px 0px;
+		    };
 			}
 		}
 	}

@@ -56,4 +56,8 @@
 			@include fade-in();
 		}
 	}
+
+	.app-footer {
+		margin-left: calc(50% - 275px);
+	}
 }
