@@ -47,15 +47,19 @@
 	}
 	&[data-size="xs"] {
 		height: 120px;
+		max-height: 120px;
 	}
 	&[data-size="m"] {
 		height: 200px;
+		max-height: 200px;
 	}
 	&[data-size="l"] {
 		height: 400px;
+		max-height: 400px;
 	}
 	&[data-size="xl"] {
 		height: 550px;
+		max-height: 550px;
 	}
 	&__header {
 		width: calc(100% - 30px);
@@ -226,10 +230,22 @@
 	font-size: $fs-xs;
 }
 
+#howToModal {
+	background: $cream;
+	.modal__inner {
+		height: calc(100% - 50px);
+    overflow-y: scroll;
+	}
+	.modal__footer {
+		background: $black-10;
+	}
+}
+
 /*responsiveness*/
 
 @include mobile {
 	.modal {
 		width: calc(100% - 20px);
+		height: calc(100% - 20px);
 	}
 }

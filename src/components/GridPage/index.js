@@ -281,11 +281,14 @@ class GridPage extends React.Component {
 
 	nextRound(cards){
 		const { gameDetails, toggleLoadingOverlay } = this.props;
+		const { activeRound } = this.state; 
 		const team1Leader = this.pickLeader(1);
 		const team2Leader = this.pickLeader(2);
+		const nextRound = activeRound.round_number + 1;
+		const id = 'r'+nextRound;
 		const data = {
-			id: 'r1',
-			round_number: 1,
+			id: id,
+			round_number: nextRound,
 			playing_cards: cards,
 			team1: {
 				score: 0,
@@ -302,8 +305,8 @@ class GridPage extends React.Component {
 			created_time: getNow(),
 		}
 		
-		//Start first round
-		this.props.addRound(gameDetails.id, 'r1', data).then(doc => {
+		//Start next round
+		this.props.addRound(gameDetails.id, id, data).then(doc => {
 			toggleLoadingOverlay();
 			if(isResType(doc)){
 				this.setState({ initProgress: 100 });

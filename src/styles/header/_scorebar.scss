@@ -83,3 +83,17 @@
 		}
 	}
 }
+
+/*responsiveness*/
+
+@include mobile {
+	.scorebar {
+		.scorebar__avatar {
+			display: none;
+		}
+		.scorebar__name {
+	    font-size: $fs-s;
+	    text-transform: uppercase;
+		}
+	}
+}

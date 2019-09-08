@@ -170,6 +170,7 @@ class BuildTeamPage extends React.Component {
 						data: { ...d, avatarObj: avatar},
 						type: 'members-card',
 						className: cxTeam,
+						frontChildren: d.name
 					});
 				}
 			})
@@ -196,8 +197,8 @@ class BuildTeamPage extends React.Component {
 					}
 					<Board
 						data={members}
-						className={`--hor-scroll ${cxBoard}`}
-						type="cards"/>
+						className={`${cxBoard}`}
+						type="bar"/>
 					<SingleForm 
 						formName={`build_team_${teamNumber}`}
 						onSubmit={this.submitForm} 

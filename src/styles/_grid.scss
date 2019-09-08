@@ -70,14 +70,31 @@
 
 @include mobile {
 	.grid {
-		width: calc(100% - 70px);
-	    height: 150px;
-	    margin-top: 50px;
-	    display: flex;
-	    flex-direction: column;
-	    flex-wrap: wrap;
-	    .card {
-	    	margin: 0px 10px!important;
-	    }
+		width: 100%;
+    padding: 0px;
+    height: auto;
+    margin: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    .card {
+    	margin-bottom: 10px!important;
+    	@include wh(100%, 50px);
+    	margin-right: 0px;
+    	&:hover {
+    		transform: translateY(0px);
+    	}
+    	.card-front,
+    	.card-back {
+    		@include wh(100%, 70px);
+    		width: calc(100% - 20px);
+    		height: 70px;
+    		left: 0px;
+    		box-sizing: border-box;
+    		&:after {
+    			border-color: transparent;
+    		};
+    	}
+    }
 	}
 }

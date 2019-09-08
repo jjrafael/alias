@@ -268,3 +268,13 @@
 		}
 	}
 }
+
+/*responsiveness*/
+
+@include mobile {
+	.grid-page {
+		.page-inner {
+			box-sizing: border-box;
+		}
+	}
+}

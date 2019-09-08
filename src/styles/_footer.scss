@@ -80,17 +80,22 @@
 /*responsiveness*/
 
 @include mobile {
+	.app-footer {
+		position: fixed;
+	}
 	.footer__options {
 		height: 70px;
 		&.--have-main {
 			.footer__options--left,
 			.footer__options--right {
+				width: 50px;
 				padding: 10px 20px;
 				line-height: 70px;
 				&:after { display: none };
 			}
 			.footer__options--main {
 				width: 100px;
+				max-width: 100px;
 				padding: 10px;
 				font-size: 20px;
 				line-height: 60px;

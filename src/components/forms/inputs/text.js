@@ -15,6 +15,7 @@ class TextInput extends React.Component {
       readOnly,
       disabled,
     } = this.props;
+    const enableEnter = extra ? extra.enableEnter : false;
     const cx = {
       input: `${className || ''} ${disabled ? 'disabled' : ''}`
     }
@@ -36,8 +37,8 @@ class TextInput extends React.Component {
             readOnly={readOnly}
             disabled={disabled}
             onChange={(e) => handlers.updateHandler(e)}
-            onFocus={(e) => handlers.focusHandler(e)}
-            onBlur={(e) => handlers.blurHandler(e)}
+            onFocus={(e) => handlers.focusHandler(e, enableEnter)}
+            onBlur={(e) => handlers.blurHandler(e, enableEnter)}
           />
           :
           <input
@@ -51,8 +52,8 @@ class TextInput extends React.Component {
             readOnly={readOnly}
             disabled={disabled}
             onChange={(e) => handlers.updateHandler(e)}
-            onFocus={(e) => handlers.focusHandler(e)}
-            onBlur={(e) => handlers.blurHandler(e)}
+            onFocus={(e) => handlers.focusHandler(e, enableEnter)}
+            onBlur={(e) => handlers.blurHandler(e, enableEnter)}
           />
         }
       </div>

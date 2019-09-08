@@ -39,3 +39,9 @@ $desktop-lg-width: 1800px;
     @content;
   }
 }
+
+@mixin mobile-keyboard {
+  @media (max-width: #{$desktop-sm-width - 1px}) and (max-height: 445px) {
+    @content;
+  }
+}

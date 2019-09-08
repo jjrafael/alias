@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import HeaderCenter from './HeaderCenter';
 import ScoreBar from './ScoreBar';
 import Menu from './Menu';
+import MobileHeader from './MobileHeader';
 
 //action
 import { setTimesUp } from '../../actions/games';
@@ -109,6 +110,7 @@ class Header extends React.Component {
       settings, 
       user, 
       cardsOnGrid,
+      page
     } = this.props;
     const { timer, activeRound } = this.state;
     const isTeam = user ? user.role === 'team' : false;
@@ -138,6 +140,7 @@ class Header extends React.Component {
     
     return (
       <header className={`app-header ${className || ''}`} data-team={turnOf}>
+        <MobileHeader page={page} />
         { inGame && team1 && team2 &&
             <div className="header-inner">
               <ScoreBar team={team.team1}/>

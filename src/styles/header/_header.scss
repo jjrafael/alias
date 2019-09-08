@@ -101,15 +101,55 @@ header {
 	transition: all 0.6s ease;
 }
 
+.mobile-header {
+	display: none;
+	font-size: $fs-s;
+  text-align: left;
+  padding: 0px 20px 0px 70px;
+  line-height: 55px;
+}
+
 /*responsiveness*/
 
 @include mobile {
+	.app-header {
+		display: block;
+		position: fixed;
+    top: 0px;
+    left: 0px;
+    &[data-team='1'] {
+    	.scorebar[data-team='1'] {
+				width: 100%;
+			}
+			.scorebar[data-team='2'] {
+				width: 0%;
+			}
+		}
+		&[data-team='2'] {
+    	.scorebar[data-team='2'] {
+				width: 100%;
+			}
+			.scorebar[data-team='1'] {
+				width: 0%;
+			}
+		}
+		&[data-team='0'],
+		&[data-team=''] {
+			.scorebar__name {
+				display: none;
+			}
+		}
+		.scorebar[data-team='1'] {
+			padding-left: 40px;
+		}
+	}
 	header.--splash {
 		display: block;
 	}
 	.header-center {
 		width: 50px;
 		left: 0px;
+		margin-left: 0px!important;
 		&:hover {
 			.header-logo {
 				@include fade-in();
@@ -122,6 +162,9 @@ header {
 		display: none;
 	}
 	.header-menu-icon {
+		display: block;
+	}
+	.mobile-header {
 		display: block;
 	}
 }

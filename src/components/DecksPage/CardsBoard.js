@@ -8,7 +8,7 @@ import Board from '../common/Board';
 //misc
 import aliasCard from '../../config/formData/aliasCard';
 import deckOptions from '../../config/formData/deckOptions';
-import { makeId, scrollTo } from '../../utils';
+import { makeId, scrollTo, bool, pluralizeString } from '../../utils';
 
 class CardsBoard extends React.Component {
   constructor(props) {
@@ -112,32 +112,39 @@ class CardsBoard extends React.Component {
   render() {
     const { show } = this.props;
     const { deckName, cards, inputData, formInfo } = this.state;
+    const cardLen = bool(cards) ? cards.length : 0;
     const cx = {
       col2: show ? 'show' : '',
-      board: !!cards ? 'active' : '',
+      board: cardLen ? 'active' : '',
     }
     const showEl = {
       deckForm: !deckName,
       forms: deckName,
-      cards: !!cards,
+      cards: cardLen,
     }
     
     return (
       <div className={`col-2 col-cards ${cx.col2}`}>
       	<div className="col --center">
-      		{ showEl.cards ?
-            <Board id="boardCards" data={this.composeCards(cards)} className={cx.board} type="cards"/>
-            : 'Add Cards'
-          }
-      	</div>
-      	<div className="col">
           { !showEl.deckForm ?
             <div className="col-header">
               <div className="heading-wrapper">
                 <h2>{deckName}</h2>
+                {cardLen ?
+                  <div className="msg__subhead">
+                    {cardLen + ' ' + pluralizeString('card', cardLen)}
+                  </div>
+                  : ''
+                }
               </div>
             </div> : ''
           }
+      		{ showEl.cards ?
+            <Board id="boardCards" data={this.composeCards(cards)} className={cx.board} type="cards"/>
+            : <div className="msg__subhead">Add Cards</div>
+          }
+      	</div>
+      	<div className="col">
           <div className="col-body --center">
             { showEl.deckForm ?
               <SingleForm 

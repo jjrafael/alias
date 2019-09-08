@@ -5,6 +5,7 @@ import Button from '../common/Button';
 import Input from './inputs';
 
 //misc
+import { variables } from '../../config';
 import { bool } from '../../utils';
 import { validateValues, validateSingleValue } from '../../utils/validations';
 
@@ -30,21 +31,41 @@ class FormBox extends React.Component {
   	this.setState({ formData });
   }
 
-  focusHandler = (e) => {
-    if(this.props.focusHandler){
-      this.props.focusHandler(e);
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyPress, false);
+  }
+
+  onKeyPress = (e) => {
+    const { keyCode } = variables;
+    if(e.keyCode === keyCode.enter || e.key === keyCode.enter) {
+      this.submitForm(e);
     }
   }
 
-  blurHandler = (e) => {
+  focusHandler = (e, enableEnter) => {
+  	e.preventDefault();
+    if(this.props.focusHandler){
+      this.props.focusHandler(e);
+    }
+
+    if(enableEnter){
+      document.addEventListener('keydown', this.onKeyPress, false);
+    }
+  }
+
+  blurHandler = (e, enableEnter) => {
+  	e.preventDefault();
     if(this.props.blurHandler){
       this.props.blurHandler(e);
+    }
+
+    if(enableEnter){
+      document.removeEventListener('keydown', this.onKeyPress, false);
     }
   }
 
   updateHandler = (e, extra) => {
   	const notInput = extra && extra.notInput;
-
   	if(!notInput){
   		e.preventDefault();
   	}
@@ -118,7 +139,7 @@ class FormBox extends React.Component {
   	let html = [];
   	const handlers = {
   		updateHandler: this.updateHandler,
-  		blurHandler: this.updateHandler,
+  		blurHandler: this.blurHandler,
   		focusHandler: this.focusHandler,
   	}
 

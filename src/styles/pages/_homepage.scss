@@ -95,3 +95,48 @@
 		}
 	}
 }
+
+
+/*responsiveness*/
+
+@include mobile {
+	.home-page {
+		.col-2 > .col .col-body.--center {
+			height: auto;
+			.forms-single {
+				padding-top: 60px;
+			}
+		}
+		.col-header {
+			height: 70px;
+		}
+		.heading-wrapper {
+			float: right;
+	    font-size: 20px;
+    	line-height: 50px;
+    	text-align: left;
+			h2 {
+				float: left;
+				font-size: $fs-s;
+				font-family: $josefin;
+				text-align: left;
+				padding-left: 20px;
+		    margin-right: 20px;
+			}
+		}
+		.board, .board.active {
+			width: calc(100% - 70px);
+    	height: 150px;
+    	margin-top: 0px;
+    	.card {
+    		margin-bottom: 0px;
+    		margin-right: 10px!important;
+    		.card-front,
+    		.card-back {
+			    width: 200px;
+    			height: 130px;
+    		}
+    	}
+		}
+	}
+}

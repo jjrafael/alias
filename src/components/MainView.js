@@ -96,6 +96,7 @@ class MainView extends React.Component {
 			role: 'grid',
 			inGame: false,
 			teamNumber: null,
+			page: null,
 		}
 	}
 
@@ -145,23 +146,52 @@ class MainView extends React.Component {
 				this.props.setPlayingDecks(defaultDecks);
 			}
 		}
+
+		if((prevProps.gameDetails !== this.props.gameDetails) ||
+			(prevProps.user !== this.props.user) ||
+			(prevProps.appDetails !== this.props.appDetails) ||
+			(prevState.verifyCacheDone !== this.state.verifyCacheDone) ||
+			(prevState.team !== this.state.team)){
+			this.setPage(
+				this.props.user, 
+				this.props.appDetails, 
+				this.props.gameDetails,
+				this.state.verifyCacheDone,
+				this.state.team);
+		}
 	}
 
-	setDefaultState() {
-		this.setState({
-			device: null,
-			cachedGameChecked: false,
-			cachedAppChecked: false,
-			cachedUserChecked: false,
-			cacheLoaded: false,
-			verifyCacheDone: false,
-			isTeamConnected: false,
-			cachedIds: null,
-			team: null,
-			role: 'grid',
-			inGame: false,
-			teamNumber: null,
-		})
+	setPage(user, appDetails, gameDetails, verifyCacheDone, team) {
+		const { inGame } = this.state;
+		const isLogged = user && user.is_logged;
+		const isAppReady = (isLogged && bool(appDetails) && verifyCacheDone);
+		const isTeam = user && user.role === 'team';
+		let page = null;
+
+		if(isAppReady){
+			//user already logged, app is initialized
+			if(isTeam && inGame){
+				//team leader and already in play: LeaderPage
+				page = 'leader';
+			}else if(isTeam && !inGame){
+				//team leader and adding members
+				page = 'buildTeam';
+			}else if(!isTeam && inGame){
+				//grid and already in play: GridPage
+				page = 'grid';
+			}else if(!isTeam && !inGame){
+				//decks and building team
+				page = 'home';
+			}else{
+				//something went wrong
+				page = 'error';
+			}
+		}else{
+			//no user logged and/or app wasn't initialized yet
+			page = 'splash';
+		}
+
+		this.setState({ page });
 	}
 
 	getDefaultBundle(decks) {
@@ -318,46 +348,39 @@ class MainView extends React.Component {
 		}
 	}
 
-	renderPages(isAppReady, isTeam) {
+	renderPages() {
 		const { hasModals } = this.props;
-		const { team, isTeamConnected, inGame } = this.state;
-		const generalProps = { variables, hasModals, team };
+		const { page, isTeamConnected } = this.state;
+		const generalProps = { variables, hasModals };
 		let html = null;
 		const props = {
 			general: generalProps,
 			home: {...generalProps, isTeamConnected},
 		}
-		
-		if(isAppReady){
-			//user already logged, app is initialized
-			if(isTeam && inGame){
-				//team leader and already in play: LeaderPage
-				html = <LeaderPage {...props.general} />;
-			}else if(isTeam && !inGame){
-				//team leader and adding members
-				html = <BuildTeamPage {...props.general} />;
-			}else if(!isTeam && inGame){
-				//grid and already in play: GridPage
-				html = <GridPage {...props.general} />;
-			}else if(!isTeam && !inGame){
-				//grid and building team
-				html = (
-					<Switch>
-						<Route
-							exact path="/" 
-							render={() => <HomePage {...props.home} />}/>
-						<Route 
-							exact path="/decks" 
-							render={() => <DecksPage {...props.general} />}/>
-					</Switch>
-				);
-			}else{
-				//something went wrong
-				html = <SplashPage {...props.general} />;
-			}
+
+		if(page === 'splash'){
+			html = <SplashPage {...props.general} />
+		}else if(page === 'home'){
+			html = (
+				<Switch>
+					<Route
+						exact path="/" 
+						render={() => <HomePage {...props.home} />}/>
+					<Route 
+						exact path="/decks" 
+						render={() => <DecksPage {...props.general} />}/>
+				</Switch>
+			); 
+		}else if(page === 'buildTeam'){
+			html = <BuildTeamPage {...props.general} />
+		}else if(page === 'leader'){
+			html = <LeaderPage {...props.general} />
+		}else if(page === 'grid'){
+			html = <GridPage {...props.general} />
+		}else if(page === 'error'){
+			html = <SplashPage {...props.general} />
 		}else{
-			//no user logged and/or app wasn't initialized yet
-			html = <SplashPage {...props.general} />;
+			html = <SplashPage {...props.general} />
 		}
 
 		return html;
@@ -365,7 +388,7 @@ class MainView extends React.Component {
 
   	render() {
   		const { user, appDetails } = this.props;
-  		const { verifyCacheDone, device, inGame } = this.state;
+  		const { verifyCacheDone, device, inGame, page } = this.state;
   		const isLogged = user && user.is_logged;
   		const isAppReady = (isLogged && !!appDetails && verifyCacheDone);
   		const isTeam = user && user.role === 'team';
@@ -375,9 +398,12 @@ class MainView extends React.Component {
 
 	    return (
 	      <div className={`page --${cxDevice}`} id="MainPage">
-	      	<Header className={`app-header ${cxHeader}`} headerProps={headerProps}/>
+	      	<Header
+	      		className={cxHeader} 
+	      		headerProps={headerProps} 
+	      		page={page}/>
 	        <Body className="app-body">
-	        	{this.renderPages(isAppReady, isTeam)}
+	        	{this.renderPages()}
 	        </Body>
 	        <ModalWarning />
 	        <ModalSignOut />

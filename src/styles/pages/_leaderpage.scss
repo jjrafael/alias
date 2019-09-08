@@ -43,6 +43,9 @@
 /*responsiveness*/
 
 @include mobile {
+	.leader-page {
+		height: calc(100% - 50px);
+	}
 	.leader-page, .leader-page.--hasBoard {
 		align-items: unset;
 		justify-content: unset;
@@ -59,10 +62,11 @@
 		}
 		form {
 			.input__textbox {
-				width: calc(100% - 20px);
+				width: 100%;
 			}
 			.input__quantity {
-				width: 50px;
+				box-sizing: border-box;
+    		width: 70px;
 			}
 			.inputwrap__quantity .input__label{
 				opacity: 0;

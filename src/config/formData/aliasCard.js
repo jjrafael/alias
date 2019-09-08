@@ -1,6 +1,7 @@
 export const formInfo = {
 	formName: 'aliasCard',
 	className: 'aliasCard',
+	autoComplete: 'off',
 	groupedInputs: 0,
 	inputs: [
 		{
@@ -14,6 +15,8 @@ export const formInfo = {
 	    className: '--card-look',
 	    extra: {
 	    	spellCheck: false,
+	    	enableEnter: true,
+	    	autoComplete: 'off',
 	    }
 		},
 		{
@@ -23,10 +26,12 @@ export const formInfo = {
 	    placeholder: '',
 	    label: 'Jinx Message',
 	    showLabel: true,
+	    value: '',
 	    validations: [],
 	    extra: {
 	    	btnLabelToShow: 'Add Jinx',
 	    	btnLabelToHide: 'Cancel',
+	    	autoComplete: 'off',
 	    }
 		}
 	],

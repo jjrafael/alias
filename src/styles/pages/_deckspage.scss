@@ -16,6 +16,18 @@
 				@include delay-child-sequence(120);
 			}
 		}
+		&.col-cards {
+			.col-header {
+				height: 0px;
+			}
+			.col {
+				flex-direction: column;
+			}
+			.board {
+		    box-sizing: border-box;
+    		width: calc(100% - 40px);
+			}
+		}
 		.col-header {
 			height: 100px;
 		}
@@ -59,5 +71,100 @@
 
 	.app-footer {
 		margin-left: calc(50% - 275px);
+	}
+}
+
+
+/*responsiveness*/
+
+@include mobile {
+	.decks-page {
+		overflow: hidden;
+		height: calc(100% - 50px);
+		.heading-wrapper {
+			top: 10px;
+			h2 {
+		    font-size: 20px;
+	    	line-height: 50px;
+	    	text-align: left;
+	    	font-family: $josefin;
+	    	font-size: $fs-s;
+	    	padding-left: 20px;
+			}
+		}
+		.col-2 {
+			height: 100%;
+			display: none;
+			&.show {
+				display: block;
+			}
+			&.col-decks {
+				margin-top: -100%;
+			}
+			&.col-cards {
+				.col {
+					display: block;
+				}
+				.col:first-child {
+					height: calc(30% + 20px);
+					.col-header {
+						height: 50px;
+					}
+				}
+				.col:last-child {
+			    height: calc(70% - 90px);
+			    .col-body.--center {
+			    	display: block;
+	    	    padding: 20px;
+  					box-sizing: border-box;
+			    }
+			    .forms-container {
+			    	width: 100%;
+			    }
+				}
+				.board {
+					height: calc(100% - 70px);
+			    position: absolute;
+    			bottom: 0px;
+					.card {
+						margin: 0px 10px 0px 0px;
+				    width: 180px;
+						.card-back, .card-front {
+					    box-sizing: border-box;
+						}
+					}
+				}
+				.forms-single {
+					@include fade-in();
+				}
+				.col .col-header {
+					height: 0px;
+				}
+			}
+			.col {
+				height: calc(50% - 35px);
+				.col-body {
+					&.--center {
+						height: calc(100% - 50px);
+					}
+				}
+				.col-header {
+					height: 30px;
+				}
+			}
+		}
+		.msg__subhead {
+			width: 100%;
+			text-align: center;
+			padding-top: 20px;
+		}
+		.board {
+			@include fade-in();
+			height: 50%;
+		}
+		.app-footer {
+			width: 100%;
+			margin: 0px;
+		}
 	}
 }
