@@ -13,11 +13,12 @@ import { listenApp, toggleLoadingOverlay } from '../../actions/app';
 
 //misc
 import avatars from '../../config/avatars';
-import { randomNumber, generateColor, getNow } from '../../utils';
+import { randomNumber, generateColor, getNow, scrollTo, bool } from '../../utils';
 
 const mapStateToProps = state => {return {
 	team: state.team.team1 || state.team.team2 || null,
-	members: state.team.team1members || state.team.team2members || [],
+	members: bool(state.team.team1members) ? state.team.team1members
+		: (bool(state.team.team2members) ? state.team.team2members : []),
 	user: state.app.user,
 	appDetails: state.app.appDetails,
 	gameDetails: state.app.gameDetails,
@@ -82,6 +83,7 @@ class BuildTeamPage extends React.Component {
 		}
 
 		if(prevProps.members !== this.props.members){
+			scrollTo('boardAddMembers');
 			this.setState({ members: this.props.members });
 		}
 
@@ -196,6 +198,7 @@ class BuildTeamPage extends React.Component {
 						</div>
 					}
 					<Board
+						id="boardAddMembers"
 						data={members}
 						className={`${cxBoard}`}
 						type="bar"/>

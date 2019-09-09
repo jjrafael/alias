@@ -11,11 +11,22 @@
 	&.--hasBoard .page-inner {
 		margin-top: -20%;
 	}
+
+	.activate-page-wrapper {
+		h4 {
+	    text-align: center;
+    	padding: 20px 0px;
+		}
+	}
+
 	.board.active {
+		@include fade-in();
     height: 200px;
     margin-bottom: 30px;
 	}
+
 	form {
+		@include fade-in();
 		.input__group {
 			display: flex;
 			position: relative;
@@ -53,6 +64,9 @@
 			padding: 20px;
 			margin-top: 0px;
 			width: 100%;
+			&.inactive {
+				@include center-flex();
+			}
 		}
 		.board, .board.active {
 			width: 100%;

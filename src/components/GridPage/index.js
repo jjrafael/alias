@@ -22,7 +22,7 @@ import {
 	setSettings
 } from '../../actions/app';
 import { setCardsOnGrid, setPlayingDecks } from '../../actions/cards';
-import { editTeam } from '../../actions/teams';
+import { editTeam, browseMembers } from '../../actions/teams';
 import { 
 	addRound, 
 	shiftTurn, 
@@ -80,6 +80,7 @@ const mapDispatchToProps = dispatch => {
 		  listenRounds,
 		  editGame,
 		  editTeam,
+		  browseMembers,
 		  pauseGame,
 		  resumeGame,
 		  setSettings
@@ -128,6 +129,14 @@ class GridPage extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState){
+		if(!bool(prevProps.team1) && this.props.team1){
+      this.props.browseMembers(this.props.team1.id, this.props.team1.team_number);
+    }
+
+    if(!bool(prevProps.team2) && this.props.team2){
+      this.props.browseMembers(this.props.team2.id, this.props.team2.team_number);
+    }
+
 		if(prevProps.rounds !== this.props.rounds){
 			const activeRound = getActiveRound(this.props.rounds, true);
 			const isSame = (activeRound && prevState.activeRound) &&

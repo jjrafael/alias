@@ -27,9 +27,9 @@ const menu = {
 		label: 'Reset Team',
 		type: 'modal'
 	},
-	startGame:{
-		id: 'start_game',
-		label: 'Start Game',
+	startApp:{
+		id: 'start_app',
+		label: 'Start App',
 		type: 'func'
 	},
 	restartGame: {
@@ -58,7 +58,7 @@ export const homeMenu = [
 ]
 
 export const splashMenu = [
-	menu.startGame,
+	menu.startApp,
 	menu.enterCode,
 	menu.howTo,
 	menu.about

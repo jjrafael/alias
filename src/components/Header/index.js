@@ -49,22 +49,33 @@ class Header extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const baseTimer = minToMsec(this.props.settings.timer);
+
     if(prevProps.settings.timer !== this.props.settings.timer){
       this.setState({ timer: minToMsec(this.props.settings.timer) });
     }
 
     if(prevProps.rounds !== this.props.rounds){
       const activeRound = getActiveRound(this.props.rounds);
+      const hasValues = activeRound && this.state.activeRound;
       this.setNewAlias(activeRound ? activeRound.alias : []);
       this.setState({ activeRound: activeRound });
+      clearInterval(this.timeFunc);
+      this.setState({ timer: baseTimer });
     }
 
     if(prevState.newAlias !== this.state.newAlias && this.props.settings.timer){
+      const hasValues = prevState.newAlias && this.state.newAlias;
       if(this.state.newAlias){
         this.props.setTimesUp(false);
         this.timeFunc = setInterval(this.setTimeFunc, 1000);
+        if(hasValues && prevState.newAlias.left !== this.state.newAlias.left){
+          clearInterval(this.timeFunc);
+          this.setState({ timer: baseTimer });
+        }
       }else{
         clearInterval(this.timeFunc);
+        this.setState({ timer: baseTimer });
       }
     }
 

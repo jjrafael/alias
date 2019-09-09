@@ -214,11 +214,12 @@ export function compareUpdate(prev, next, operator, haveValue, extra){
 // dom manipulation
 export function scrollTo(id, type){
 	const el = document.getElementById(id);
-	if(type === 'top'){
+	const hasEl = bool(el)
+	if(hasEl && type === 'top'){
 		el.scrollTop = 0;
-	}else if(type === 'bottom'){
+	}else if(hasEl && type === 'bottom'){
 		el.scrollTop = el.scrollHeight;
-	}else{
+	}else if(hasEl){
 		el.scrollTop = el.scrollHeight;
 	}
 }

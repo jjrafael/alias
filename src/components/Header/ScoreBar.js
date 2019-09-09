@@ -7,6 +7,7 @@ class ScoreBar extends React.Component {
 		this.state = {
 			newScore: false
 		}
+		this._isMounted = true;
 	}
 
 	componentDidUpdate(prevProps) {
@@ -20,10 +21,20 @@ class ScoreBar extends React.Component {
 		}
 	}
 
+	componentWillUnmount() {
+		this._isMounted = false;
+	}
+
+	editState(obj){
+		if(this._isMounted){
+			this.setState(obj);
+		}
+	}
+
 	promptScore(direction){
-		this.setState({ newScore: direction });
+		this.editState({ newScore: direction });
 		setTimeout(() => {
-			this.setState({ newScore: '' });
+			this.editState({ newScore: '' });
 		}, 2000);
 	}
 

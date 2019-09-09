@@ -5,10 +5,12 @@ import { bindActionCreators } from 'redux';
 //Components
 import FormBox from '../forms/FormBox';
 import Board from '../common/Board';
+import Button from '../common/Button';
 
 // actions
 import { listenGame, listenRounds, editRound } from '../../actions/games';
 import { setSettings } from '../../actions/app';
+import { browseMembers } from '../../actions/teams';
 
 //misc
 import { bool, getNow, makeId } from '../../utils';
@@ -21,8 +23,8 @@ const mapStateToProps = state => {return {
 	gameDetails: state.game.gameDetails,
 	settings: state.app.settings,
 	rounds: state.game.rounds,
-	team1members: state.team.team1members,
-	team2members: state.team.team2members,
+	members: bool(state.team.team1members) ? state.team.team1members
+		: (bool(state.team.team2members) ? state.team.team2members : [])
 }}
 
 const mapDispatchToProps = dispatch => {
@@ -31,7 +33,8 @@ const mapDispatchToProps = dispatch => {
 		  listenGame, 
 		  listenRounds,
 		  editRound,
-		  setSettings
+		  setSettings,
+		  browseMembers
 		},
 		dispatch
 	 )
@@ -47,6 +50,7 @@ class LeaderPage extends React.Component {
 			pendingAnswer: false,
 			alias: [],
 			isWaiting: false,
+			activatePage: false,
 		}
 	}
 
@@ -61,6 +65,10 @@ class LeaderPage extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState){
+		if(!prevProps.team && this.props.team && !bool(this.props.members)){
+			this.props.browseMembers(this.props.team.id, this.props.team.team_number);
+		}
+
 		if(prevProps.rounds !== this.props.rounds && this.props.rounds){
 			const activeRound = getActiveRound(this.props.rounds);
 			this.setState({ activeRound });
@@ -72,6 +80,9 @@ class LeaderPage extends React.Component {
 		if(prevState.activeRound !== this.state.activeRound){
 			const alias = this.state.activeRound ? this.state.activeRound.alias : [];
 			this.setState({ alias });
+			if(!bool(alias)){
+				this.activatePage(false);
+			}
 		}
 
 		if(prevState.alias !== this.state.alias){
@@ -79,6 +90,10 @@ class LeaderPage extends React.Component {
 			const haveNew = bool(this.state.alias.filter(d => d.new));
 			this.setState({ pendingAnswer: haveNew && bool(this.state.alias) });
 		}
+	}
+
+	activatePage(value) {
+		this.setState({ activatePage: value });
 	}
 
 	submitForm = (formData) => {
@@ -161,7 +176,7 @@ class LeaderPage extends React.Component {
 
   render() {
   	const { rounds, gameDetails, team } = this.props;
-  	const { cardsForTeam, pendingAnswer, activeRound } = this.state;
+  	const { cardsForTeam, pendingAnswer, activeRound, activatePage } = this.state;
   	const turnOf = gameDetails ? gameDetails.turnOf : 0;
   	const gridReady = bool(rounds) && bool(cardsForTeam) && activeRound;
   	const teamNumber = team ? team.team_number : null;
@@ -170,7 +185,8 @@ class LeaderPage extends React.Component {
   	const notTurn = gameDetails && teamNumber ? (Number(turnOf) !== teamNumber) : false;
   	const cx = {
   		page: `${bool(boardArr) ? '--hasBoard' : ''}`,
-  		board: bool(boardArr) ? 'active' : ''
+  		board: bool(boardArr) ? 'active' : '',
+  		activated: activatePage ? 'active' : 'inactive',
   	}
   	const msg = {
   		msgNoRound: 'Preparing Game...',
@@ -179,17 +195,18 @@ class LeaderPage extends React.Component {
   		msgPause: 'Game Paused',
   	}
   	const showEl = {
-  		board: gridReady,
-  		form: gridReady && !pendingAnswer && !notTurn && !isPause,
+  		board: gridReady && activatePage,
+  		form: gridReady && activatePage && !pendingAnswer && !notTurn && !isPause,
+  		activateButton: gridReady && !activatePage,
   		msgNoRound: !gridReady,
-  		msgPending: gridReady && pendingAnswer && !notTurn && !isPause,
-  		msgNotTurn: gridReady && notTurn && !isPause,
-  		msgPause: gridReady && isPause
+  		msgPending: gridReady && activatePage && pendingAnswer && !notTurn && !isPause,
+  		msgNotTurn: gridReady && activatePage && notTurn && !isPause,
+  		msgPause: gridReady && activatePage && isPause
   	}
   	
     return (
       <div className={`page-wrapper leader-page ${cx.page}`} data-team={teamNumber}>
-				<div className="page-inner">
+				<div className={`page-inner ${cx.activated}`}>
 					{showEl.board ? 
 						<Board
 							id="boardInGameAlias"
@@ -215,6 +232,15 @@ class LeaderPage extends React.Component {
 					}
 					{ showEl.msgNotTurn ?
 						msg.msgNotTurn : ''
+					}
+					{ showEl.activateButton ?
+						<div className="activate-page-wrapper">
+							<h4>Ready?</h4>
+							<Button
+								text={'Start'} 
+								onClick={() => this.activatePage(true)}/>
+						</div>
+						: ''
 					}
 				</div>
 		  </div>

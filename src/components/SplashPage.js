@@ -156,8 +156,8 @@ class SplashPage extends React.Component {
 	      		</CardsCol>
 	      		<CardsCol count={cardCount} animDelay={'17s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards" className="--pointer">
-	      				<div className="card-inner" onClick={this.initUser}>
-	      					<h3>Start Game</h3>
+	      				<div className="card-inner f--start-app" onClick={this.initUser}>
+	      					<h3>Start App</h3>
 	      				</div>
 	      			</Card>
 	      		</CardsCol>

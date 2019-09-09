@@ -28,7 +28,8 @@ import {
 	deleteLocalStorage,
 	pluralizeString,
 	randomNumber, 
-	generateColor
+	generateColor,
+	scrollTo
 } from '../../utils';
 import avatars from '../../config/avatars';
 
@@ -104,6 +105,24 @@ class HomePage extends React.Component {
 
 		if(team2Id){
 			this.checkActiveTeam(2, team2Id);
+		}
+	}
+
+	componentDidUpdate(prevProps){
+		if(prevProps.team1members !== this.props.team1members){
+			const bothArrays = Array.isArray(prevProps.team1members) &&
+				Array.isArray(this.props.team1members);
+			if(bothArrays && prevProps.team1members.length < this.props.team1members.length){
+				scrollTo('boardTeam1Members');
+			}
+		}
+
+		if(prevProps.team2members !== this.props.team2members){
+			const bothArrays = Array.isArray(prevProps.team2members) &&
+				Array.isArray(this.props.team2members);
+			if(bothArrays && prevProps.team2members.length < this.props.team2members.length){
+				scrollTo('boardTeam2Members');
+			}
 		}
 	}
 
@@ -256,7 +275,11 @@ class HomePage extends React.Component {
 						</div> : ''
 					}
 					{ showEl.members ?
-						<Board data={this.getMembers(members, teamNumber)} className={`--hor-scroll ${cxBoard}`} type="cards"/> : ''
+						<Board
+							id={`boardTeam${teamNumber}Members`}
+							data={this.getMembers(members, teamNumber)} 
+							className={`--hor-scroll ${cxBoard}`} 
+							type="cards"/> : ''
 					}
 					{ showEl.connectedNoMembers ?
 						<div className="msg__connect-to-team">

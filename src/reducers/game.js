@@ -267,11 +267,12 @@ export default function Game(state = initialState, action) {
                 roundLoading: true,
             }
         case game.LISTEN_ROUNDS_SUCCESS:
+            let LISTEN_ROUNDS_val = mergeArray(state.rounds, action.response, true);
             return {
                 ...state,
                 roundLoading: false,
                 roundError: false,
-                rounds: action.response
+                rounds: LISTEN_ROUNDS_val
             }
         case game.LISTEN_ROUNDS_FAILURE:
             return {

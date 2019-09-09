@@ -94,7 +94,8 @@ class CardsBoard extends React.Component {
       this.setState({ 
         cards: [...this.state.cards, {
           ...formData,
-          id: makeId(10, true)
+          id: makeId(10, true),
+          kind: 'text'
         }]
       });
       scrollTo('boardCards');

@@ -54,6 +54,13 @@ class Menu extends React.Component {
 		}
 	}
 
+	startApp(){
+		const el = document.getElementsByClassName('f--start-app');
+		if(el.length){
+			el[0].click();
+		}
+	}
+
 	updateMenu(){
 		const { isAppReady, isTeam, inGame } = this.props;
 		let menuData = menu.aboutMenu;
@@ -110,6 +117,9 @@ class Menu extends React.Component {
 			break;
 
 			//func
+			case 'start_app':
+				this.startApp();
+			break;
 			case 'pause_game':
 				this.props.pauseGame();
 			break;

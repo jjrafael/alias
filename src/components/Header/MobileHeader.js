@@ -8,7 +8,8 @@ const mapStateToProps = state => {
   return {
     rounds: state.game.rounds,
     team: state.team.team1 || state.team.team2 || null,
-    members: state.team.team1members || state.team.team2members || [],
+    members: bool(state.team.team1members) ? state.team.team1members
+			: (bool(state.team.team2members) ? state.team.team2members : [])
   }
 }
 
@@ -21,12 +22,13 @@ class MobileHeader extends React.Component {
 
 		if(page === 'buildTeam'){
 			html = team ? team.name : 'Build your team';
-		}else if(activeRound && bool(members) && page === 'leader'){
-			const leader = activeRound[`team${teamNumber}`].leader;
-			const member = find(members, ['id', leader])
-			html = member || team.name || 'Team Leader';
+		}else if(bool(activeRound) && page === 'leader'){
+			const activeTeam = activeRound[`team${teamNumber}`];
+			const leader = activeTeam ? activeTeam.leader : '';
+			const member = find(members, ['id', leader]);
+			html = member ? member.name : (team.name || 'Team Leader');
 		}
-
+		
 		return html;
 	}
 

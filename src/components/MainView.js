@@ -151,18 +151,19 @@ class MainView extends React.Component {
 			(prevProps.user !== this.props.user) ||
 			(prevProps.appDetails !== this.props.appDetails) ||
 			(prevState.verifyCacheDone !== this.state.verifyCacheDone) ||
-			(prevState.team !== this.state.team)){
+			(prevState.team !== this.state.team) ||
+			(prevState.inGame !== this.state.inGame)){
 			this.setPage(
 				this.props.user, 
 				this.props.appDetails, 
 				this.props.gameDetails,
 				this.state.verifyCacheDone,
-				this.state.team);
+				this.state.team,
+				this.state.inGame);
 		}
 	}
 
-	setPage(user, appDetails, gameDetails, verifyCacheDone, team) {
-		const { inGame } = this.state;
+	setPage(user, appDetails, gameDetails, verifyCacheDone, team, inGame) {
 		const isLogged = user && user.is_logged;
 		const isAppReady = (isLogged && bool(appDetails) && verifyCacheDone);
 		const isTeam = user && user.role === 'team';
@@ -190,7 +191,7 @@ class MainView extends React.Component {
 			//no user logged and/or app wasn't initialized yet
 			page = 'splash';
 		}
-
+		
 		this.setState({ page });
 	}
 
@@ -357,7 +358,7 @@ class MainView extends React.Component {
 			general: generalProps,
 			home: {...generalProps, isTeamConnected},
 		}
-
+		
 		if(page === 'splash'){
 			html = <SplashPage {...props.general} />
 		}else if(page === 'home'){

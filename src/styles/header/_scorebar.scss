@@ -88,6 +88,7 @@
 
 @include mobile {
 	.scorebar {
+		width: calc(50% - 20PX);
 		.scorebar__avatar {
 			display: none;
 		}

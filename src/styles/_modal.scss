@@ -29,7 +29,7 @@
 	border-radius: 10px;
 	background: $white;
 	position: relative;
-	background: $peach;
+	background: $peach-light;
 	&.--flipping {
 		animation: flipping 1s ease forwards;
 		> * {
@@ -219,7 +219,7 @@
 	}
 	&.--front {
 		z-index: 62;
-		background: $peach;
+		background: $peach-light;
 		border-radius: 10px;
 	}
 }

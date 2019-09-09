@@ -27,13 +27,13 @@ export function checkQuerySize(data, returnArray) {
 }
 
 //Data modifications
-export function mergeArray(_arr1, _arr2, keepNonExist){
+export function mergeArray(_arr1, _arr2, keepNonExist, _prop){
 	const arr1 = Array.isArray(_arr1) ? _arr1 : (_arr1 ? [_arr1] : []); //previous array
 	const arr2 = Array.isArray(_arr2) ? _arr2 : (_arr2 ? [_arr2] : []);	//new array
+	const prop = _prop || 'id';
 	let arr = [];
-
 	arr1.forEach(d => {
-		const next = find(arr2, ['id', d.id])
+		const next = find(arr2, [prop, d[prop]])
 		if(next){
 			arr.push(next);
 		}else if(keepNonExist){
@@ -42,7 +42,7 @@ export function mergeArray(_arr1, _arr2, keepNonExist){
 	})
 
 	arr2.forEach(d => {
-		const exists = find(arr, ['id', d.id]);
+		const exists = find(arr, [prop, d[prop]]);
 		if(!exists){
 			arr.push(d);
 		}
