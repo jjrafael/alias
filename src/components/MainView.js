@@ -11,6 +11,7 @@ import ModalSignOut from './modal/ModalSignOut';
 import ModalEnterCode from './modal/ModalEnterCode';
 import ModalWarning from './modal/ModalWarning';
 import ModalHowToPlay from './modal/ModalHowToPlay';
+import ModalAboutDev from './modal/ModalAboutDev';
 
 //pages
 import SplashPage from './SplashPage';
@@ -410,6 +411,7 @@ class MainView extends React.Component {
 	        <ModalSignOut />
 	        <ModalEnterCode />
 	        <ModalHowToPlay />
+	        <ModalAboutDev />
 	        <Loading />
 	      </div>
 	    );

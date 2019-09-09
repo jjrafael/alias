@@ -63,6 +63,7 @@ const initialState = {
     showModalReportAlias: false,
     showModalAliasHistory: false,
     showModalSettings: false,
+    showModalAboutDev: false,
 };
 
 export default function App(state = initialState, action) {
@@ -368,6 +369,12 @@ export default function App(state = initialState, action) {
                 ...state,
                 showModalHowToPlay: action.data,
             }
+        case app.MODAL_TOGGLE_ABOUT_DEV:
+            return {
+                ...state,
+                showModalAboutDev: action.data,
+            }
+
 
         //SIGNOUT
         case app.CLEAR_STATES:
@@ -384,6 +391,12 @@ export default function App(state = initialState, action) {
                 showModalRestartGame: false,
                 showModalResetTeam: false,
                 showModalEnterCode: false,
+                showModalRoundWinner: false,
+                showModalQuitGame: false,
+                showModalReportAlias: false,
+                showModalAliasHistory: false,
+                showModalSettings: false,
+                showModalAboutDev: false,
             }
 
         default: 

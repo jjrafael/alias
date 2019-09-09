@@ -16,7 +16,7 @@ const menu = {
 		label: 'How To Play',
 		type: 'modal',
 	},
-	about: {
+	aboutDev: {
 		id: 'about_dev',
 		label: 'About JJ Rafael',
 		type: 'modal',
@@ -54,14 +54,14 @@ export const homeMenu = [
 	menu.enterCode,
 	menu.signOut,
 	menu.howTo,
-	menu.about
+	menu.aboutDev
 ]
 
 export const splashMenu = [
 	menu.startApp,
 	menu.enterCode,
 	menu.howTo,
-	menu.about
+	menu.aboutDev
 ]
 
 export const inGridMenu = [
@@ -69,23 +69,23 @@ export const inGridMenu = [
 	menu.pauseGame,
 	menu.quitGame,
 	menu.howTo,
-	menu.about
+	menu.aboutDev
 ]
 
 export const buildTeamMenu = [
 	menu.signOut,
 	menu.howTo,
-	menu.about
+	menu.aboutDev
 ]
 
 export const teamLeaderMenu = [
 	menu.signOut,
 	menu.howTo,
-	menu.about
+	menu.aboutDev
 ]
 
 export const aboutMenu = [
-	menu.about
+	menu.aboutDev
 ]
 
 export default {

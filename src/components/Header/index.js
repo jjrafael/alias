@@ -57,7 +57,6 @@ class Header extends React.Component {
 
     if(prevProps.rounds !== this.props.rounds){
       const activeRound = getActiveRound(this.props.rounds);
-      const hasValues = activeRound && this.state.activeRound;
       this.setNewAlias(activeRound ? activeRound.alias : []);
       this.setState({ activeRound: activeRound });
       clearInterval(this.timeFunc);

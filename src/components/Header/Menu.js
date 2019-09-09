@@ -10,7 +10,8 @@ import {
 	toggleRestartGameModal,
 	toggleEnterCodeModal,
 	toggleQuitGameModal,
-	toggleHowToPlayModal
+	toggleHowToPlayModal,
+	toggleAboutDevModal
 } from '../../actions/app';
 import { pauseGame } from '../../actions/games';
 
@@ -32,6 +33,7 @@ const mapDispatchToProps = dispatch => {
 			toggleEnterCodeModal,
 			toggleQuitGameModal,
 			toggleHowToPlayModal,
+			toggleAboutDevModal,
 			pauseGame
     },
     dispatch
@@ -114,6 +116,9 @@ class Menu extends React.Component {
 				break;
 			case 'how_to_play':
 				this.props.toggleHowToPlayModal(true);
+			break;
+			case 'about_dev':
+				this.props.toggleAboutDevModal(true);
 			break;
 
 			//func
