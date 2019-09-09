@@ -40,7 +40,7 @@ class ModalHowToPlay extends React.Component {
           link: 'https://github.com/jjrafael'
         },
         {
-          icon: 'ig',
+          icon: 'instagram',
           label: 'Instagram',
           link: 'https://instagram.com/jessiejrafael'
         },
@@ -51,7 +51,7 @@ class ModalHowToPlay extends React.Component {
         },
         {
           icon: 'document',
-          label: 'Resume',
+          label: 'Download Resume',
           link: ''
         },
       ]
@@ -69,7 +69,7 @@ class ModalHowToPlay extends React.Component {
     socials.forEach((d, i) => {
       html.push(
         <a key={i} href={d.link || '/'} target="_blank" rel="noopener noreferrer">
-          <div className={`social-item icon icon-${d.icon}`}></div>
+          <div className={`social-item icon icon-${d.icon}`} title={d.label}></div>
         </a>
       )
     })
@@ -91,7 +91,7 @@ class ModalHowToPlay extends React.Component {
             <div className="modal__header hide"></div>
             <div className="modal__body --no-header">
               <div className="jjr-photo">
-
+                <div className="jjr-emblem icon icon-jjr_outline"></div>
               </div>
               <div className="jjr-content">
                 <h5>Hello, Im the developer of this app!</h5>

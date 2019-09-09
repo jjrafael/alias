@@ -27,6 +27,8 @@ class MobileHeader extends React.Component {
 			const leader = activeTeam ? activeTeam.leader : '';
 			const member = find(members, ['id', leader]);
 			html = member ? member.name : (team.name || 'Team Leader');
+		}else if(page === 'home'){
+			html = 'Prep your game';
 		}
 		
 		return html;

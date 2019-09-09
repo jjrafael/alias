@@ -41,7 +41,7 @@ class DeckCard extends React.Component {
     }else if(type === 'death'){
       html = (
         <div className={`card-back__inner --${type}`}>
-          You're Dead!
+          <i className="icon icon-skull"></i>
         </div>
       )
     }

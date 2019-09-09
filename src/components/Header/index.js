@@ -44,6 +44,7 @@ class Header extends React.Component {
       timer: minToMsec(this.props.settings.timer),
       activeRound: null,
       newAlias: null,
+      isMenu: false,
     }
     this.timeFunc = null;
   }
@@ -104,6 +105,10 @@ class Header extends React.Component {
     }
   }
 
+  toggleMenu(value) {
+    this.setState({ isMenu: value });
+  }
+
   setNewAlias(data){
     const arr = bool(data) ? data.filter(d => d.new) : [];
     const alias = bool(arr) ? arr[0] : null;
@@ -122,7 +127,7 @@ class Header extends React.Component {
       cardsOnGrid,
       page
     } = this.props;
-    const { timer, activeRound } = this.state;
+    const { timer, activeRound, isMenu } = this.state;
     const isTeam = user ? user.role === 'team' : false;
     const turnOf = gameDetails && !isTeam ? gameDetails.turnOf : '';
     const inGame = gameDetails && gameDetails.status === 'active';
@@ -161,8 +166,18 @@ class Header extends React.Component {
               </div>
             </div>
         }
-        <HeaderCenter timer={timer}>
+        <HeaderCenter
+          timer={timer} 
+          className={isMenu ? '--open' : '--close'}>
           <Menu {...headerProps}/>
+          <div className="menu__toggle">
+            { !isMenu ?
+              <i className="icon icon-menu"
+                onClick={() => this.toggleMenu(true)}></i>
+              : <i className="icon icon-clearclose"
+                onClick={() => this.toggleMenu(false)}></i>
+            }
+          </div>
         </HeaderCenter>
       </header>
     );

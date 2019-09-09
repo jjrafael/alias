@@ -139,7 +139,7 @@ class Menu extends React.Component {
 		
 		menuData.forEach((d, i) => {
 			html.push(
-				<li key={i} className={`menu__item ${d.className}`}
+				<li key={i} className={`menu__item ${d.className || ''}`}
 					onClick={() => this.clickMenu(d)}>
 					{d.label}
 				</li>

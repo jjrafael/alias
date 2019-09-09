@@ -13,6 +13,7 @@ class HowToWin extends React.Component {
             <li>Reporting opponent's alias</li>
             <li>Opponent team reaching violation limit</li>
             <li>Accepting jinx dares</li>
+            <li>Avoiding Death cards</li>
           </ul>
         </div>
       </article>

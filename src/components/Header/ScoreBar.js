@@ -62,12 +62,14 @@ class ScoreBar extends React.Component {
 		};
 		const icons = {
 			trophies: this.renderIcons(trophies, 'trophy'),
-			violations: this.renderIcons(violations, 'stop')
+			violations: this.renderIcons(violations, 'violation')
 		}
 		
 		return (
 			<div className={`scorebar scorebar-team ${cx.score}`} data-team={teamNumber}>
-				<div className="scorebar__avatar"></div>
+				<div className="scorebar__avatar">
+					<i className={`icon icon-${team.avatar}`}></i>
+				</div>
 				<div className="scorebar__round-score">
 						{score}
 						<span className="over-score">/{team.score_goal}</span>

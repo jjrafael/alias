@@ -19,7 +19,6 @@
 		right: 0px;
 		> * {
 			float: right;
-			text-align: right;
 		}
 		.scorebar__info {
 			flex-direction: row-reverse;
@@ -30,6 +29,10 @@
 		width: 40px;
 		height: $header-height;
 		background: $black-10;
+		text-align: center;
+    line-height: 58px;
+    font-size: $fs-s;
+    color: $black-75;
 	}
 	&__round-score {
 		float: left;
@@ -66,7 +69,8 @@
 	    height: 25px;
 	    float: left;
 	    margin: 2px 2px 0px 2px;
-	    background: $black-10;
+	    text-align: center;
+	    line-height: 27px;
 		}
 	}
 	&__violations {
@@ -79,7 +83,9 @@
 	    height: 25px;
 	    float: left;
 	    margin: 2px 2px 0px 2px;
-	    background: $red-50;
+	    text-align: center;
+	    line-height: 27px;
+	    font-size: 22px;
 		}
 	}
 }

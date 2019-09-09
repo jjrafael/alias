@@ -132,7 +132,7 @@ class CardsBoard extends React.Component {
               <div className="heading-wrapper">
                 <h2>{deckName}</h2>
                 {cardLen ?
-                  <div className="msg__subhead">
+                  <div>
                     {cardLen + ' ' + pluralizeString('card', cardLen)}
                   </div>
                   : ''

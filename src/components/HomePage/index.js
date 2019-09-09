@@ -206,6 +206,7 @@ class HomePage extends React.Component {
 	}
 
 	getMembers(members, teamNumber) {
+		const team = this.props[`team${teamNumber}`];
 		let arr = [];
 
 		if(members.length){
@@ -216,7 +217,9 @@ class HomePage extends React.Component {
 					arr.push({
 						data: { ...d, avatarObj: avatar},
 						type: 'members-card',
-						className: '--team'+ teamNumber
+						className: '--team'+ teamNumber,
+						backChildren: team && team.avatar ? 
+							<i className={`icon icon-${team.avatar}`}></i> : ''
 					});
 				}
 			})

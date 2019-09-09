@@ -277,7 +277,11 @@ class ModalRoundWinner extends React.Component {
                 <div className="msg__round-result">
                   {show.isViolated ? loser.team.name+' reached violation limit' : 'Our Winner!'}
                 </div>
-                <div className="trophy-wrapper"></div>
+                <div className="trophy-wrapper --finish">
+                  <i className="icon icon-trophy"></i>
+                  <i className="icon icon-trophy"></i>
+                  <i className="icon icon-trophy"></i>
+                </div>
                 <Button text="Exit Game" className="--primary" onClick={() => this.finishGame()}/>
               </div> :
               <div className="modal__body --body-only --center">
@@ -285,7 +289,9 @@ class ModalRoundWinner extends React.Component {
                 <div className="msg__round-result">
                   Congratulations! {msg}
                 </div>
-                <div className="trophy-wrapper"></div>
+                <div className="trophy-wrapper">
+                  <i className="icon icon-trophy"></i>
+                </div>
                 <Button text="Next Round!" className="--primary" onClick={() => this.shufflePlayingCards()}/>
               </div>
             }
