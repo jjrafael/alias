@@ -170,7 +170,10 @@ class ModalHowToPlay extends React.Component {
           id="howToModal">
           <div className="modal__inner">
             <div className="modal__header">
-              <i className="icon icon-menu"></i>
+              { page !== 1 ?
+                <i className="icon icon-list_alt icon--left"
+                onClick={() => this.goToPage(1)}></i> : ''
+              }
               {this.renderHeader()}
             </div>
             <div className="modal__body">

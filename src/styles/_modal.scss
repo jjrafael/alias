@@ -80,6 +80,12 @@
 		display: block;
 		text-align: left;
 		overflow: hidden;
+		.icon--left {
+			margin-right: 10px;
+			font-size: 20px;
+			text-align: center;
+			cursor: pointer;
+		}
 	}
 	&__body {
 		padding: 10px 20px;
