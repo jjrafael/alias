@@ -1,6 +1,6 @@
 //Utility for common functionalities throughtout the project
 import moment from 'moment';
-import * as firebase from 'firebase';
+import { functions } from '../Firebase';
 import { isNumber, isEmpty } from 'lodash';
 import { variables } from '../config';
 import colors from '../config/colorPalette';
@@ -11,7 +11,7 @@ export function getNow(isString) {
 	if(isString){
 		now = moment().format(variables.timeFormat);
 	}else{
-		now = firebase.firestore.Timestamp.fromDate(new Date());
+		now = functions.timestamp.fromDate(new Date());
 	}
 
     return now;

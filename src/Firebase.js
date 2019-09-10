@@ -1,6 +1,6 @@
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import 'firebase/firestore';
-import 'firebase/database';
+import 'firebase/functions';
 
 //alias-2399d firebase config
 // const firebaseConfig = {
@@ -33,7 +33,12 @@ export const baseURL = {
 	games: firebase.firestore().collection('games'),
 	decks: firebase.firestore().collection('decks'),
 	teams: firebase.firestore().collection('teams'),
-	db: firebase.database(),
+}
+
+// Functions or utilities
+export const functions = {
+	timestamp: firebase.firestore.Timestamp,
+	deleteFn: firebase.functions().httpsCallable('recursiveDelete')
 }
 
 export const collection = {

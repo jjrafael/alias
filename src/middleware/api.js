@@ -1,4 +1,4 @@
-import * as firebase from 'firebase';
+import { functions } from '../Firebase';
 import config from '../config';
 
 export default function callAPIMiddleware({ dispatch, getState }) {
@@ -88,8 +88,7 @@ export default function callAPIMiddleware({ dispatch, getState }) {
         )
       })
     }else if(method === 'deleteAll'){
-      const deleteFn = firebase.functions().httpsCallable('recursiveDelete');
-      deleteFn({path: callRef}).then((response) => {
+      functions.deleteFn({path: callRef}).then((response) => {
         const isArray = response && !!response.docs;
         let res = response;
 

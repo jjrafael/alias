@@ -94,7 +94,7 @@
 
 @include mobile {
 	.scorebar {
-		width: calc(50% - 20PX);
+		width: calc(50% - 20px);
 		.scorebar__avatar {
 			display: none;
 		}

@@ -1,6 +1,5 @@
 // Utility for reducers/database/firebase functionalities
 import { find } from 'lodash';
-import { baseURL } from '../Firebase';
 
 // Firebase
 export function parseFireResponse(response) {
@@ -8,10 +7,6 @@ export function parseFireResponse(response) {
 		id: response.id,
 		...response.data,
 	}
-}
-
-export function dbRef(collectionKey, ref) {
-	return baseURL.db.ref(collectionKey+'/'+ref);
 }
 
 export function checkQuerySize(data, returnArray) {
