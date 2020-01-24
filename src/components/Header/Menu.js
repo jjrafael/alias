@@ -5,36 +5,25 @@ import { bindActionCreators } from 'redux';
 //actions
 import { 
 	toggleSignOutModal, 
-	toggleResetGameModal,
-	toggleResetTeamModal,
-	toggleRestartGameModal,
 	toggleEnterCodeModal,
-	toggleQuitGameModal,
 	toggleHowToPlayModal,
 	toggleAboutDevModal
-} from '../../actions/app';
-import { pauseGame } from '../../actions/games';
+} from '../../actions/session';
 
 //misc
 import menu from '../../config/menu';
 
 const mapStateToProps = state => {return {
-	user: state.app.user,
-	gameDetails: state.game.gameDetails,
+	user: state.session.user
 }}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-    	toggleSignOutModal, 
-			toggleResetGameModal,
-			toggleResetTeamModal,
-			toggleRestartGameModal,
+    	toggleSignOutModal,
 			toggleEnterCodeModal,
-			toggleQuitGameModal,
 			toggleHowToPlayModal,
 			toggleAboutDevModal,
-			pauseGame
     },
     dispatch
   )
@@ -49,14 +38,12 @@ class Menu extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if((prevProps.isAppReady !== this.props.isAppReady) ||
-			(prevProps.inGame !== this.props.inGame) ||
-			(prevProps.isTeam !== this.props.isTeam)){
+		if(prevProps.isSessionReady !== this.props.isSessionReady){
 			this.updateMenu();
 		}
 	}
 
-	startApp(){
+	startSession(){
 		const el = document.getElementsByClassName('f--start-app');
 		if(el.length){
 			el[0].click();
@@ -64,29 +51,12 @@ class Menu extends React.Component {
 	}
 
 	updateMenu(){
-		const { isAppReady, isTeam, inGame } = this.props;
+		const { isSessionReady } = this.props;
 		let menuData = menu.aboutMenu;
 		
-		if(isAppReady){
-			//user already logged, app is initialized
-			if(isTeam && inGame){
-				//team leader and already in play: LeaderPage
-				menuData = menu.teamLeaderMenu
-			}else if(isTeam && !inGame){
-				//team leader and adding members: buildTeamPage
-				menuData = menu.buildTeamMenu
-			}else if(!isTeam && inGame){
-				//grid and already in play: GridPage
-				menuData = menu.inGridMenu
-			}else if(!isTeam && !inGame){
-				//grid and building team
-				menuData = menu.homeMenu
-			}else{
-				//something went wrong
-				menuData = menu.aboutMenu
-			}
+		if(isSessionReady){
+			menuData = menu.homeMenu
 		}else{
-			//no user logged and/or app wasn't initialized yet
 			menuData = menu.splashMenu
 		}
 		
@@ -99,21 +69,9 @@ class Menu extends React.Component {
 			case 'sign_out':
 				this.props.toggleSignOutModal(true);
 			break;
-			case 'reset_game':
-				this.props.toggleResetGameModal(true);
-			break;
-			case 'restart_game':
-				this.props.toggleRestartGameModal(true);
-			break;
-			case 'reset_team':
-				this.props.toggleResetTeamModal(true);
-			break;
 			case 'enter_code':
 				this.props.toggleEnterCodeModal(true);
 			break;
-			case 'quit_game':
-				this.props.toggleQuitGameModal(true);
-				break;
 			case 'how_to_play':
 				this.props.toggleHowToPlayModal(true);
 			break;
@@ -123,10 +81,7 @@ class Menu extends React.Component {
 
 			//func
 			case 'start_app':
-				this.startApp();
-			break;
-			case 'pause_game':
-				this.props.pauseGame();
+				this.startSession();
 			break;
 			default:
 			break;

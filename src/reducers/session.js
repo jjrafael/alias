@@ -21,7 +21,7 @@ const initialState = {
         cards_per_team: 8,
         cards_per_round: 25,
     },
-    appDetails: null,
+    sessionDetails: null,
     user: null,
     userType: 'player',
     selectedDecks: [],
@@ -38,19 +38,19 @@ const initialState = {
     },
 
     //requests
-    appInitializing: false,
+    sessionInitializing: false,
     decksLoading: false,
     settingsLoading: false,
     addingUser: false,
     userLoading: false,
-    appLoading: false,
+    sessionLoading: false,
 
     //failures
     decksError: false,
     initializeError: false,
     settingsError: false,
     userError: false,
-    appError: false,
+    sessionError: false,
 
     //modals
     showModalSignout: false,
@@ -66,65 +66,65 @@ const initialState = {
     showModalAboutDev: false,
 };
 
-export default function App(state = initialState, action) {
-    const { app } = constants;
+export default function Session(state = initialState, action) {
+    const { session } = constants;
     switch(action.type) {
-        //INITIALIZE_APP
-        case app.INITIALIZE_APP_REQUEST:
+        //INITIALIZE_SESSION
+        case session.INITIALIZE_SESSION_REQUEST:
             return {
                 ...state,
-                appInitializing: true,
+                sessionInitializing: true,
             }
-        case app.INITIALIZE_APP_SUCCESS:
+        case session.INITIALIZE_SESSION_SUCCESS:
             return {
                 ...state,
-                appInitializing: false,
-                appDetails: {
+                sessionInitializing: false,
+                sessionDetails: {
                     ...action.payload,
                     id: action.response.id,
                 },
                 gameKey: action.response.data,
                 initializeError: false,
             }
-        case app.INITIALIZE_APP_FAILURE:
+        case session.INITIALIZE_SESSION_FAILURE:
             return {
                 ...state,
-                appInitializing: false,
+                sessionInitializing: false,
                 initializeError: action.error,
             }
 
-        //READ APP
-        case app.READ_APP_REQUEST:
+        //READ session
+        case session.READ_SESSION_REQUEST:
             return {
                 ...state,
-                readingApp: true,
+                readingSession: true,
             }
-        case app.READ_APP_SUCCESS:
+        case session.READ_SESSION_SUCCESS:
             const data_read = action.notStateSave
-                ?   state.appDetails
+                ?   state.sessionDetails
                 : { ...action.response.data(),
                     id: action.response.id }
             return {
                 ...state,
-                readingApp: false,
-                appDetails: data_read,
+                readingSession: false,
+                sessionDetails: data_read,
                 initializeError: false,
             }
-        case app.READ_APP_FAILURE:
+        case session.READ_SESSION_FAILURE:
             return {
                 ...state,
-                readingApp: false,
+                readingSession: false,
                 initializeError: true,
             }
 
-        case app.EDIT_APP_REQUEST:
+        case session.EDIT_SESSION_REQUEST:
             return {
                 ...state,
-                appLoading: true,
+                sessionLoading: true,
             }
-        case app.EDIT_APP_SUCCESS:
+        case session.EDIT_SESSION_SUCCESS:
             const isEnd = action.payload.status === 'inactive';
-            let data_edit = state.appDetails;
+            let data_edit = state.sessionDetails;
 
             if(!action.notStateSave){
                 data_edit = isEnd ? null : action.payload
@@ -132,23 +132,23 @@ export default function App(state = initialState, action) {
 
             return {
                 ...state,
-                appLoading: false,
-                appError: false,
-                appDetails: data_edit
+                sessionLoading: false,
+                sessionError: false,
+                sessionDetails: data_edit
             }
-        case app.EDIT_APP_FAILURE:
+        case session.EDIT_SESSION_FAILURE:
             return {
                 ...state,
-                appLoading: false,
-                appError: true,
+                sessionLoading: false,
+                sessionError: true,
             }
-         case app.LISTEN_APP_REQUEST:
+         case session.LISTEN_SESSION_REQUEST:
             return {
                 ...state,
                 teamLoading: true,
             }
-        case app.LISTEN_APP_SUCCESS:
-            const LISTEN_APP = {
+        case session.LISTEN_SESSION_SUCCESS:
+            const LISTEN_SESSION = {
                 ...action.response.data(),
                 id: action.response.id
             };
@@ -156,9 +156,9 @@ export default function App(state = initialState, action) {
                 ...state,
                 teamLoading: false,
                 teamError: false,
-                appDetails: LISTEN_APP
+                sessionDetails: LISTEN_SESSION
             }
-        case app.LISTEN_APP_FAILURE:
+        case session.LISTEN_SESSION_FAILURE:
             return {
                 ...state,
                 teamLoading: false,
@@ -166,12 +166,12 @@ export default function App(state = initialState, action) {
             }
 
         //USER
-        case app.ADD_USER_REQUEST:
+        case session.ADD_USER_REQUEST:
             return {
                 ...state,
                 addingUser: true,
             }
-        case app.ADD_USER_SUCCESS:
+        case session.ADD_USER_SUCCESS:
             return {
                 ...state,
                 addingUser: false,
@@ -181,22 +181,22 @@ export default function App(state = initialState, action) {
                 },
                 userError: false,
             }
-        case app.ADD_USER_FAILURE:
+        case session.ADD_USER_FAILURE:
             return {
                 ...state,
                 addingUser: false,
                 userError: action.error,
             }
         
-        case app.READ_USER_REQUEST:
+        case session.READ_USER_REQUEST:
             return {
                 ...state,
-                readingApp: true,
+                readingSession: true,
             }
-        case app.READ_USER_SUCCESS:
+        case session.READ_USER_SUCCESS:
             return {
                 ...state,
-                readingApp: false,
+                readingSession: false,
                 user: {
                     ...action.response.data(),
                     id: action.response.id,
@@ -204,19 +204,19 @@ export default function App(state = initialState, action) {
                 },
                 initializeError: false,
             }
-        case app.READ_USER_FAILURE:
+        case session.READ_USER_FAILURE:
             return {
                 ...state,
-                readingApp: false,
+                readingSession: false,
                 initializeError: action.error,
             }
 
-        case app.EDIT_USER_REQUEST:
+        case session.EDIT_USER_REQUEST:
             return {
                 ...state,
                 userLoading: true,
             }
-        case app.EDIT_USER_SUCCESS:
+        case session.EDIT_USER_SUCCESS:
             const isSignedOut = action.payload.status === 'signed_out';
             return {
                 ...state,
@@ -224,7 +224,7 @@ export default function App(state = initialState, action) {
                 userError: false,
                 user: isSignedOut ? null : action.payload
             }
-        case app.EDIT_USER_FAILURE:
+        case session.EDIT_USER_FAILURE:
             return {
                 ...state,
                 userLoading: false,
@@ -232,19 +232,19 @@ export default function App(state = initialState, action) {
             }
 
         //SETTINGS
-        case app.EDIT_SETTINGS_REQUEST:
+        case session.EDIT_SETTINGS_REQUEST:
             return {
                 ...state,
                 settingsLoading: true,
             }
-        case app.EDIT_SETTINGS_SUCCESS:
+        case session.EDIT_SETTINGS_SUCCESS:
             return {
                 ...state,
                 settingsLoading: false,
                 settings: action.response.data,
                 settingsError: false,
             }
-        case app.EDIT_SETTINGS_FAILURE:
+        case session.EDIT_SETTINGS_FAILURE:
             return {
                 ...state,
                 settingsLoading: false,
@@ -252,19 +252,19 @@ export default function App(state = initialState, action) {
             }
 
         //CUSTOM GAME
-        case app.BROWSE_DECKS_REQUEST:
+        case session.BROWSE_DECKS_REQUEST:
             return {
                 ...state,
                 decksLoading: true,
             }
-        case app.BROWSE_DECKS_SUCCESS:
+        case session.BROWSE_DECKS_SUCCESS:
             return {
                 ...state,
                 decksLoading: false,
                 decks: action.response.data,
                 decksError: false,
             }
-        case app.BROWSE_DECKS_FAILURE:
+        case session.BROWSE_DECKS_FAILURE:
             return {
                 ...state,
                 decksLoading: false,
@@ -272,7 +272,7 @@ export default function App(state = initialState, action) {
             }
 
         //NON-API
-        case app.TOGGLE_LOADING_OVERLAY:
+        case session.TOGGLE_LOADING_OVERLAY:
             return {
                 ...state,
                 loading: {
@@ -281,7 +281,7 @@ export default function App(state = initialState, action) {
                 },
             }
 
-        case app.TOGGLE_WARNING_MODAL:
+        case session.TOGGLE_WARNING_MODAL:
             return {
                 ...state,
                 warningModal: {
@@ -290,19 +290,19 @@ export default function App(state = initialState, action) {
                 },
             }
         
-        case app.SET_DEVICE_DETAILS:
+        case session.SET_DEVICE_DETAILS:
             return {
                 ...state,
                 deviceDetails: action.data,
             }
 
-        case app.SET_APP:
+        case session.SET_SESSION:
             return {
                 ...state,
-                appDetails: action.data,
+                sessionDetails: action.data,
             }
 
-        case app.SET_SETTINGS:
+        case session.SET_SETTINGS:
             return {
                 ...state,
                 settings: {
@@ -311,65 +311,65 @@ export default function App(state = initialState, action) {
                 },
             }
 
-        case app.MODAL_TOGGLE_SIGNOUT:
+        case session.MODAL_TOGGLE_SIGNOUT:
             return {
                 ...state,
                 showModalSignout: action.data,
             }
 
-        case app.MODAL_TOGGLE_RESET_GAME:
+        case session.MODAL_TOGGLE_RESET_GAME:
             return {
                 ...state,
                 showModalResetGame: action.data,
             }
 
-        case app.MODAL_TOGGLE_RESET_TEAM:
+        case session.MODAL_TOGGLE_RESET_TEAM:
             return {
                 ...state,
                 showModalResetTeam: action.data,
             }
 
-        case app.MODAL_TOGGLE_RESTART_GAME:
+        case session.MODAL_TOGGLE_RESTART_GAME:
             return {
                 ...state,
                 showModalRestartGame: action.data,
             }
-        case app.MODAL_TOGGLE_ENTER_CODE:
+        case session.MODAL_TOGGLE_ENTER_CODE:
             return {
                 ...state,
                 showModalEnterCode: action.data,
             }
-        case app.MODAL_TOGGLE_ROUND_WINNER:
+        case session.MODAL_TOGGLE_ROUND_WINNER:
             return {
                 ...state,
                 showModalRoundWinner: action.data,
             }
-        case app.MODAL_TOGGLE_QUIT_GAME:
+        case session.MODAL_TOGGLE_QUIT_GAME:
             return {
                 ...state,
                 showModalQuitGame: action.data,
             }
-        case app.MODAL_TOGGLE_REPORT_ALIAS:
+        case session.MODAL_TOGGLE_REPORT_ALIAS:
             return {
                 ...state,
                 showModalReportAlias: action.data,
             }
-        case app.MODAL_TOGGLE_ALIAS_HISTORY:
+        case session.MODAL_TOGGLE_ALIAS_HISTORY:
             return {
                 ...state,
                 showModalAliasHistory: action.data,
             }
-        case app.MODAL_TOGGLE_SETTINGS:
+        case session.MODAL_TOGGLE_SETTINGS:
             return {
                 ...state,
                 showModalSettings: action.data,
             }
-        case app.MODAL_TOGGLE_HOW_PLAY:
+        case session.MODAL_TOGGLE_HOW_PLAY:
             return {
                 ...state,
                 showModalHowToPlay: action.data,
             }
-        case app.MODAL_TOGGLE_ABOUT_DEV:
+        case session.MODAL_TOGGLE_ABOUT_DEV:
             return {
                 ...state,
                 showModalAboutDev: action.data,
@@ -377,11 +377,11 @@ export default function App(state = initialState, action) {
 
 
         //SIGNOUT
-        case app.CLEAR_STATES:
+        case session.CLEAR_STATES:
             return {
                 ...state,
                 gameKey: null,
-                appDetails: null,
+                sessionDetails: null,
                 user: null,
                 userType: 'player',
                 selectedDecks: [],

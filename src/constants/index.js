@@ -1,11 +1,5 @@
-import app  from './app';
-import game  from './game';
-import team  from './team';
-import cards  from './cards';
+import session  from './session';
 
 export default {
-  app,
-  game,
-  team,
-  cards,
+  session
 }

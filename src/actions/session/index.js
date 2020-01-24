@@ -1,14 +1,14 @@
-import constants from '../../constants/app';
+import constants from '../../constants/session';
 import { baseURL } from '../../Firebase';
 
-//APP
-export function initializeApp(data) {
-	const ref = baseURL.app;
+//SESSION
+export function initializeSession(data) {
+	const ref = baseURL.session;
   return {
   	types: [
-  		constants.INITIALIZE_APP_REQUEST,
-  		constants.INITIALIZE_APP_SUCCESS,
-  		constants.INITIALIZE_APP_FAILURE
+  		constants.INITIALIZE_SESSION_REQUEST,
+  		constants.INITIALIZE_SESSION_SUCCESS,
+  		constants.INITIALIZE_SESSION_FAILURE
   	],
   	method: 'add',
   	data: data,
@@ -16,13 +16,13 @@ export function initializeApp(data) {
   }
 }
 
-export function readApp(id, notStateSave) {
-	const ref = baseURL.app.doc(id);
+export function readSession(id, notStateSave) {
+	const ref = baseURL.session.doc(id);
   return {
   	types: [
-  		constants.READ_APP_REQUEST,
-  		constants.READ_APP_SUCCESS,
-  		constants.READ_APP_FAILURE
+  		constants.READ_SESSION_REQUEST,
+  		constants.READ_SESSION_SUCCESS,
+  		constants.READ_SESSION_FAILURE
   	],
   	method: 'get',
   	payload: { notStateSave },
@@ -30,13 +30,13 @@ export function readApp(id, notStateSave) {
   }
 }
 
-export function editApp(id, data, notStateSave) {
-	const ref = baseURL.app.doc(id);
+export function editSession(id, data, notStateSave) {
+	const ref = baseURL.session.doc(id);
   return {
   	types: [
-  		constants.EDIT_APP_REQUEST,
-  		constants.EDIT_APP_SUCCESS,
-  		constants.EDIT_APP_FAILURE
+  		constants.EDIT_SESSION_REQUEST,
+  		constants.EDIT_SESSION_SUCCESS,
+  		constants.EDIT_SESSION_FAILURE
   	],
   	method: 'set',
   	data,
@@ -45,16 +45,16 @@ export function editApp(id, data, notStateSave) {
   }
 }
 
-export function listenApp(id) {
-  const ref = baseURL.app.doc(id);
+export function listenSession(id) {
+  const ref = baseURL.session.doc(id);
   const listenData = {
     returnData: true
   }
   return {
     types: [
-      constants.LISTEN_APP_REQUEST,
-      constants.LISTEN_APP_SUCCESS,
-      constants.LISTEN_APP_FAILURE
+      constants.LISTEN_SESSION_REQUEST,
+      constants.LISTEN_SESSION_SUCCESS,
+      constants.LISTEN_SESSION_FAILURE
     ],
     method: 'listen',
     callRef: ref,
@@ -128,7 +128,7 @@ export function setDeviceDetails(data) {
   }
 }
 
-export function setApp(data) {
+export function setSession(data) {
   return {
   	type: constants.SET_APP,
     data,
@@ -226,7 +226,7 @@ export function toggleAboutDevModal(show) {
   }
 }
 
-export function clearRdxApp() {
+export function clearRdxSession() {
   return {
   	type: constants.CLEAR_STATES,
   }

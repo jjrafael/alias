@@ -1,6 +1,6 @@
 {
-  "name": "alias",
-  "descriptions": "A codename tabletop-inspired game made for party game using web and mobile devices",
+  "name": "chambr",
+  "descriptions": "A chamber of apps for group activities",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,14 +11,14 @@
     "firebase": "^6.6.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-router-redux": "^4.0.8",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.3.0",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "typescript": "^3.5.3"

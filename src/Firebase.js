@@ -2,26 +2,15 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/functions';
 
-//alias-2399d firebase config
-// const firebaseConfig = {
-//     apiKey: "AIzaSyANK72PRG_bYJRIHXBghfDpeovTzB9HEQs",
-//     authDomain: "alias-2399d.firebaseapp.com",
-//     databaseURL: "https://alias-2399d.firebaseio.com",
-//     projectId: "alias-2399d",
-//     storageBucket: "alias-2399d.appspot.com",
-//     messagingSenderId: "1034482005991",
-//     appId: "1:1034482005991:web:4bbd88b1426bf91c"
-// };
-
-// aliasdecks firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyCDom3zNrokLi_x-OzFF5FHyzjEJo-wnD8",
-  authDomain: "aliasdecks.firebaseapp.com",
-  databaseURL: "https://aliasdecks.firebaseio.com",
-  projectId: "aliasdecks",
-  storageBucket: "aliasdecks.appspot.com",
-  messagingSenderId: "216179747976",
-  appId: "1:216179747976:web:09215a6a11ee60ec1fc33d"
+  apiKey: "AIzaSyB4eLZRhTMJbwCqbLDiwYnF2xPj8QTwLpI",
+  authDomain: "chambr-play.firebaseapp.com",
+  databaseURL: "https://chambr-play.firebaseio.com",
+  projectId: "chambr-play",
+  storageBucket: "chambr-play.appspot.com",
+  messagingSenderId: "200436995068",
+  appId: "1:200436995068:web:4871ccf8d3550a9f561879",
+  measurementId: "G-YLM18Q8S20"
 };
 
 // Initialize Firebase
@@ -29,10 +18,9 @@ firebase.initializeApp(firebaseConfig);
 
 export const baseURL = {
 	users: firebase.firestore().collection('users'),
-	app: firebase.firestore().collection('app'),
-	games: firebase.firestore().collection('games'),
-	decks: firebase.firestore().collection('decks'),
-	teams: firebase.firestore().collection('teams'),
+	apps: firebase.firestore().collection('apps'),
+	rooms: firebase.firestore().collection('rooms'),
+	events: firebase.firestore().collection('events'),
 }
 
 // Functions or utilities
@@ -43,10 +31,9 @@ export const functions = {
 
 export const collection = {
 	users: 'users',
-	app: 'app',
-	games: 'games',
-	decks: 'decks',
-	teams: 'teams',
+	apps: 'apps',
+	rooms: 'rooms',
+	events: 'events',
 }
 
 export default firebase;

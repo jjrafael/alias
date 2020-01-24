@@ -14,11 +14,11 @@ import MakingDeck from '../articles/MakingDeck';
 import HowToWin from '../articles/HowToWin';
 
 //actions
-import { toggleHowToPlayModal } from '../../actions/app';
+import { toggleHowToPlayModal } from '../../actions/session';
 
 const mapStateToProps = state => {
   return {
-    showModal: state.app.showModalHowToPlay,
+    showModal: state.session.showModalHowToPlay,
   }
 }
 

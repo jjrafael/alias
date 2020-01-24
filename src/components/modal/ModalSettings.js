@@ -8,15 +8,15 @@ import FormBox from '../forms/FormBox';
 import Button from '../common/Button';
 
 //actions
-import { toggleSettingsModal, setSettings } from '../../actions/app';
+import { toggleSettingsModal, setSettings } from '../../actions/session';
 
 //misc
 import gameSettings from '../../config/formData/gameSettings';
 
 const mapStateToProps = state => {
   return {
-    showModal: state.app.showModalSettings,
-    settings: state.app.settings
+    showModal: state.session.showModalSettings,
+    settings: state.session.settings
   }
 }
 
