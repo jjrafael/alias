@@ -11,27 +11,39 @@ import SingleForm from '../forms/SingleForm';
 import { 
   toggleEnterCodeModal, 
   toggleLoadingOverlay,
-  readSession,
+  readApp,
   addUser,
-  initializeSession,
-  editSession
-} from '../../actions/session';
+  initializeApp,
+  editApp
+} from '../../actions/app';
+import { 
+  verifyTeamCode,
+  editTeam,
+  resetTeams,
+  resetMembers
+} from '../../actions/teams';
 
 //misc
-import {
+import { 
+  getResponse, 
   isResType, 
-  getNow,
+  getNow, 
+  deleteLocalStorage,
   setLocalStorage
 } from '../../utils';
+import { checkQuerySize } from '../../utils/data';
 
 const mapStateToProps = state => {
   return {
-    showModal: state.session.showModalEnterCode,
-    sessionDetails: state.session.sessionDetails,
-    user: state.session.user,
-    userType: state.session.userType,
-    deviceDetails: state.session.deviceDetails,
-    submittingCode: state.session.submittingCode,
+    showModal: state.app.showModalEnterCode,
+    appDetails: state.app.appDetails,
+    user: state.app.user,
+    userType: state.app.userType,
+    deviceDetails: state.app.deviceDetails,
+    submittingCode: state.app.submittingCode,
+    teamCodeError: state.team.teamCodeError,
+    team1: state.team.team1,
+    team2: state.team.team2,
   }
 }
 
@@ -40,10 +52,14 @@ const mapDispatchToProps = dispatch => {
     {
       toggleEnterCodeModal,
       toggleLoadingOverlay,
-      readSession,
+      verifyTeamCode,
+      editTeam,
+      readApp,
       addUser,
-      initializeSession,
-      editSession,
+      initializeApp,
+      editApp,
+      resetTeams,
+      resetMembers,
     },
     dispatch
   )
@@ -53,28 +69,29 @@ class ModalEnterCode extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      haveActiveSession: this.props.sessionDetails && this.props.sessionDetail.status === 'active',
+      haveActiveApp: this.props.appDetails && this.props.appDetail.status === 'active',
       haveActiveUser: this.props.user && this.props.user.status === 'active',
       code: '',
       maxChar: 6,
       verificationError: '',
       progressBar: 0,
+      teamNumber: null,
     }
   }
 
   componentDidUpdate(prevProps, prevState){
-      if(prevProps.sessionDetails !== this.props.sessionDetails){
-        const haveActiveSession = this.props.sessionDetails && this.props.sessionDetails.status === 'active';
+      if(prevProps.appDetails !== this.props.appDetails){
+        const haveActiveApp = this.props.appDetails && this.props.appDetails.status === 'active';
         this.setState({ 
-          haveActiveSession, 
+          haveActiveApp, 
           progressBar: 100, 
           verificationError: '', 
         });
         this.closeLoading();
         this.closeModal();
 
-        if(haveActiveSession){
-          setLocalStorage('alias_sessionId', this.props.sessionDetails.id);
+        if(haveActiveApp){
+          setLocalStorage('alias_appId', this.props.appDetails.id);
         }
       }
 
@@ -92,43 +109,94 @@ class ModalEnterCode extends React.Component {
   }
 
   verifyCode(code) {
-    this.closeLoading('Error while verifying code');
-  }
-
-  verifySession(data) {
-    const { session_id } = data;
-    this.props.readSession(session_id).then((doc) => {
-      this.closeLoading();
+    this.props.verifyTeamCode(code).then(res => {
+      if(!res.error){
+        const data = checkQuerySize(res, true);
+        if(!!data && data[0] && data[0].status === 'inactive'){
+          this.setState({ progressBar: 20 });
+          this.verifyApp(data[0]);
+        }else{
+          this.closeLoading('Code was not available anymore');
+        }
+      }else{
+        this.closeLoading('Error while verifying team code');
+      }
     })
   }
 
-  initUser(session) {
+  verifyApp(data) {
+    const { app_id, id, team_number } = data;
+    const isTeam1 = (['1', 1]).indexOf(team_number) !== -1;
+    const oppositeTeam = isTeam1 ? 2 : 1;
+    this.props.readApp(app_id).then((doc) => {
+      //if exists and active
+      const cond = {key: 'status', value: 'active'};
+      const response = getResponse(doc, cond);
+      if(response){
+        const isTeamUnAvail = response['team'+team_number+'_user_key'];
+        if(!isTeamUnAvail){
+          const teamData = {
+            ...data, 
+            status: 'active',
+          };
+
+          this.setState({ 
+            teamNumber: team_number,
+            progressBar: 40,
+          });
+
+          this.props.editTeam(id, teamData).then(doc => {
+            if(isResType(doc)){
+              this.initUser({
+                id: app_id, 
+                data: response
+              }, team_number);
+              this.setState({ progressBar: 60 });
+              this.props.resetTeams(oppositeTeam);
+              this.props.resetMembers();
+              setLocalStorage('alias_team'+team_number+'Id', id);
+              deleteLocalStorage('alias_team'+oppositeTeam+'Id');
+            }
+          });
+
+        }else{
+          this.closeLoading('The app or the team is already unavailable');
+        }
+      }else{
+        this.closeLoading('Error while verifying team status');
+      }
+    })
+  }
+
+  initUser(app, teamNumber) {
     const { deviceDetails, userType } = this.props;
     const now = getNow();
     const data = {
-      name: 'tester1',
-      email: 'tester1@mail.co',
+      name: 'team_tester1',
+      email: 'team_tester1@mail.co',
       platform: deviceDetails.platform,
       is_logged: true,
       device: deviceDetails.device,
       browser: deviceDetails.browser,
       status: 'active',
       type: userType,
-      role: 'player',
+      role: 'team',
       created_time: now,
       last_logged_time: now,
     }
 
     this.props.addUser(data).then(doc => {
       if(isResType(doc)){
-        const sessionData = {
-          ...session.data, 
-          total_connected_users: session.data.total_connected_users + 1,
+        const teamKey = 'team'+teamNumber+'_user_key';
+        const appData = {
+          ...app.data, 
+          total_connected_users: app.data.total_connected_users + 1,
+          [teamKey]: doc.response.id
         }
 
-        //connect to session
+        //connect to app
         this.setState({ progressBar: 80 });
-        this.props.editSession(session.id, sessionData);
+        this.props.editApp(app.id, appData);
       }else{
         this.closeLoading('Error while initializing user');
       }

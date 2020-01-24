@@ -7,11 +7,11 @@ import Modal from './index';
 import Button from '../common/Button';
 
 //actions
-import { toggleWarningModal } from '../../actions/session';
+import { toggleWarningModal } from '../../actions/app';
 
 const mapStateToProps = state => {
   return {
-    warningModal: state.session.warningModal,
+    warningModal: state.app.warningModal,
   }
 }
 

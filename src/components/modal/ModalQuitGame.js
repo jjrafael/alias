@@ -10,7 +10,7 @@ import Button from '../common/Button';
 import { 
   toggleQuitGameModal, 
   toggleLoadingOverlay,
-} from '../../actions/session';
+} from '../../actions/app';
 import { deleteGame, clearRounds } from '../../actions/games';
 import { editTeam } from '../../actions/teams';
 
@@ -20,7 +20,7 @@ import { getActiveRound } from '../../utils/game';
 
 const mapStateToProps = state => {
   return {
-    showModal: state.session.showModalQuitGame,
+    showModal: state.app.showModalQuitGame,
     gameDetails: state.game.gameDetails,
     rounds: state.game.rounds,
     team1: state.team.team1,

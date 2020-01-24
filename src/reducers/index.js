@@ -1,10 +1,16 @@
 import { combineReducers } from 'redux';
 
 //Reducers
-import session from './session';
+import app from './app';
+import cards from './cards';
+import game from './game';
+import team from './team';
 
 const appReducer = combineReducers({
-	session
+	app,
+	cards,
+	game,
+	team,
 });
 
 const reducers = (state, action) => {

@@ -239,8 +239,12 @@ export function checkElExists(className) {
 // local storage
 export function getAllLocalStorage() {
     return {
-    	sessionId: localStorage.getItem('alias_sessionId'),
+    	appId: localStorage.getItem('alias_appId'),
 	    userId: localStorage.getItem('alias_userId'),
+	    gameId: localStorage.getItem('alias_gameId'),
+	    team1Id: localStorage.getItem('alias_team1Id'),
+	    team2Id: localStorage.getItem('alias_team2Id'),
+	    leaderId: localStorage.getItem('alias_leaderId'),
     }
 }
 
@@ -269,14 +273,31 @@ export function deleteLocalStorage(key) {
 }
 
 export function clearLocalStorage(key) {
-    localStorage.removeItem('alias_sessionId');
+    localStorage.removeItem('alias_appId');
     localStorage.removeItem('alias_userId');
+    localStorage.removeItem('alias_gameId');
+    localStorage.removeItem('alias_app');
+    localStorage.removeItem('alias_user');
+    localStorage.removeItem('alias_game');
+    localStorage.removeItem('alias_team1Id');
+    localStorage.removeItem('alias_team2Id');
+    localStorage.removeItem('alias_leaderId');
+}
+
+export function hasCachedActiveGame() {
+	const localStored = getAllLocalStorage;
+	const game = localStored && localStored.game ? JSON.parse(localStored.game) : null;
+	return (localStored && localStored.gameId
+			&& game &&  game.status === 'active')
+		? localStored.gameId : null;
 }
 
 export function hasCachedActiveApp() {
 	const localStored = getAllLocalStorage();
-	return (localStored && localStored.sessionId)
-		? localStored.sessionId : null;
+	const app = localStored && localStored.app ? JSON.parse(localStored.app) : null;
+	return (localStored && localStored.appId
+			&& app &&  app.status === 'active')
+		? localStored.appId : null;
 }
 
 // colors

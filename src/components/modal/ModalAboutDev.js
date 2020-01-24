@@ -7,10 +7,11 @@ import Modal from './index';
 import Button from '../common/Button';
 
 //actions
-import { toggleAboutDevModal } from '../../actions/session';
+import { toggleAboutDevModal } from '../../actions/app';
 
 const mapStateToProps = state => {
   return {
+    showModal: state.app.showModalAboutDev,
   }
 }
 

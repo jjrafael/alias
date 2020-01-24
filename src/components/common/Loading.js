@@ -3,11 +3,11 @@ import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux'
 
 //actions
-import { toggleLoadingOverlay } from '../../actions/session'
+import { toggleLoadingOverlay } from '../../actions/app'
 
 const mapStateToProps = (state) => {
     return {
-        loading: state.session.loading
+        loading: state.app.loading
     }
 }
 

@@ -9,33 +9,33 @@ import CardsCol from './common/CardsCol';
 
 //actions
 import {
-	initializeSession, 
+	initializeApp, 
 	addUser, 
 	toggleEnterCodeModal, 
 	toggleWarningModal ,
 	toggleHowToPlayModal
-} from '../actions/session';
+} from '../actions/app';
 
 //misc
 import { getNow, setLocalStorage } from '../utils';
 
 const mapStateToProps = state => {
 	return {
-		deviceDetails: state.session.deviceDetails,
-		user: state.session.user,
-		userType: state.session.userType,
-		settings: state.session.settings,
-		sessionDetails: state.session.sessionDetails,
-		loadingOverlay: state.session.loadingOverlay,
-		userError: state.session.userError,
-		initializeError: state.session.initializeError,
+		deviceDetails: state.app.deviceDetails,
+		user: state.app.user,
+		userType: state.app.userType,
+		settings: state.app.settings,
+		appDetails: state.app.appDetails,
+		loadingOverlay: state.app.loadingOverlay,
+		userError: state.app.userError,
+		initializeError: state.app.initializeError,
 	}
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      initializeSession,
+      initializeApp,
       addUser,
       toggleEnterCodeModal,
       toggleWarningModal,
@@ -49,7 +49,7 @@ class SplashPage extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			loadingTitle: 'Initializing Session...',
+			loadingTitle: 'Initializing App...',
 			disableRouletteFx: false,
 		}
 	}
@@ -57,7 +57,7 @@ class SplashPage extends React.Component {
 	componentDidUpdate(prevProps){
 		if(prevProps.user !== this.props.user && !!this.props.user){
 			if(this.props.user.id && !this.props.user.isCache){
-				this.initSession(this.props.user);
+				this.initApp(this.props.user);
 				setLocalStorage('alias_userId', this.props.user.id);
 			}
 		}
@@ -85,18 +85,23 @@ class SplashPage extends React.Component {
 		this.props.toggleHowToPlayModal(true);
 	}
 
-	initSession(user) {
+	initApp(user) {
 		const { settings } = this.props;
 		const now = getNow();
 		const data = {
 			created_by: user.id,
 			created_time: now,
+			grid_user_key: user.id,
 			name: user.name,
 			status: 'active',
+			team1_user_key: '',
+			team2_user_key: '',
 			timer: settings.timer,
 			total_connected_users: 1,
+			total_games: 0,
+			total_teams: 2,
 		}
-		this.props.initializeSession(data);
+		this.props.initializeApp(data);
 	}
 
 	initUser = () => {
@@ -115,7 +120,7 @@ class SplashPage extends React.Component {
 			created_time: now,
 			last_logged_time: now,
 		}
-		this.props.add(data);
+		this.props.addUser(data);
 	}
 
 	render() {
@@ -151,7 +156,7 @@ class SplashPage extends React.Component {
 	      		</CardsCol>
 	      		<CardsCol count={cardCount} animDelay={'17s'} className={`flippy ${rouletteConds ? '--roulette' : ''}`}>
 	      			<Card size="medium" type="splash-cards" className="--pointer">
-	      				<div className="card-inner f--start-session" onClick={this.initUser}>
+	      				<div className="card-inner f--start-app" onClick={this.initUser}>
 	      					<h3>Start App</h3>
 	      				</div>
 	      			</Card>
@@ -171,12 +176,11 @@ class SplashPage extends React.Component {
 	      	</div>
 	      	<div className={`splash-logo-wrapper ${showLogo ? '' : 'trans-hide'}`}>
 	      		<div className="logo-typography">
-	      			<span>C</span>
-	      			<span>H</span>
 	      			<span>A</span>
-	      			<span>M</span>
-	      			<span>B</span>
-							<span>R</span>
+	      			<span>L</span>
+	      			<span>I</span>
+	      			<span>A</span>
+	      			<span>S</span>
 	      		</div>
 	      	</div>
 	      </div>
